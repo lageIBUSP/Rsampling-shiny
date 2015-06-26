@@ -1,0 +1,12 @@
+- Server: 
+- - should call Rsampling with specified parameters and output sensible graphs
+- - should return some kind of "progress bar"
+
+- UI:
+- - Excel-like interface to input data (with added "open file" / "save file"?)
+- - checkboxes for selecting columns?
+- - radiobox for type ("normal_rand", "rows_as_units", "columns_as_units", 
+    "within_rows", "within_columns")
+- -	radiobox for statistic (presets: aov, correlation, diff, ???, also enter new one)
+- - slider for ntrials
+- - checkbox for simplify

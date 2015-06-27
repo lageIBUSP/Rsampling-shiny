@@ -1,7 +1,0 @@
-- Server: 
-- - should return some kind of "progress bar"?
-
-- UI:
-- - Excel-like interface to input data (with added "open file" / "save file"?)
-- - checkboxes for selecting columns?
-- -	selection of statistic (presets: aov, correlation, diff, ???, also enter new one)

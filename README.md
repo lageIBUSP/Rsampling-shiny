@@ -16,7 +16,6 @@ and wait for the browser window to open!
 
 ## To do list:
 
-* "isolate" inputs to reduce number of Rsampling calls
 * Improve the interface help
 * Excel-like interface to input data
 * Add a color indicator to the "more extreme" values in the histogram

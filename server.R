@@ -18,7 +18,8 @@ shinyServer(function(input, output) {
 					 "custom" = csvfile())
 	})
 	distribution <- reactive({
-		type = switch(input$type,
+		input$go # triggers the calculations when the "Update graph" is pressed
+		type = switch(isolate(input$type),
 									"Normal shuffle" = "normal_rand",
 									"Rows as units" = "rows_as_units",
 									"Columns as units" = "columns_as_units",
@@ -26,7 +27,9 @@ shinyServer(function(input, output) {
 									"Within columns" = "within_columns"
 									)
 		Rsampling(type = type, dataframe = data(),
-							 statistics = emb.ei, cols = 2, ntrials = input$ntrials, replace=input$replace)
+							 statistics = emb.ei, cols = 2, 
+							 ntrials = isolate(input$ntrials), 
+							 replace=isolate(input$replace))
 	})
 	output$view <- renderTable({
 		head(data(), 15)

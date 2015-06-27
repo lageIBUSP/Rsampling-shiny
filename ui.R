@@ -7,7 +7,7 @@ shinyUI(fluidPage(
 					includeHTML("help.html")
 				),
 			  tabPanel("Data input", 
-					helpText("Use this tab to select the input data for your analysis. (To do: add an Excel-like spreadsheet here)"),
+					helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
 					selectInput("datasource",
 											"What is your input data?",
 											choices = c("embauba", "azteca", "peucetia", "rhyzophora", "custom")
@@ -15,6 +15,7 @@ shinyUI(fluidPage(
 					conditionalPanel(
 						fileInput("file", "Choose CSV file:", accept='.csv'),
 						checkboxInput("header", "Header?"),
+						helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
 						condition="input.datasource	== 'custom'"
 													 ),
 #					submitButton("Go!"),
@@ -34,8 +35,8 @@ shinyUI(fluidPage(
 			),
 			checkboxInput("replace", "Replace?"),
 			helpText("See the help page for details on the different randomization types."),
-		  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100)#,
-#			submitButton("Update Graph")
+		  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
+			actionButton("go", "Update Graph")
 			),
 	  mainPanel(
 		      plotOutput("distPlot"),

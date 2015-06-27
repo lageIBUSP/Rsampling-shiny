@@ -5,6 +5,16 @@ shinyUI(fluidPage(
   # Application title
   titlePanel("Rsampling!"),
 
+			tabsetPanel(type="tabs",
+				tabPanel("Help/info",
+					h2("Rsampling - resampling statistics in R"),
+					h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny"))
+				),
+			  tabPanel("Data input", 
+          numericInput("dx", "Ahm whatever:", 100)
+			  ),
+				tabPanel("Statistics",
+
 	# Sidebar with a slider input for the number of bins
 	sidebarLayout(
 								# another panel for data input??
@@ -15,7 +25,7 @@ shinyUI(fluidPage(
 									"Rows as units", "Columns as units")
 			),
 			checkboxInput("replace", "Replace?"),
-		  numericInput("ntrials", "Number of trials:", 100, increment=100),
+		  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
 			# statistic: from a dropdown or write your own
 			# checkbox: simplify?
 
@@ -28,20 +38,11 @@ shinyUI(fluidPage(
 
   # Show a plot of the generated distribution
 	  mainPanel(
-			tabsetPanel(type="tabs",
-				tabPanel("Help/info",
-					h2("Rsampling - resampling statistics in R"),
-					h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny"))
-				),
-			  tabPanel("Data input", 
-          numericInput("dx", "Ahm whatever:", 100)
-			  ),
-				tabPanel("Graphs",
 		      plotOutput("distPlot"),
 			    h3(textOutput("stat")),
 			    h3(textOutput("p"))
-				)
 			)
     )
 	)
 ))
+)

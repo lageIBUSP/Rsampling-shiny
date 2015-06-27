@@ -23,12 +23,15 @@ shinyUI(fluidPage(
 					tableOutput("view")
 			  ),
 				tabPanel("Statistics",
+    			helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
+			    selectInput("stat", "Statistic:", choices=c("Mean difference" = "meandif")),
+					helpText("Below you see the result of this function applied to the original data:"),
+			    h3(textOutput("stat"))
+				),
+				tabPanel("Resampling",
 	sidebarLayout(
-								# another panel for data input??
     sidebarPanel(
-			# statistic: from a dropdown or write your own
-			selectInput("stat", "Statistic:", choices=c("Mean difference")), # TODO: how to add more stats??
-			helpText("Use one of the preset statistics or write your own."),
+			helpText("Here is where we do the randomization!"),
 			selectInput("type", "Randomization type:", 
 				choices=c("Normal shuffle", "Within rows", "Whithin columns", 
 									"Rows as units", "Columns as units")
@@ -40,7 +43,6 @@ shinyUI(fluidPage(
 			),
 	  mainPanel(
 		      plotOutput("distPlot"),
-			    h3(textOutput("stat")),
 			    h3(textOutput("p"))
 			)
     )

@@ -5,6 +5,12 @@ shinyServer(function(input, output) {
 	### INTERNAL OBJECTS AND INPUT HANDLING ###
 	###########################################
 	#### Selection of prebuilt statistic functions
+	smean <- function(dataframe){
+		mean(dataframe[,input$m1])
+	}
+	ssd <- function(dataframe){
+		sd(dataframe[,input$m1])
+	}
 	meandif <- function(dataframe){
 		props <- unlist(tapply(dataframe[,input$s2], dataframe[,input$s1], mean))
 		props[1] - props[length(props)]
@@ -15,6 +21,8 @@ shinyServer(function(input, output) {
 	}
 	# what columns should be randomized?
 	cols <- reactive({
+		if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
+			return(input$m1)
 		if(input$stat == "meandif") # the "data" column is indicated by s2
 			return(input$s2)
 		if(input$stat == "meandifc") # the before and after columns are d1 and d2
@@ -26,7 +34,9 @@ shinyServer(function(input, output) {
 	statistic <- reactive({
 		switch(input$stat,
 					 "meandif" = meandif,
-					 "meandifc" = meandifc
+					 "meandifc" = meandifc,
+					 "smean" = smean,
+					 "ssd" = ssd
 					)
 	})
 	### the statistic applied to the original data

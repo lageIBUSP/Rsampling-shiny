@@ -18,8 +18,8 @@ and wait for the browser window to open!
 
 * Improve the interface help
 * Excel-like interface to input data (like [this?] (https://github.com/AnalytixWare/ShinySky)
-* selection of statistic of interest (aov, cor, diff, ???, enter custom code)
-* better interface for selecting columns
+* custom code for statistic of interest, more stats (aov, cor, diff, ???, enter custom code)
+* better interface for selecting columns, and add a selector for the "stratum"
 * add a progress bar
 * add a button to install Rsampling from inside the app
 * animations!

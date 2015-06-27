@@ -25,8 +25,16 @@ shinyUI(fluidPage(
 				tabPanel("Statistics",
     			helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
 			    selectInput("stat", "Statistic:", 
-											choices=c("Mean difference between groups" = "meandif",
+											choices=c("Column mean" = "smean",
+																"Column standard deviation" = "ssd",
+																"Mean difference between groups" = "meandif",
 																"Mean difference between columns" = "meandifc")),
+					### Panel for smean/ssd:
+					conditionalPanel(
+						helpText("This function calculates the mean or standard deviation of a single data column"),
+						numericInput("m1", "Variable column: ", 1),
+								condition="input.stat == 'smean' || input.stat == 'ssd'"
+					),
 					### Panel for meandif:
 					conditionalPanel(
 						helpText("This function splits the data acording to a categorical variable. Then it calculates 
@@ -34,7 +42,7 @@ shinyUI(fluidPage(
 										 to work with only ",em("TWO")," categories!"),
 						numericInput("s1", "Categorical variable column: ", 1),
 						numericInput("s2", "Numerical variable column: ", 2),
-								condition="input.stat== 'meandif'"
+								condition="input.stat == 'meandif'"
 					),
 					### Panel for meandifc:
 					conditionalPanel(

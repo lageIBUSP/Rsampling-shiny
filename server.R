@@ -1,33 +1,27 @@
 library(shiny)
 library(Rsampling)
-
-# Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  # Expression that generates a histogram. The expression is
-	# wrapped in a call to renderPlot to indicate that:
-	#
-	#  1) It is "reactive" and therefore should be automatically
-	#     re-executed when inputs change
-	#  2) Its output type is a plot
-		emb.ei <- function(dataframe){
-			props <- tapply(dataframe$with.vines, dataframe$morphotype, mean)
-			props[[1]] - props[[2]]
-		}
+	emb.ei <- function(dataframe){
+		props <- tapply(dataframe[,2], dataframe[,1], mean)
+		props[[1]] - props[[2]]
+	}
 	distribution <- reactive({
-		Rsampling(type = "normal", dataframe = embauba,
-							 statistics = emb.ei, cols = 2, ntrials = input$ntrials)
+		type = switch(input$type,
+									"Normal shuffle" = "normal_rand",
+									"Rows as units" = "rows_as_units",
+									"Columns as units" = "columns_as_units",
+									"Within rows" = "within_rows",
+									"Within columns" = "within_columns"
+									)
+		Rsampling(type = type, dataframe = embauba,
+							 statistics = emb.ei, cols = 2, ntrials = input$ntrials, replace=input$replace)
 	})
-
   output$distPlot <- renderPlot({
-#		x    <- faithful[, 2]  # Old Faithful Geyser data
-#		bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-		# draw the histogram with the specified number of bins
-		hist(distribution(), xlim=c(-0.5, 0.5), xlab = "Estatística de interesse", col="skyblue", border="white")
+		hist(distribution(), xlim=c(-0.5, 0.5), main = "Interest statistic", col="skyblue", border="white")
 		abline(v = emb.ei(embauba), lty=2, col="red")
 	})
 	output$stat <- renderText({
-		paste("Interest statistic: ", emb.ei(embauba),"\n", sep="")
+		paste("Interest statistic: ", round(emb.ei(embauba),3),"\n", sep="")
 	})
 	output$p <- renderText({
 		paste("p-value: ", sum(distribution() >= emb.ei(embauba)) / length(distribution()), "\n", sep="")

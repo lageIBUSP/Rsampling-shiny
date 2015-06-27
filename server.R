@@ -5,13 +5,17 @@ shinyServer(function(input, output) {
 		props <- unlist(tapply(dataframe[,2], dataframe[,1], mean))
 		props[1] - props[length(props)]
 	}
+	csvfile <- reactive({
+		if(is.null(input$file)) return (data.frame());
+		read.csv(input$file$datapath, header=input$header)
+	})
 	data <- reactive({
 		switch(input$datasource,
 					 "embauba" = embauba,
 					 "azteca" = azteca,
 					 "peucetia" = peucetia,
-					 "rhyzophora" = rhyzophora
-					 )
+					 "rhyzophora" = rhyzophora,
+					 "custom" = csvfile())
 	})
 	distribution <- reactive({
 		type = switch(input$type,
@@ -28,10 +32,9 @@ shinyServer(function(input, output) {
 		head(data(), 15)
 	})
   output$distPlot <- renderPlot({
-		minx <- min(distribution())
-		maxx <- max(distribution())
-		line <- emb.ei(data()); if(abs(line) > maxx) maxx = line; if(-abs(line) < minx) minx = -line;
-		hist(distribution(), xlim=1.1*c(minx, maxx), main = "Statistic of interest", col="skyblue", border="white")
+		maxx <- max(abs(distribution()))
+		line <- emb.ei(data()); if(abs(line) > maxx) maxx = abs(line); 
+		hist(distribution(), xlim=1.1*c(-maxx, maxx), main = "Statistic of interest", col="skyblue", border="white")
 		abline(v = emb.ei(data()), lty=2, col="red")
 	})
 	output$stat <- renderText({

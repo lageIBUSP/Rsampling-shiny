@@ -12,20 +12,22 @@ shinyUI(fluidPage(
 											"What is your input data?",
 											choices = c("embauba", "azteca", "peucetia", "rhyzophora", "custom")
 										 ),
+					## the next panel only shows for the custom datasource
 					conditionalPanel(
 						fileInput("file", "Choose CSV file:", accept='.csv'),
 						checkboxInput("header", "Header?"),
 						helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
 						condition="input.datasource	== 'custom'"
 													 ),
-#					submitButton("Go!"),
 					helpText("The first rows of the selected data table are:"),
 					tableOutput("view")
 			  ),
 				tabPanel("Statistics",
     			helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
-			    selectInput("stat", "Statistic:", choices=c("Mean difference" = "meandif")),
-					### Panel for mean diff:
+			    selectInput("stat", "Statistic:", 
+											choices=c("Mean difference between groups" = "meandif",
+																"Mean difference between columns" = "meandifc")),
+					### Panel for meandif:
 					conditionalPanel(
 						helpText("This function splits the data acording to a categorical variable. Then it calculates 
 										 the mean for each group, and subtracts one from another. Note that this is designed 
@@ -33,6 +35,14 @@ shinyUI(fluidPage(
 						numericInput("s1", "Categorical variable column: ", 1),
 						numericInput("s2", "Numerical variable column: ", 2),
 								condition="input.stat== 'meandif'"
+					),
+					### Panel for meandifc:
+					conditionalPanel(
+						helpText("This function calculates the difference between two columns in your dataset (i.e.,
+										 before and after a treatment is applied). It then averages these differences."),
+						numericInput("d1", "Before treatment: ", 1),
+						numericInput("d2", "After treatment: ", 2),
+								condition="input.stat== 'meandifc'"
 					),
 					helpText("Below you see the result of this function applied to the original data:"),
 			    h3(textOutput("stat"))

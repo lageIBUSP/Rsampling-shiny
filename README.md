@@ -18,9 +18,8 @@ and wait for the browser window to open!
 
 * Improve the interface help
 * Excel-like interface to input data
-* Add a color indicator to the "more extreme" values in the histogram
-* checkboxes for selecting columns
 * selection of statistic of interest (aov, cor, diff, ???, enter custom code)
+* checkboxes for selecting columns
 * add a progress bar
 * add a button to install Rsampling from inside the app
 * animations!

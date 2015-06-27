@@ -43,6 +43,11 @@ shinyUI(fluidPage(
 			),
 	  mainPanel(
 		      plotOutput("distPlot"),
+					helpText("The graph above shows the distribution of your selected statistic after repeated 
+									 randomization from your data. The histograms bins in orange (if any) represent those
+									 simulations in which the statistic had a value that's ", em("equal to or more extreme"),
+									 " than the statistic calculated on your original data (represented by the dotted red line).
+									 This leads to a p-value of:"),
 			    h3(textOutput("p"))
 			)
     )

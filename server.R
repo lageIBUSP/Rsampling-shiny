@@ -35,9 +35,15 @@ shinyServer(function(input, output) {
 		head(data(), 15)
 	})
   output$distPlot <- renderPlot({
-		maxx <- max(abs(distribution()))
+		mydist <- distribution()
+		maxx <- max(abs(mydist))
 		line <- emb.ei(data()); if(abs(line) > maxx) maxx = abs(line); 
-		hist(distribution(), xlim=1.1*c(-maxx, maxx), main = "Statistic of interest", col="skyblue", border="white")
+		oh <- hist(mydist, xlim=1.1*c(-maxx, maxx), main = "Distribution of the statistic of interest", col="skyblue", border="white", xlab="Statistic of interest")
+		# adds the extreme values in orange
+		mydist <- mydist[abs(mydist) >= abs(emb.ei(data()))]
+		if(length(mydist)>0) 
+			hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
+					 add=TRUE, breaks = oh$breaks)
 		abline(v = emb.ei(data()), lty=2, col="red")
 	})
 	output$stat <- renderText({

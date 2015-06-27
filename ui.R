@@ -6,13 +6,19 @@ shinyUI(fluidPage(
 					h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny"))
 				),
 			  tabPanel("Data input", 
-          numericInput("dx", "Ahm whatever:", 100)
+					selectInput("datasource",
+											"What is your input data?",
+											choices = c("embauba","azteca", "peucetia", "rhyzophora")
+										 ),
+					submitButton("Go!"),
+					tableOutput("view")
 			  ),
 				tabPanel("Statistics",
 	sidebarLayout(
 								# another panel for data input??
     sidebarPanel(
 			# statistic: from a dropdown or write your own
+			selectInput("stat", "Statistic:", choices=c("Mean difference")), # TODO: add more stats??
 			helpText("Use one of the preset statistics or write your own."),
 			selectInput("type", "Randomization type:", 
 				choices=c("Normal shuffle", "Within rows", "Whithin columns", 

@@ -4,4 +4,4 @@
 - UI:
 - - Excel-like interface to input data (with added "open file" / "save file"?)
 - - checkboxes for selecting columns?
-- -	radiobox for statistic (presets: aov, correlation, diff, ???, also enter new one)
+- -	selection of statistic (presets: aov, correlation, diff, ???, also enter new one)

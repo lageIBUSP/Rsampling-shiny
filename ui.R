@@ -25,6 +25,15 @@ shinyUI(fluidPage(
 				tabPanel("Statistics",
     			helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
 			    selectInput("stat", "Statistic:", choices=c("Mean difference" = "meandif")),
+					### Panel for mean diff:
+					conditionalPanel(
+						helpText("This function splits the data acording to a categorical variable. Then it calculates 
+										 the mean for each group, and subtracts one from another. Note that this is designed 
+										 to work with only ",em("TWO")," categories!"),
+						numericInput("s1", "Categorical variable column: ", 1),
+						numericInput("s2", "Numerical variable column: ", 2),
+								condition="input.stat== 'meandif'"
+					),
 					helpText("Below you see the result of this function applied to the original data:"),
 			    h3(textOutput("stat"))
 				),

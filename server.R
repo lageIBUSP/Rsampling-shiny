@@ -2,7 +2,7 @@ library(shiny)
 library(Rsampling)
 shinyServer(function(input, output) {
 	emb.ei <- function(dataframe){
-		props <- unlist(tapply(dataframe[,2], dataframe[,1], mean))
+		props <- unlist(tapply(dataframe[,input$s2], dataframe[,input$s1], mean))
 		props[1] - props[length(props)]
 	}
 	csvfile <- reactive({

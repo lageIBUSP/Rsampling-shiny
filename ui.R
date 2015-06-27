@@ -28,12 +28,32 @@ shinyUI(fluidPage(
                          choices=c("Column mean" = "smean",
                                    "Column standard deviation" = "ssd",
                                    "Mean difference between groups" = "meandif",
-                                   "Mean difference between columns" = "meandifc")),
+                                   "Mean difference between columns" = "meandifc",
+                                   "Mean sum of rows" = "srow",
+                                   "Mean sum of columns" = "scol",
+                                   "Regression intercept" = "intercept",
+                                   "Regression coefficient" = "slope",
+                                   "Correlation between columns" = "corr")),
              ### Panel for smean/ssd:
              conditionalPanel(
-               helpText("This function calculates the mean or standard deviation of a single data column"),
+               helpText("These functions calculate the correlation coefficient, slope or intercept of
+                        a linear correlation analysis between two columns, y ~ ax + b. Here, x is the
+                        independent variable, and y is the dependent variable."),
+               numericInput("r1", "Dependent variable column: ", 1),
+               numericInput("r2", "Independent variable column: ", 1),
+               condition="input.stat == 'intercept' || input.stat == 'slope' || input.stat == 'corr'"
+             ),
+             ### Panel for smean/ssd:
+             conditionalPanel(
+               helpText("This function calculates the mean or standard deviation of a single data column."),
                numericInput("m1", "Variable column: ", 1),
                condition="input.stat == 'smean' || input.stat == 'ssd'"
+             ),
+             ### Panel for srow/scol:
+             conditionalPanel(
+               helpText("This function calculates the sum of every values in a row (or column). Then, it takes
+                        the mean of these values."),
+               condition="input.stat == 'srow' || input.stat == 'scol'"
              ),
              ### Panel for meandif:
              conditionalPanel(
@@ -46,7 +66,7 @@ shinyUI(fluidPage(
              ),
              ### Panel for meandifc:
              conditionalPanel(
-               helpText("This function calculates the difference between two columns in your dataset (i.e.,
+               helpText("This function calculates the pairwise difference between two columns in your dataset (i.e.,
                         before and after a treatment is applied). It then averages these differences."),
                numericInput("d1", "Before treatment: ", 1),
                numericInput("d2", "After treatment: ", 2),

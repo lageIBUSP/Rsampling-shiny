@@ -19,6 +19,21 @@ shinyServer(function(input, output) {
               dif <- dataframe[, input$d2] - dataframe[, input$d1]
               mean(dif)
             }
+            srow <- function(dataframe) {
+              mean(apply(dataframe, 1, sum))
+            }
+            scol <- function(dataframe) {
+              mean(apply(dataframe, 2, sum))
+            }
+            intercept <- function(dataframe) {
+              coef(lm(dataframe[, input$r1] ~ dataframe[, input$r2]))[1]
+            }
+            slope <- function(dataframe) {
+              coef(lm(dataframe[, input$r1] ~ dataframe[, input$r2]))[2]
+            }
+            corr <- function(dataframe) {
+              cor(dataframe[, input$r1], dataframe[, input$r2])
+            }
             # what columns should be randomized?
             cols <- reactive({
               if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
@@ -27,6 +42,10 @@ shinyServer(function(input, output) {
                 return(input$s2)
               if(input$stat == "meandifc") # the before and after columns are d1 and d2
                 return(c(input$d1, input$d2))
+              if(input$stat %in% c("scol", "srow")) # all columns should be used
+                return(1:ncol(data()))
+              if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
+                return(input$r1)
               #else?
               return(NULL)
             })
@@ -36,7 +55,12 @@ shinyServer(function(input, output) {
                      "meandif" = meandif,
                      "meandifc" = meandifc,
                      "smean" = smean,
-                     "ssd" = ssd
+                     "ssd" = ssd,
+                     "srow" = srow,
+                     "scol" = scol,
+                     "intercept" = intercept,
+                     "slope" = slope,
+                     "corr" = corr
                      )
             })
             ### the statistic applied to the original data

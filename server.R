@@ -1,10 +1,19 @@
 library(shiny)
 library(Rsampling)
 shinyServer(function(input, output) {
-	emb.ei <- function(dataframe){
+	meandif <- function(dataframe){
 		props <- unlist(tapply(dataframe[,input$s2], dataframe[,input$s1], mean))
 		props[1] - props[length(props)]
 	}
+	statistic <- reactive({
+		switch(input$stat,
+					 "meandif" = meandif
+					)
+	})
+	svalue <- reactive({
+		f <- statistic()
+		f(data())
+	})
 	csvfile <- reactive({
 		if(is.null(input$file)) return (data.frame());
 		read.csv(input$file$datapath, header=input$header)
@@ -27,7 +36,7 @@ shinyServer(function(input, output) {
 									"Within columns" = "within_columns"
 									)
 		Rsampling(type = type, dataframe = data(),
-							 statistics = emb.ei, cols = 2, 
+							 statistics = statistic(), cols = 2, 
 							 ntrials = isolate(input$ntrials), 
 							 replace=isolate(input$replace))
 	})
@@ -37,19 +46,19 @@ shinyServer(function(input, output) {
   output$distPlot <- renderPlot({
 		mydist <- distribution()
 		maxx <- max(abs(mydist))
-		line <- emb.ei(data()); if(abs(line) > maxx) maxx = abs(line); 
+		line <- svalue(); if(abs(line) > maxx) maxx = abs(line); 
 		oh <- hist(mydist, xlim=1.1*c(-maxx, maxx), main = "Distribution of the statistic of interest", col="skyblue", border="white", xlab="Statistic of interest")
 		# adds the extreme values in orange
-		mydist <- mydist[abs(mydist) >= abs(emb.ei(data()))]
+		mydist <- mydist[abs(mydist) >= abs(line)]
 		if(length(mydist)>0) 
 			hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
 					 add=TRUE, breaks = oh$breaks)
-		abline(v = emb.ei(data()), lty=2, col="red")
+		abline(v = line, lty=2, col="red")
 	})
 	output$stat <- renderText({
-		paste("Statistic of interest: ", round(emb.ei(data()),3),"\n", sep="")
+		paste("Statistic of interest: ", round(svalue(),3),"\n", sep="")
 	})
 	output$p <- renderText({
-		paste("(two sided) p-value: ", round(sum(abs(distribution()) >= abs(emb.ei(data()))) / length(distribution()),3), "\n", sep="")
+		paste("(two sided) p-value: ", round(sum(abs(distribution()) >= abs(svalue())) / length(distribution()),3), "\n", sep="")
 	})
 })

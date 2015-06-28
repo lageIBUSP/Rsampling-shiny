@@ -15,4 +15,5 @@ and wait for the browser window to open!
 * Access the Rsampling sample datafiles, or upload your own data in csv format
 * Choose between a range of statistics, or write your own R function
 * Select your randomization scheme, with or without replacement
+* Optional stratified randomization
 * Reactive graph showing the distribuion of the statistic of interest and estimated p-value

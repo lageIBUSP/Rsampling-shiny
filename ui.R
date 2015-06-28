@@ -16,11 +16,11 @@ shinyUI(fluidPage(
                   textOutput("pkginstall")
                 ),
                 condition="output.needinstall"
-             )
              ),
              conditionalPanel("!output.needinstall",
                p("You already have Rsampling installed :)")
-             ),
+             )
+    ),
     tabPanel("Data input", 
              helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
              selectInput("datasource",
@@ -117,7 +117,7 @@ shinyUI(fluidPage(
                              choices=c("Normal shuffle", "Within rows", "Whithin columns", 
                                        "Rows as units", "Columns as units")
                  ),
-                 checkboxInput("replace", "Replace?"),
+                 checkboxInput("replace", "With replacement?"),
                  helpText("See the help page for details on the different randomization types."),
                  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
                  actionButton("go", "Update Graph")

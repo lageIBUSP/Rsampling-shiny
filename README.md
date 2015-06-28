@@ -14,7 +14,6 @@ and wait for the browser window to open!
 
 ## To do list:
 
-* Trap common errors (function returns NA)
 * Improve the interface help
 * Excel-like interface to input data (like [this?] (https://github.com/AnalytixWare/ShinySky))
 * more stats (F-statistics)

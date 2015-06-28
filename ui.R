@@ -8,38 +8,41 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              includeHTML("help.html")
              ),
     tabPanel("Data input", 
-           #  helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
+             helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
              selectInput("datasource",
                          "What is your input data?",
                          choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
                          ),
-             bsPopover("datasource", "Select the input data for your analysis. The first options are datasets included in the library, select \"upload file\" to upload your own file.", placement="right"),
              ## the next panel only shows for the custom datasource
-             conditionalPanel(
+             fluidRow(column(6,conditionalPanel(
                fileInput("file", "Choose CSV file:", accept='.csv'),
-                 checkboxInput("header", "Header?"),
+               fluidRow(
+                 column(3, checkboxInput("header", "Header?")),
                  bsTooltip("header", "First row as header"),
+                 column(3,
                  radioButtons('sep', 'Separator',
                               c(Comma=',',
                                 Semicolon=';',
                                 Tab='\t',
-                                Spc=' '),
-                              ','),
+                                Space=' '),
+                              ',')),
+                 column(3,
                  radioButtons('dec', 'Decimal',
                               c(dot ='.',
-                                colon=','),
-                              ','),
+                                comma=','),
+                              '.')),
+                 column(3,
                  radioButtons('quote', 'Quote',
                               c(None='',
                                 'Double Quote'='"',
                                 'Single Quote'="'"),
-                              '"'),
-                 
+                              '"'))
+                 ),
                helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
                condition="input.datasource	== 'upload file'"
-             ),
-             helpText("The first rows of the selected data table are:"),
-             tableOutput("view")
+             ))),
+             tableOutput("view"),
+             bsTooltip("view", "These are first rows of the selected data table.", "top")
              ),
     tabPanel("Statistics",
              helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
@@ -121,9 +124,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                              choices=c("Normal shuffle", "Within rows", "Whithin columns", 
                                        "Rows as units", "Columns as units")
                  ),
+                 bsTooltip("type", "See the help page for details on the different randomization types."),
                  checkboxInput("replace", "Replace?"),
-                 helpText("See the help page for details on the different randomization types."),
+                 bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),
                  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
+                 bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
                  actionButton("go", "Update Graph")
                ),
                mainPanel(

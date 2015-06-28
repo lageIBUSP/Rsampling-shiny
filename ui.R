@@ -96,14 +96,14 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                helpText("These functions calculate the correlation coefficient, slope or intercept of
                         a linear correlation analysis between two columns, y ~ ax + b. Here, x is the
                         independent variable, and y is the dependent variable."),
-               numericInput("r1", "Dependent variable column: ", 1),
-               numericInput("r2", "Independent variable column: ", 2),
+               selectInput("r1", "Dependent variable column: ", 1),
+               selectInput("r2", "Independent variable column: ", 2),
                condition="input.stat == 'intercept' || input.stat == 'slope' || input.stat == 'corr'"
              ),
              ### Panel for smean/ssd:
              conditionalPanel(
                helpText("This function calculates the mean or standard deviation of a single data column."),
-               numericInput("m1", "Variable column: ", 1),
+               selectInput("m1", "Variable column: ", choices=1),
                condition="input.stat == 'smean' || input.stat == 'ssd'"
              ),
              ### Panel for srow/scol:
@@ -117,16 +117,16 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                helpText("This function splits the data acording to a categorical variable. Then it calculates 
                         the mean for each group, and subtracts one from another. Note that this is designed 
                         to work with only ",em("TWO")," categories!"),
-               numericInput("s1", "Categorical variable column: ", 1),
-               numericInput("s2", "Numerical variable column: ", 2),
+               selectInput("s1", "Categorical variable column: ", 1),
+               selectInput("s2", "Numerical variable column: ", 2),
                condition="input.stat == 'meandif'"
              ),
              ### Panel for meandifc:
              conditionalPanel(
                helpText("This function calculates the pairwise difference between two columns in your dataset (i.e.,
                         before and after a treatment is applied). It then averages these differences."),
-               numericInput("d1", "Before treatment: ", 1),
-               numericInput("d2", "After treatment: ", 2),
+               selectInput("d1", "Before treatment: ", 1),
+               selectInput("d2", "After treatment: ", 2),
                condition="input.stat== 'meandifc'"
              ),
              helpText("Below you see the result of this function applied to the original data:"),
@@ -147,7 +147,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  checkboxInput("stratum", "Stratified resampling?"),
                  bsTooltip("stratum", "Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
                  conditionalPanel("input.stratum",
-                   numericInput("stratumc", "Stratum variable: ", 1)
+                   selectInput("stratumc", "Stratum variable: ", 1)
                  ),
                  bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
                  actionButton("go", "Update Graph")

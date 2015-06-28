@@ -1,21 +1,21 @@
 library(shiny)
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
             ###########################################
             #### Selection of prebuilt statistic functions
             smean <- function(dataframe){
-              mean(dataframe[,input$m1])
+              mean(dataframe[,as.numeric(input$m1)])
             }
             ssd <- function(dataframe){
-              sd(dataframe[,input$m1])
+              sd(dataframe[,as.numeric(input$m1)])
             }
             meandif <- function(dataframe){
-              props <- unlist(tapply(dataframe[,input$s2], dataframe[,input$s1], mean))
+              props <- unlist(tapply(dataframe[,as.numeric(input$s2)], dataframe[,as.numeric(input$s1)], mean))
               props[1] - props[length(props)]
             }
             meandifc <- function(dataframe){
-              dif <- dataframe[, input$d2] - dataframe[, input$d1]
+              dif <- dataframe[, as.numeric(input$d2)] - dataframe[, as.numeric(input$d1)]
               mean(dif)
             }
             srow <- function(dataframe) {
@@ -25,13 +25,13 @@ shinyServer(function(input, output) {
               mean(apply(dataframe, 2, sum))
             }
             intercept <- function(dataframe) {
-              coef(lm(dataframe[, input$r1] ~ dataframe[, input$r2]))[1]
+              coef(lm(dataframe[, as.numeric(input$r1)] ~ dataframe[, as.numeric(input$r2)]))[1]
             }
             slope <- function(dataframe) {
-              coef(lm(dataframe[, input$r1] ~ dataframe[, input$r2]))[2]
+              coef(lm(dataframe[, as.numeric(input$r1)] ~ dataframe[, as.numeric(input$r2)]))[2]
             }
             corr <- function(dataframe) {
-              cor(dataframe[, input$r1], dataframe[, input$r2])
+              cor(dataframe[, as.numeric(input$r1)], dataframe[, as.numeric(input$r2)])
             }
             # accessory for the custom function handler 
             # (for a slight performance improvement over parsing everytime)
@@ -49,15 +49,15 @@ shinyServer(function(input, output) {
             # what columns should be randomized?
             cols <- reactive({
               if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
-                return(input$m1)
+                return(as.numeric(input$m1))
               if(input$stat == "meandif") # the "data" column is indicated by s2
-                return(input$s2)
+                return(as.numeric(input$s2))
               if(input$stat == "meandifc") # the before and after columns are d1 and d2
-                return(c(input$d1, input$d2))
+                return(c(as.numeric(input$d1), as.numeric(input$d2)))
               if(input$stat %in% c("scol", "srow", "custom")) # all columns should be used
                 return(1:ncol(data()))
               if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
-                return(input$r1)
+                return(as.numeric(input$r1))
               #else?
               return(NULL)
             })
@@ -66,7 +66,7 @@ shinyServer(function(input, output) {
                 return (rep(1, nrow(data())))
               #else
               d <- data()
-              return (d[, input$stratumc])
+              return (d[, as.numeric(input$stratumc)])
             })
             ### this reactive simply translates the input value into the corresponding function
             statistic <- reactive({
@@ -176,5 +176,17 @@ shinyServer(function(input, output) {
             ### simply displays the "p-value"
             output$p <- renderText({
               paste("(two sided) p-value: ", round(sum(abs(distribution()) >= abs(svalue())) / length(distribution()),3), "\n", sep="")
+            })
+            observe({
+              cols <- 1:dim(data())[2]
+              names(cols) <- colnames(data())
+              updateSelectInput(session, "m1", choices = cols)
+              updateSelectInput(session, "r1", choices = cols)
+              updateSelectInput(session, "r2", choices = cols, selected=2)
+              updateSelectInput(session, "s1", choices = cols)
+              updateSelectInput(session, "s2", choices = cols, selected=2)
+              updateSelectInput(session, "d1", choices = cols)
+              updateSelectInput(session, "d2", choices = cols, selected=2)
+              updateSelectInput(session, "stratumc", choices = cols)
             })
 })

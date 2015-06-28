@@ -4,7 +4,22 @@ shinyUI(fluidPage(
     tabPanel("Help/info",
              h2("Rsampling - resampling statistics in R"),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
-             includeHTML("help.html")
+             includeHTML("help.html"),
+             h3("Package installation!"),
+             conditionalPanel( # for Rsampling install
+                p("It seems that you don't have the Rsampling package installed. You can install it
+                  by pressing the button below (experimental!), and it should take a couple of minutes
+                  to download and install. If it fails, see the instructions for manual install ",
+                  a("here", href="https://github.com/lageIBUSP/Rsampling")),
+                actionButton("installbutton", "Install!"),
+                conditionalPanel(condition="input.installbutton > 0",
+                  textOutput("pkginstall")
+                ),
+                condition="output.needinstall"
+             )
+             ),
+             conditionalPanel("!output.needinstall",
+               p("You already have Rsampling installed :)")
              ),
     tabPanel("Data input", 
              helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),

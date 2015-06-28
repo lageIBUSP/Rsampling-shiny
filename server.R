@@ -1,5 +1,4 @@
 library(shiny)
-library(Rsampling)
 shinyServer(function(input, output) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
@@ -114,9 +113,29 @@ shinyServer(function(input, output) {
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })
+            ### tries to install the Rsampling package
+            output$pkginstall <- renderText({
+              # runs when the install button is pressed
+              if (input$installbutton > 0) {
+              cat("installing...")
+              if(!require(devtools))
+                 install.packages("devtools")
+              library(devtools)
+              install_github(repo = 'lageIBUSP/Rsampling')
+              if(require(Rsampling))
+                return("Installation complete!")
+              else
+                return("Installation error!")
+              }
+            })
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
+            output$needinstall <- reactive({
+              ! require(Rsampling)
+            })
+            # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
+            outputOptions(output, 'needinstall', suspendWhenHidden=FALSE)
             ### simple table display to see the contents of the data selected
             output$view <- renderTable({
               head(data(), 15)

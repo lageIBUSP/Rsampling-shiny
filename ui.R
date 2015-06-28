@@ -5,10 +5,25 @@ shinyUI(fluidPage(theme= "bootstrap.css",
     tabPanel("Rsampling",
              h2("Rsampling - resampling statistics in R"),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
-             includeHTML("help.html")
+             includeHTML("help.html"),
+             h3("Package installation!"),
+             conditionalPanel( # for Rsampling install
+                p("It seems that you don't have the Rsampling package installed. You can install it
+                  by pressing the button below (experimental!), and it should take a couple of minutes
+                  to download and install. If it fails, see the instructions for manual install ",
+                  a("here", href="https://github.com/lageIBUSP/Rsampling")),
+                actionButton("installbutton", "Install!"),
+                conditionalPanel(condition="input.installbutton > 0",
+                  textOutput("pkginstall")
+                ),
+                condition="output.needinstall"
              ),
+             conditionalPanel("!output.needinstall",
+               p("You already have Rsampling installed :)")
+             )
+    ),
     tabPanel("Data input", 
-             helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
+             helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the \"upload\" option to upload your own file."),
              selectInput("datasource",
                          "What is your input data?",
                          choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
@@ -125,7 +140,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        "Rows as units", "Columns as units")
                  ),
                  bsTooltip("type", "See the help page for details on the different randomization types."),
-                 checkboxInput("replace", "Replace?"),
+                 checkboxInput("replace", "With replacement?"),
                  bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),
                  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
                  bsTooltip("ntrials", "How many iteractions of sampling should we do?"),

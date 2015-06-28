@@ -1,5 +1,4 @@
 library(shiny)
-library(Rsampling)
 shinyServer(function(input, output) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
@@ -102,6 +101,9 @@ shinyServer(function(input, output) {
             ### trigger a recalculation of the statistic (for performance reasons)
             distribution <- reactive({
               input$go # triggers the calculations when the "Update graph" is pressed
+              # traps NA, NaN, NULL, Infin the statistic applied over the original data
+              if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
+                return (0);
               type = switch(isolate(input$type),
                             "Normal shuffle" = "normal_rand",
                             "Rows as units" = "rows_as_units",
@@ -114,9 +116,28 @@ shinyServer(function(input, output) {
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })
+            ### tries to install the Rsampling package
+            output$pkginstall <- renderText({
+              # runs when the install button is pressed
+              if (input$installbutton > 0) {
+                if(!require(devtools))
+                   install.packages("devtools")
+                library(devtools)
+                install_github(repo = 'lageIBUSP/Rsampling')
+                if(require(Rsampling))
+                  return("Installation complete!")
+                else
+                  return("Installation error!")
+              }
+            })
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
+            output$needinstall <- reactive({
+              ! require(Rsampling)
+            })
+            # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
+            outputOptions(output, 'needinstall', suspendWhenHidden=FALSE)
             ### simple table display to see the contents of the data selected
             output$view <- renderTable({
               head(data(), 15)
@@ -124,6 +145,9 @@ shinyServer(function(input, output) {
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
               mydist <- distribution()
+              # Traps errors
+              if (length(mydist) == 1)
+                stop("Distribution calculation stopped with error!")
               # what should be the xlim?
               maxx <- max(abs(mydist))
               line <- svalue(); if(abs(line) > maxx) maxx = abs(line); 

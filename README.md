@@ -16,13 +16,3 @@ and wait for the browser window to open!
 * Choose between a range of statistics, or write your own R function
 * Select your randomization scheme, with or without replacement
 * Reactive graph showing the distribuion of the statistic of interest and estimated p-value
-
-## To do list:
-
-* Improve the interface help
-* Excel-like interface to input data (like [this?] (https://github.com/AnalytixWare/ShinySky))
-* more stats (F-statistics)
-* better interface for selecting columns, also remove the redundancies between "s1", "m1", "d1", etc etc
-* restricted randomization with a selector for the "stratum"
-* add a progress bar
-* animations!

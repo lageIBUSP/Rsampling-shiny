@@ -71,7 +71,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                    "Regression intercept" = "intercept",
                                    "Regression coefficient" = "slope",
                                    "Correlation between columns" = "corr",
-                                   "Custom code" = "custom")),
+                                   "Custom code" = "custom"),
+                         "meandif"),
              ### Panel for custom code:
              conditionalPanel(
                helpText("You are free to write down your own R function to calculate any statistic 
@@ -96,7 +97,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                         a linear correlation analysis between two columns, y ~ ax + b. Here, x is the
                         independent variable, and y is the dependent variable."),
                numericInput("r1", "Dependent variable column: ", 1),
-               numericInput("r2", "Independent variable column: ", 1),
+               numericInput("r2", "Independent variable column: ", 2),
                condition="input.stat == 'intercept' || input.stat == 'slope' || input.stat == 'corr'"
              ),
              ### Panel for smean/ssd:
@@ -143,6 +144,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  checkboxInput("replace", "With replacement?"),
                  bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),
                  sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
+                 checkboxInput("stratum", "Stratified resampling?"),
+                 bsTooltip("stratum", "Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
+                 conditionalPanel("input.stratum",
+                   numericInput("stratumc", "Stratum variable: ", 1)
+                 ),
                  bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
                  actionButton("go", "Update Graph")
                ),

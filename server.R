@@ -61,6 +61,13 @@ shinyServer(function(input, output) {
               #else?
               return(NULL)
             })
+            stratum <- reactive({
+              if (input$stratum == FALSE)
+                return (rep(1, nrow(data())))
+              #else
+              d <- data()
+              return (d[, input$stratumc])
+            })
             ### this reactive simply translates the input value into the corresponding function
             statistic <- reactive({
               switch(input$stat,
@@ -113,6 +120,7 @@ shinyServer(function(input, output) {
                             )
               Rsampling(type = type, dataframe = data(),
                         statistics = statistic(), cols = cols(),
+                        stratum = stratum(),
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })

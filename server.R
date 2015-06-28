@@ -85,17 +85,17 @@ shinyServer(function(input, output) {
             ### reads the CSV uploaded by the data selector
             csvfile <- reactive({
               if(is.null(input$file)) return (data.frame());
-              read.csv(input$file$datapath, header=input$header)
+              read.table(input$file$datapath, header=input$header, sep=input$sep, quote=input$quote, dec=input$dec)
             })
             ### translates the input value for data source into the corresponding R object
-            ### in the case "custom", it reads the csv using the csvfile() reactive
+            ### in the case "upload file", it reads the csv using the csvfile() reactive
             data <- reactive({
               switch(input$datasource,
                      "embauba" = embauba,
                      "azteca" = azteca,
                      "peucetia" = peucetia,
                      "rhyzophora" = rhyzophora,
-                     "custom" = csvfile())
+                     "upload file" = csvfile())
             })
             ### calculates the distribution of the statistic of interest using Rsampling
             ### several of its arguments are isolate()'d, meaning that changing them will

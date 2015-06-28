@@ -1,23 +1,42 @@
 library(shiny)
-shinyUI(fluidPage(
+library(shinyBS)
+shinyUI(fluidPage(theme= "bootstrap.css",
   tabsetPanel(type="tabs",
-    tabPanel("Help/info",
+    tabPanel("Rsampling",
              h2("Rsampling - resampling statistics in R"),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
              includeHTML("help.html")
              ),
     tabPanel("Data input", 
-             helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
+           #  helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select \"custom\" to upload your own file."),
              selectInput("datasource",
                          "What is your input data?",
-                         choices = c("embauba", "azteca", "peucetia", "rhyzophora", "custom")
+                         choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
                          ),
+             bsPopover("datasource", "Select the input data for your analysis. The first options are datasets included in the library, select \"upload file\" to upload your own file.", placement="right"),
              ## the next panel only shows for the custom datasource
              conditionalPanel(
                fileInput("file", "Choose CSV file:", accept='.csv'),
-               checkboxInput("header", "Header?"),
+                 checkboxInput("header", "Header?"),
+                 bsTooltip("header", "First row as header"),
+                 radioButtons('sep', 'Separator',
+                              c(Comma=',',
+                                Semicolon=';',
+                                Tab='\t',
+                                Spc=' '),
+                              ','),
+                 radioButtons('dec', 'Decimal',
+                              c(dot ='.',
+                                colon=','),
+                              ','),
+                 radioButtons('quote', 'Quote',
+                              c(None='',
+                                'Double Quote'='"',
+                                'Single Quote'="'"),
+                              '"'),
+                 
                helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
-               condition="input.datasource	== 'custom'"
+               condition="input.datasource	== 'upload file'"
              ),
              helpText("The first rows of the selected data table are:"),
              tableOutput("view")

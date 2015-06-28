@@ -16,9 +16,10 @@ and wait for the browser window to open!
 
 ## To do list:
 
+* Trap common errors (function returns NA)
 * Improve the interface help
-* Excel-like interface to input data (like [this?] (https://github.com/AnalytixWare/ShinySky)
-* custom code for statistic of interest, more stats (F-statistics)
+* Excel-like interface to input data (like [this?] (https://github.com/AnalytixWare/ShinySky))
+* more stats (F-statistics)
 * better interface for selecting columns, also remove the redundancies between "s1", "m1", "d1", etc etc
 * restricted randomization with a selector for the "stratum"
 * add a progress bar

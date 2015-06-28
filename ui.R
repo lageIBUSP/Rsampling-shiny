@@ -42,7 +42,7 @@ shinyUI(fluidPage(
                         \"dataframe\". Your last line in the code should return a single number, representing
                         the statistic of interest. Some examples of what to use include:"),
                strong("Sum of column 1:"), p(""), code("sum(dataframe[, 1])"), p(""),
-               strong("Mean of row 3:"), p(""), code("mean(dataframe[, 3])"), p(""),
+               strong("Mean of row 3:"), p(""), code("mean(dataframe[3, ])"), p(""),
                strong("Correlation coefficient between columns 1 and 2:"), p(""),
                code("cor(dataframe[,1], dataframe[,2])"), p(""),
                strong("Sum of the squared residuals of a linear model:"), p(""),

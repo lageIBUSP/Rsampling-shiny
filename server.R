@@ -34,9 +34,18 @@ shinyServer(function(input, output) {
             corr <- function(dataframe) {
               cor(dataframe[, input$r1], dataframe[, input$r2])
             }
-            custom <- function(dataframe) {
+            # accessory for the custom function handler 
+            # (for a slight performance improvement over parsing everytime)
+            pcustom <- reactive({
               input$gocustomstat
-              eval(parse(text=isolate(input$customstat)))
+              parse(text=isolate(input$customstat))
+            })
+            custom <- function(my.df) {
+              dataframe <- as.data.frame(my.df)
+              # Removes the spurious stratum column included by Rsampling routines
+              if (colnames(dataframe)[1] == "stratum")
+                dataframe <- dataframe[,-1]
+              eval(pcustom())
             }
             # what columns should be randomized?
             cols <- reactive({
@@ -46,7 +55,7 @@ shinyServer(function(input, output) {
                 return(input$s2)
               if(input$stat == "meandifc") # the before and after columns are d1 and d2
                 return(c(input$d1, input$d2))
-              if(input$stat %in% c("scol", "srow")) # all columns should be used
+              if(input$stat %in% c("scol", "srow", "custom")) # all columns should be used
                 return(1:ncol(data()))
               if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
                 return(input$r1)

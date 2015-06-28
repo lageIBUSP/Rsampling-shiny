@@ -7,7 +7,7 @@ To run, install [R] (http://www.r-project.org/) and the [Rsampling library] (htt
 
 Then, launch R and run
 ```R
-install.package("shiny")
+install.packages("shiny")
 library(shiny)
 runGitHub(repo="Rsampling-shiny", username="andrechalom")
 ``` 

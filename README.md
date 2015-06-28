@@ -11,8 +11,13 @@ install.packages(c("shiny","devtools"))
 library(shiny)
 runGitHub(repo="Rsampling-shiny", username="andrechalom")
 ``` 
-
 and wait for the browser window to open!
+
+## Current features
+* Access the Rsampling sample datafiles, or upload your own data in csv format
+* Choose between a range of statistics, or write your own R function
+* Select your randomization scheme, with or without replacement
+* Reactive graph showing the distribuion of the statistic of interest and estimated p-value
 
 ## To do list:
 

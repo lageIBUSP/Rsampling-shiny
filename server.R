@@ -34,6 +34,10 @@ shinyServer(function(input, output) {
             corr <- function(dataframe) {
               cor(dataframe[, input$r1], dataframe[, input$r2])
             }
+            custom <- function(dataframe) {
+              input$gocustomstat
+              eval(parse(text=isolate(input$customstat)))
+            }
             # what columns should be randomized?
             cols <- reactive({
               if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
@@ -60,7 +64,8 @@ shinyServer(function(input, output) {
                      "scol" = scol,
                      "intercept" = intercept,
                      "slope" = slope,
-                     "corr" = corr
+                     "corr" = corr,
+                     "custom" = custom
                      )
             })
             ### the statistic applied to the original data

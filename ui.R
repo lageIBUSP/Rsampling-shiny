@@ -33,7 +33,26 @@ shinyUI(fluidPage(
                                    "Mean sum of columns" = "scol",
                                    "Regression intercept" = "intercept",
                                    "Regression coefficient" = "slope",
-                                   "Correlation between columns" = "corr")),
+                                   "Correlation between columns" = "corr",
+                                   "Custom code" = "custom")),
+             ### Panel for custom code:
+             conditionalPanel(
+               helpText("You are free to write down your own R function to calculate any statistic 
+                        over your data! The data is stored as a dataframe with the boring name of 
+                        \"dataframe\". Your last line in the code should return a single number, representing
+                        the statistic of interest. Some examples of what to use include:"),
+               strong("Sum of column 1:"), p(""), code("sum(dataframe[, 1])"), p(""),
+               strong("Mean of row 3:"), p(""), code("mean(dataframe[, 3])"), p(""),
+               strong("Correlation coefficient between columns 1 and 2:"), p(""),
+               code("cor(dataframe[,1], dataframe[,2])"), p(""),
+               strong("Sum of the squared residuals of a linear model:"), p(""),
+               code("my.lm <- lm(dataframe[,5] ~ dataframe[,4])"), p(""),
+               code("my.r <- residuals(my.lm)"), p(""),
+               code("sum(my.r^2)"), p(""),
+               tags$textarea(id = "customstat", rows=5, cols=40, "return(pi)"),
+               actionButton("gocustomstat", "Go!"),
+               condition="input.stat == 'custom'"
+             ),
              ### Panel for smean/ssd:
              conditionalPanel(
                helpText("These functions calculate the correlation coefficient, slope or intercept of

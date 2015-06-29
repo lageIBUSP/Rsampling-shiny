@@ -120,7 +120,7 @@ shinyServer(function(input, output, session) {
                             )
               Rsampling(type = type, dataframe = data(),
                         statistics = statistic(), cols = cols(),
-                        stratum = stratum(),
+                        stratum = isolate(stratum()),
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })
@@ -178,7 +178,9 @@ shinyServer(function(input, output, session) {
               paste("(two sided) p-value: ", round(sum(abs(distribution()) >= abs(svalue())) / length(distribution()),3), "\n", sep="")
             })
             observe({
-              cols <- 1:dim(data())[2]
+              # Check to see if there is any data (may fail during file upload)
+              if(!ncol(data())) return();
+              cols <- 1:ncol(data())
               names(cols) <- colnames(data())
               updateSelectInput(session, "m1", choices = cols)
               updateSelectInput(session, "r1", choices = cols)

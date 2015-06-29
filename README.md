@@ -1,13 +1,14 @@
 # Rsampling-shiny
 
-Rsampling is a free and open source package intended for teaching and learning about
-resampling in statistics.
+[Rsampling] (https://github.com/lageIBUSP/Rsampling) is a free and open source package intended for 
+teaching and learning about resampling in statistics. Rsampling-shiny is a web-based graphical user interface
+written in [shiny] (http://shiny.rstudio.com).
 
 To run, you need to install [R] (http://www.r-project.org/). Then, launch R and run
 ```R
 install.packages(c("shiny","shinyBS","devtools"))
 library(shiny)
-runGitHub(repo="Rsampling-shiny", username="andrechalom")
+runGitHub(repo="andrechalom/Rsampling-shiny")
 ``` 
 and wait for the browser window to open!
 

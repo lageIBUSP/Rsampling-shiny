@@ -161,8 +161,13 @@ shinyServer(function(input, output, session) {
               line <- svalue(); if(abs(line) > maxx) maxx = abs(line); 
               # draws the histogram
               oh <- hist(mydist, xlim=1.1*c(-maxx, maxx), main = "Distribution of the statistic of interest", col="skyblue", border="white", xlab="Statistic of interest")
-              # adds the extreme values in orange
-              mydist <- mydist[abs(mydist) >= abs(line)]
+              # adds the extreme values in orange. the definition of "extreme" depends on whether the test is
+              # one sided or two sided
+              mydist <- switch(input$pside,
+                              "Two sided" = mydist[abs(mydist) >= abs(line)],
+                              "Greater" = mydist[mydist >= line],
+                              "Lesser" = mydist[mydist <= line]
+                              )
               if(length(mydist)>0) 
                 hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
                      add=TRUE, breaks = oh$breaks)
@@ -175,8 +180,16 @@ shinyServer(function(input, output, session) {
             })
             ### simply displays the "p-value"
             output$p <- renderText({
-              paste("(two sided) p-value: ", round(sum(abs(distribution()) >= abs(svalue())) / length(distribution()),3), "\n", sep="")
+              side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
+              p <- switch(input$pside, 
+                          "Two sided" = abs(distribution()) >= abs(svalue()),
+                          "Greater" = distribution() >= svalue(),
+                          "Lesser" = distribution() <= svalue()
+                          )
+              p <- round(sum(p) / length(distribution()),3)
+              paste(side, "p-value:", p)
             })
+            ### Updates the values in the dropdowns for column selection
             observe({
               # Check to see if there is any data (may fail during file upload)
               if(!ncol(data())) return();

@@ -160,7 +160,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                           randomization from your data. The histograms bins in orange (if any) represent those
                           simulations in which the statistic had a value that's ", em("equal 
                           to or more extreme"), " than the statistic calculated on your original data
-                          (represented by the dotted red line). This leads to a p-value of:"),
+                          (represented by the dotted red line). The gray area delimits the values of the statistics under which the null hypothesis should be accepted with 5% of chance of error. The proportion of simulations with statistics more extreme than the observed (p-value of) is:"),
                  h3(textOutput("p"))
                )
              )

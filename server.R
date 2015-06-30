@@ -125,6 +125,9 @@ shinyServer(function(input, output, session) {
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })
+            ###########################################
+            ####### OUTPUT GENERATING FUNCTIONS #######
+            ###########################################
             ### tries to install the Rsampling package
             output$pkginstall <- renderText({
               # runs when the install button is pressed
@@ -139,9 +142,12 @@ shinyServer(function(input, output, session) {
                   return("Installation error!")
               }
             })
-            ###########################################
-            ####### OUTPUT GENERATING FUNCTIONS #######
-            ###########################################
+            # displays a warning in the case svalue() is not a single number
+            output$svaluewarning <- renderText({
+              if(!is.null(svalue()) && length(svalue()) > 1)
+                return("WARNING, the statistic function should return a single number.")
+              return("")
+            })
             output$needinstall <- reactive({
               ! require(Rsampling)
             })
@@ -162,7 +168,8 @@ shinyServer(function(input, output, session) {
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-              paste("Statistic of interest: ", round(svalue(),3),"\n", sep="")
+              s <- paste(round(svalue(), 3), collapse = " ") # to avoid weird things when length > 1
+              paste("Statistic of interest: ", s, "\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({

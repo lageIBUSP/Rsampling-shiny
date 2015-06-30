@@ -41,11 +41,12 @@ dplot <- function(dist, svalue, pside=c("Two sided", "Greater", "Lesser"),
   if(vline) abline(v = svalue, lty=2, col="red")
   # Vertical svalues for rejection region
   dist.q <- quantile(dist, c(0.025, 0.975, 0.95, 0.05))
-  rejection <- switch(pside,
+  rrejection <- switch(pside,
                       "Two sided" = dist.q[1:2],
                       "Greater" = c(dots$xlim[1], dist.q[3]),
                       "Lesser" = c(dist.q[4], dots$xlim[2])
                       )
-  rect(xleft=rejection[1], xright=rejection[2], ybottom = 0, ytop=max(oh$counts),
-       col=gray.colors(1,alpha=.3), lwd=0)
+  if(rejection)
+    rect(xleft=rrejection[1], xright=rrejection[2], ybottom = 0, ytop=max(oh$counts),
+      col=gray.colors(1,alpha=.3), lwd=0)
 }

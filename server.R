@@ -158,7 +158,7 @@ shinyServer(function(input, output, session) {
               if (length(mydist) == 1)
                 stop("Distribution calculation stopped with error!")
               dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
-                    extreme = TRUE, vline = TRUE, rejection = TRUE)
+                    extreme = input$extreme, vline = TRUE, rejection = input$rejection)
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({

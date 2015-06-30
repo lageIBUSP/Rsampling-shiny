@@ -152,6 +152,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                    selectInput("stratumc", "Stratum variable: ", 1)
                  ),
                  bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
+                 fluidRow(column(6, checkboxInput("extreme", "Show extremes?", TRUE)),
+                          column(6, checkboxInput("rejection", "Show rejection region?", TRUE))
+                         ),
                  actionButton("go", "Update Graph")
                ),
                mainPanel(

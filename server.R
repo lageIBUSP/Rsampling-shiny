@@ -91,7 +91,7 @@ shinyServer(function(input, output, session) {
             ### reads the CSV uploaded by the data selector
             csvfile <- reactive({
               if(is.null(input$file)) return (data.frame());
-              read.table(input$file$datapath, header=input$header, sep=input$sep, quote=input$quote, dec=input$dec)
+              read.csv(input$file$datapath, header=input$header, sep=input$sep, quote=input$quote, dec=input$dec)
             })
             ### translates the input value for data source into the corresponding R object
             ### in the case "upload file", it reads the csv using the csvfile() reactive
@@ -202,7 +202,7 @@ shinyServer(function(input, output, session) {
             observe({
               # Check to see if there is any data (may fail during file upload)
               if(!ncol(data())) return();
-              cols <- 1:ncol(data())
+              cols <- 1:length(colnames(data()))
               names(cols) <- colnames(data())
               updateSelectInput(session, "m1", choices = cols)
               updateSelectInput(session, "r1", choices = cols)

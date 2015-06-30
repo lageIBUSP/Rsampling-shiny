@@ -161,19 +161,26 @@ shinyServer(function(input, output, session) {
               line <- svalue(); if(abs(line) > maxx) maxx = abs(line); 
               # draws the histogram
               oh <- hist(mydist, xlim=1.1*c(-maxx, maxx), main = "Distribution of the statistic of interest", col="skyblue", border="white", xlab="Statistic of interest")
-              # adds the rejection region in orange. The definition of the region depends on whether the test is
+              # adds the extreme values in orange. the definition of "extreme" depends on whether the test is
               # one sided or two sided
-              mydist.q <- quantile(mydist, probs=c(0.025, 0.05, 0.95, 0.975))
               mydist <- switch(input$pside,
-                              "Two sided" = mydist[mydist < mydist.q[1] || mydist > mydist.q[4]],
-                              "Greater" = mydist[mydist > mydist.q[3]],
-                              "Lesser" = mydist[mydist < mydist.q[2]]
+                              "Two sided" = mydist[abs(mydist) >= abs(line)],
+                              "Greater" = mydist[mydist >= line],
+                              "Lesser" = mydist[mydist <= line]
                               )
               if(length(mydist)>0) 
                 hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
                      add=TRUE, breaks = oh$breaks)
               # vertical line with the original statistic
-              abline(v = line, lty=2, col="red")
+                abline(v = line, lty=2, col="blue")
+             # Vertical lines for rejection region
+                mydist.q <- quantile(mydist, c(0.025, 0.975, 0.95, 0.05))
+                rejection <- switch(input$pside,
+                              "Two sided" = mydist.q[1:2],
+                              "Greater" = mydist.q[3],
+                              "Lesser" = mydist.q[4]
+                                    )
+                abline(v=rejection, col="red", lwd=2)
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({

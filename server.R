@@ -1,4 +1,5 @@
 library(shiny)
+source("dplot.R")
 shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
@@ -156,32 +157,8 @@ shinyServer(function(input, output, session) {
               # Traps errors
               if (length(mydist) == 1)
                 stop("Distribution calculation stopped with error!")
-              # what should be the xlim?
-              maxx <- max(abs(mydist))
-              line <- svalue(); if(abs(line) > maxx) maxx = abs(line); 
-              # draws the histogram
-              oh <- hist(mydist, xlim=1.1*c(-maxx, maxx), main = "Distribution of the statistic of interest", col="skyblue", border="white", xlab="Statistic of interest")
-              # adds the extreme values in orange. the definition of "extreme" depends on whether the test is
-              # one sided or two sided
-              mydist <- switch(input$pside,
-                              "Two sided" = mydist[abs(mydist) >= abs(line)],
-                              "Greater" = mydist[mydist >= line],
-                              "Lesser" = mydist[mydist <= line]
-                              )
-              if(length(mydist)>0) 
-                hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
-                     add=TRUE, breaks = oh$breaks)
-              # vertical line with the original statistic
-                abline(v = line, lty=2, col="red")
-             # Vertical lines for rejection region
-                mydist.q <- quantile(distribution(), c(0.025, 0.975, 0.95, 0.05))
-                rejection <- switch(input$pside,
-                              "Two sided" = mydist.q[1:2],
-                              "Greater" = c(1.1*-maxx, mydist.q[3]),
-                              "Lesser" = c(mydist.q[4], 1.1*maxx)
-                                    )
-                rect(xleft=rejection[1], xright=rejection[2], ybottom = 0, ytop=max(oh$counts),
-                     col=gray.colors(1,alpha=.3), lwd=0)
+              dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
+                    extreme = TRUE, vline = TRUE, rejection = TRUE)
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({

@@ -180,8 +180,8 @@ shinyServer(function(input, output, session) {
                               "Greater" = c(mydist.q[3],1.1*maxx),
                               "Lesser" = c(1.1*-maxx, mydist.q[4])
                                     )
-                rect(xleft=rejection[1], xright=rejection[2], ybottom=min(oh$counts), ytop=max(oh$counts),
-                     col=gray.colors(10, alpha=0.5)[1])
+                rect(xleft=rejection[1], xright=rejection[2], ybottom = 0, ytop=max(oh$counts),
+                     col=gray.colors(1,alpha=.3), lwd=0)
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({

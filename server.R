@@ -1,5 +1,4 @@
 library(shiny)
-source("dplot.R")
 shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###

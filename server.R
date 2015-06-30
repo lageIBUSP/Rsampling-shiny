@@ -174,7 +174,7 @@ shinyServer(function(input, output, session) {
               # vertical line with the original statistic
                 abline(v = line, lty=2, col="blue")
              # Vertical lines for rejection region
-                mydist.q <- quantile(mydist, c(0.025, 0.975, 0.95, 0.05))
+                mydist.q <- quantile(distribution(), c(0.025, 0.975, 0.95, 0.05))
                 rejection <- switch(input$pside,
                               "Two sided" = mydist.q[1:2],
                               "Greater" = mydist.q[3],

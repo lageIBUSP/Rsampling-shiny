@@ -172,7 +172,7 @@ shinyServer(function(input, output, session) {
                 hist(mydist, xlim=1.1*c(-maxx,maxx), col="orange1", border="white", 
                      add=TRUE, breaks = oh$breaks)
               # vertical line with the original statistic
-                abline(v = line, lty=2, col="blue")
+                abline(v = line, lty=2, col="red")
              # Vertical lines for rejection region
                 mydist.q <- quantile(distribution(), c(0.025, 0.975, 0.95, 0.05))
                 rejection <- switch(input$pside,
@@ -180,7 +180,8 @@ shinyServer(function(input, output, session) {
                               "Greater" = c(mydist.q[3],1.1*maxx),
                               "Lesser" = c(1.1*-maxx, mydist.q[4])
                                     )
-                polygon(x=rep(rejection,2), y=rep(range(oh$counts), 2), col=gray.colors(10, alpha=0.5)[1])
+                rect(xleft=rejection[1], xright=rejection[2], ybottom=min(oh$counts), ytop=max(oh$counts),
+                     col=gray.colors(10, alpha=0.5)[1])
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({

@@ -23,8 +23,9 @@ runGitHub(repo="andrechalom/Rsampling-shiny")
 and wait for the browser window to open!
 
 ## Offline installation
-If you need to be able to use Rsampling-shiny without Internet access, download the Rsampling-shiny\_1.0.zip
-file above, and extract it to a folder. Then, open R (with the required packages installed, see above) and run
+If you need to be able to use Rsampling-shiny without Internet access, download the [latest stable version] 
+(https://github.com/andrechalom/Rsampling-shiny/archive/v1.1.zip), 
+and extract it to a folder. Then, open R (with the required packages installed, see above) and run
 ```R
 library(shiny)
 runApp("<path to Rsampling-shiny>")

@@ -126,19 +126,20 @@ shinyServer(function(input, output, session) {
                         replace=isolate(input$replace))
             })
             ### tries to install the Rsampling package
-            output$pkginstall <- renderText({
-              # runs when the install button is pressed
-              if (input$installbutton > 0) {
-                if(!require(devtools))
-                   install.packages("devtools")
-                library(devtools)
-                install_github(repo = 'lageIBUSP/Rsampling')
-                if(require(Rsampling))
-                  return("Installation complete!")
-                else
-                  return("Installation error!")
-              }
-            })
+            # Removed in v1.1 because of several issues
+#            output$pkginstall <- renderText({
+#              # runs when the install button is pressed
+#              if (input$installbutton > 0) {
+#                if(!require(devtools))
+#                   install.packages("devtools")
+#                library(devtools)
+#                install_github(repo = 'lageIBUSP/Rsampling')
+#                if(require(Rsampling))
+#                  return("Installation complete!")
+#                else
+#                  return("Installation error!")
+#              }
+#            })
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
@@ -177,10 +178,12 @@ shinyServer(function(input, output, session) {
             })
             ### Updates the values in the dropdowns for column selection
             observe({
-              # Check to see if there is any data (may fail during file upload)
-              if(!ncol(data())) return();
-              cols <- 1:length(colnames(data()))
-              names(cols) <- colnames(data())
+              # Check to see if there is any data (may fail during file upload 
+              # or if Rsampling is not installed)
+              d <- tryCatch(data(), error=function(cond) return(data.frame()))
+              if(!ncol(d)) return();
+              cols <- 1:length(colnames(d))
+              names(cols) <- colnames(d)
               updateSelectInput(session, "m1", choices = cols)
               updateSelectInput(session, "r1", choices = cols)
               updateSelectInput(session, "r2", choices = cols, selected=2)

@@ -60,7 +60,9 @@ shinyServer(function(input, output, session) {
                 return(1:ncol(data()))
               if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
                 return(as.numeric(input$r1))
-              #else? TODO: add custom selector here
+              if(input$stat == "custom")
+                return(eval(parse(text=isolate(input$customcols))))
+              #else?
               return(NULL)
             })
             stratum <- reactive({
@@ -120,15 +122,7 @@ shinyServer(function(input, output, session) {
                             "Within rows" = "within_rows",
                             "Within columns" = "within_columns"
                             )
-              # ugly if: can we decide which columns should be randomized before?
-              if(input$stat == "custom")
-                Rsampling(type = type, dataframe = data(),
-                        statistics = statistic(),
-                        stratum = isolate(stratum()),
-                        ntrials = isolate(input$ntrials), 
-                        replace=isolate(input$replace))
-              else
-                Rsampling(type = type, dataframe = data(),
+              Rsampling(type = type, dataframe = data(),
                         statistics = statistic(), cols = cols(),
                         stratum = isolate(stratum()),
                         ntrials = isolate(input$ntrials), 

@@ -159,6 +159,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  conditionalPanel("input.stratum",
                    selectInput("stratumc", "Stratum variable: ", 1)
                  ),
+                 conditionalPanel("input.stat == 'custom'",
+                   helpText("Which columns of the data set should be randomized? This input
+                           will be parsed as R code, so 1:3 or c(1,4,5) are valid values"),
+                   textInput("customcols", "Columns", "1")
+                 ),
                  bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
                  fluidRow(column(6, checkboxInput("extreme", "Show extremes?", TRUE)),
                           column(6, checkboxInput("rejection", "Show rejection region?", TRUE))

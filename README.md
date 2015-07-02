@@ -4,7 +4,7 @@
 teaching and learning about resampling in statistics. Rsampling-shiny is a web-based graphical user interface
 written in [shiny] (http://shiny.rstudio.com).
 
-To run, you need to install [R] (http://www.r-project.org/) and the [Rsampling] library (https://github.com/lageIBUSP/Rsampling).
+To run, you need to install [R] (http://www.r-project.org/) and the [Rsampling] (https://github.com/lageIBUSP/Rsampling) library.
 
 To install Rsampling, open R and run:
 ```R

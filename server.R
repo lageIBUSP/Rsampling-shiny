@@ -35,17 +35,19 @@ shinyServer(function(input, output, session) {
               cor(dataframe[, as.numeric(input$r1)], dataframe[, as.numeric(input$r2)])
             }
             # accessory for the custom function handler 
+            # removed to make debugging faster, may be added back later?
             # (for a slight performance improvement over parsing everytime)
-            pcustom <- reactive({
-              input$gocustomstat
-              parse(text=isolate(input$customstat))
-            })
-            custom <- function(my.df) {
-              dataframe <- as.data.frame(my.df)
+            #pcustom <- reactive({
+            #  input$gocustomstat
+            #  parse(text=isolate(input$customstat))
+            #})
+            custom <- function(dataframe) {
+              #dataframe <- as.data.frame(my.df)
               # Removes the spurious stratum column included by Rsampling routines
-              if (colnames(dataframe)[1] == "stratum")
-                dataframe <- dataframe[,-1]
-              eval(pcustom())
+              # Fixed in Rsampling 0.0.0.2, so this code is now useless
+              #if (colnames(dataframe)[1] == "stratum")
+              #  dataframe <- dataframe[,-1]
+              eval(parse(text=input$customstat))
             }
             # what columns should be randomized?
             cols <- reactive({
@@ -55,11 +57,11 @@ shinyServer(function(input, output, session) {
                 return(as.numeric(input$s2))
               if(input$stat == "meandifc") # the before and after columns are d1 and d2
                 return(c(as.numeric(input$d1), as.numeric(input$d2)))
-              if(input$stat %in% c("scol", "srow", "custom")) # all columns should be used
+              if(input$stat %in% c("scol", "srow")) # all columns should be used
                 return(1:ncol(data()))
               if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
                 return(as.numeric(input$r1))
-              #else?
+              #else? TODO: add custom selector here
               return(NULL)
             })
             stratum <- reactive({
@@ -119,7 +121,15 @@ shinyServer(function(input, output, session) {
                             "Within rows" = "within_rows",
                             "Within columns" = "within_columns"
                             )
-              Rsampling(type = type, dataframe = data(),
+              # ugly if: can we decide which columns should be randomized before?
+              if(input$stat == "custom")
+                Rsampling(type = type, dataframe = data(),
+                        statistics = statistic(),
+                        stratum = isolate(stratum()),
+                        ntrials = isolate(input$ntrials), 
+                        replace=isolate(input$replace))
+              else
+                Rsampling(type = type, dataframe = data(),
                         statistics = statistic(), cols = cols(),
                         stratum = isolate(stratum()),
                         ntrials = isolate(input$ntrials), 
@@ -144,7 +154,9 @@ shinyServer(function(input, output, session) {
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
             output$needinstall <- reactive({
-              ! require(Rsampling)
+              if(! require(Rsampling)) return ("notinstalled")
+              else if(packageDescription("Rsampling")$Version != "0.0.0.2") return ("incompatible")
+              else return ("ok")
             })
             # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
             outputOptions(output, 'needinstall', suspendWhenHidden=FALSE)
@@ -158,12 +170,14 @@ shinyServer(function(input, output, session) {
               # Traps errors
               if (length(mydist) == 1)
                 stop("Distribution calculation stopped with error!")
-              dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
+              Rsampling::dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
                     extreme = input$extreme, vline = TRUE, rejection = input$rejection)
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-              paste("Statistic of interest: ", round(svalue(),3),"\n", sep="")
+              input$gocustomstat
+              input$stat
+              paste("Statistic of interest: ", round(isolate(svalue()),3),"\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({

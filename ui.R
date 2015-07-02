@@ -16,10 +16,16 @@ shinyUI(fluidPage(theme= "bootstrap.css",
 #                conditionalPanel(condition="input.installbutton > 0",
 #                  textOutput("pkginstall")
 #                ),
-                condition="output.needinstall"
+                condition="output.needinstall=='notinstalled'"
              ),
-             conditionalPanel("!output.needinstall",
+             conditionalPanel("output.needinstall=='ok'",
                p("You already have Rsampling installed :)")
+             ),
+             conditionalPanel("output.needinstall=='incompatible'",
+                p("Your version of the Rsampling library seems to be incompatible with this interface
+                  version. Please download the latest version of the library ",
+                  a("here", href="https://github.com/lageIBUSP/Rsampling"), ", then reload this interface",
+                  style="color:#f30")
              )
     ),
     tabPanel("Data input", 

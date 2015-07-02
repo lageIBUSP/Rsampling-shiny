@@ -154,7 +154,10 @@ shinyServer(function(input, output, session) {
 #            })
             # displays a warning in the case svalue() is not a single number
             output$svaluewarning <- renderText({
-              if(!is.null(svalue()) && length(svalue()) > 1)
+              s <- isolate(try(svalue(), silent=TRUE))
+              input$gocustomstat
+              input$stat
+              if(!is.null(s) && length(s) > 1)
                 return("WARNING, the statistic function should return a single number.")
               return("")
             })
@@ -183,7 +186,7 @@ shinyServer(function(input, output, session) {
               input$gocustomstat
               input$stat
               # to avoid weird things when length > 1
-              s <- paste(round(svalue(), 3), collapse = " ")
+              s <- paste(round(isolate(svalue()), 3), collapse = " ")
               paste("Statistic of interest: ", s, "\n", sep="")
             })
             ### simply displays the "p-value"

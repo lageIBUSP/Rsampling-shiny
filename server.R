@@ -1,5 +1,4 @@
 library(shiny)
-source("dplot.R")
 shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
@@ -135,6 +134,9 @@ shinyServer(function(input, output, session) {
                         ntrials = isolate(input$ntrials), 
                         replace=isolate(input$replace))
             })
+            ###########################################
+            ####### OUTPUT GENERATING FUNCTIONS #######
+            ###########################################
             ### tries to install the Rsampling package
             # Removed in v1.1 because of several issues
 #            output$pkginstall <- renderText({
@@ -150,9 +152,12 @@ shinyServer(function(input, output, session) {
 #                  return("Installation error!")
 #              }
 #            })
-            ###########################################
-            ####### OUTPUT GENERATING FUNCTIONS #######
-            ###########################################
+            # displays a warning in the case svalue() is not a single number
+            output$svaluewarning <- renderText({
+              if(!is.null(svalue()) && length(svalue()) > 1)
+                return("WARNING, the statistic function should return a single number.")
+              return("")
+            })
             output$needinstall <- reactive({
               if(! require(Rsampling)) return ("notinstalled")
               else if(packageDescription("Rsampling")$Version != "0.0.0.2") return ("incompatible")
@@ -177,7 +182,9 @@ shinyServer(function(input, output, session) {
             output$stat <- renderText({
               input$gocustomstat
               input$stat
-              paste("Statistic of interest: ", round(isolate(svalue()),3),"\n", sep="")
+              # to avoid weird things when length > 1
+              s <- paste(round(svalue(), 3), collapse = " ")
+              paste("Statistic of interest: ", s, "\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({

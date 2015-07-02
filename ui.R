@@ -136,7 +136,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                condition="input.stat== 'meandifc'"
              ),
              helpText("Below you see the result of this function applied to the original data:"),
-             h3(textOutput("stat"))
+             h3(textOutput("stat")),
+             # displays a warning in case the statistic is not returning a single number
+             h4(textOutput("svaluewarning"), style="color:#f30")
             ),
     tabPanel("Resampling",
              sidebarLayout(

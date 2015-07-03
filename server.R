@@ -146,6 +146,12 @@ shinyServer(function(input, output, session) {
 #                  return("Installation error!")
 #              }
 #            })
+	    output$download <- downloadHandler(
+              filename=function() "Rsampling.csv",
+	      content=function(file) {
+		write.csv(distribution(), file)
+	      }
+	    )
             # displays a warning in the case svalue() is not a single number
             output$svaluewarning <- renderText({
               s <- isolate(try(svalue(), silent=TRUE))

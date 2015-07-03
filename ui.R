@@ -10,7 +10,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              conditionalPanel( # for Rsampling install
                 p("It seems that you don't have the Rsampling package installed. Please install it
                   following the instructions ", 
-                  a("here", href="https://github.com/lageIBUSP/Rsampling"), ", then reload this interface",
+                  a("here", href="https://github.com/lageIBUSP/Rsampling"), " then reload this interface",
                   style="color:#f30"),
 #                actionButton("installbutton", "Install!"),
 #                conditionalPanel(condition="input.installbutton > 0",
@@ -24,7 +24,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              conditionalPanel("output.needinstall=='incompatible'",
                 p("Your version of the Rsampling library seems to be incompatible with this interface
                   version. Please download the latest version of the library ",
-                  a("here", href="https://github.com/lageIBUSP/Rsampling"), ", then reload this interface",
+                  a("here", href="https://github.com/lageIBUSP/Rsampling"), " then reload this interface",
                   style="color:#f30")
              )
     ),
@@ -153,7 +153,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  selectInput("pside", "Alternative:", choices=c("Two sided", "Greater", "Lesser")),
                  bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),
                  bsTooltip("pside", "Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.", "top"),
-                 sliderInput("ntrials", "Number of trials:", min=100,max=5000,value=300,step=100),
+                 sliderInput("ntrials", "Number of trials:", min=500,max=10000,value=1000,step=500),
                  checkboxInput("stratum", "Stratified resampling?"),
                  bsTooltip("stratum", "Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
                  conditionalPanel("input.stratum",
@@ -168,7 +168,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  fluidRow(column(6, checkboxInput("extreme", "Show extremes?", TRUE)),
                           column(6, checkboxInput("rejection", "Show rejection region?", TRUE))
                          ),
-                 actionButton("go", "Update Graph")
+	         fluidRow(column(6, actionButton("go", "Update Graph")),
+			  column(6, downloadButton('download', "Download data"))
+			 )
                ),
                mainPanel(
                  plotOutput("distPlot"),

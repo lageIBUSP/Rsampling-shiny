@@ -157,7 +157,7 @@ shinyServer(function(input, output, session) {
             })
             output$needinstall <- reactive({
               if(! require(Rsampling)) return ("notinstalled")
-              else if(packageDescription("Rsampling")$Version != "0.0.0.2") return ("incompatible")
+              else if(packageDescription("Rsampling")$Version != "0.0.0.3") return ("incompatible")
               else return ("ok")
             })
             # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
@@ -177,6 +177,7 @@ shinyServer(function(input, output, session) {
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
+	      c(input$m1, input$r1, input$r2, input$s1, input$s2, input$d1, input$d2)
               input$gocustomstat
               input$stat
               # to avoid weird things when length > 1

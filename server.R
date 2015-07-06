@@ -127,11 +127,19 @@ shinyServer(function(input, output, session) {
                             "Within rows" = "within_rows",
                             "Within columns" = "within_columns"
                             )
+              # sets up a new shiny progress bar and callback function
+              progress <- shiny::Progress$new(max=100)
+              on.exit(progress$close())
+              progress$set(message = "Sampling...", value = 0)
+              pupdate <- function(x) 
+                progress$set(value = x * progress$getMax(), 
+                             detail=paste0(round(progress$getValue()), "%"))
               Rsampling(type = type, dataframe = data(),
                         statistics = statistic(), cols = cols(),
                         stratum = isolate(stratum()),
                         ntrials = isolate(input$ntrials), 
-                        replace=isolate(input$replace))
+                        replace=isolate(input$replace),
+                        progress = pupdate)
             })
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######

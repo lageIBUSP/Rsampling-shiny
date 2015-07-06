@@ -13,6 +13,8 @@ library(devtools)
 install_github(repo = 'lageIBUSP/Rsampling')
 ```
 
+![ ] (www/chicken.png?raw=true)
+
 ## Web version
 You can run Rsampling shiny from github! Just open R and run:
 ```R

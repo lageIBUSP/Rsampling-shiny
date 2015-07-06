@@ -70,7 +70,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              selectInput("stat", "Statistic:", 
                          choices=c("Column mean" = "smean",
                                    "Column standard deviation" = "ssd",
-                                   "Mean difference between groups" = "meandif",
+                             "Mean difference between 2 groups" = "meandif",
+                             "F-statistic for more than 2 groups" = "Fstatistic",
                                    "Mean difference between columns" = "meandifc",
                                    "Mean sum of rows" = "srow",
                                    "Mean sum of columns" = "scol",
@@ -126,6 +127,15 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                selectInput("s1", "Categorical variable column: ", 1),
                selectInput("s2", "Numerical variable column: ", 2),
                condition="input.stat == 'meandif'"
+                 ),
+             ### Panel for Fstatistics:
+             conditionalPanel(
+                 helpText("This function splits the data acording to a categorical variable. Then it calculates
+                           the ratio of among-group to within-group variances (F-statistic).
+                           A large difference between means of at least two groups lead to large values of F."),
+               selectInput("s1", "Categorical variable column: ", 1),
+               selectInput("s2", "Numerical variable column: ", 2),
+               condition="input.stat == 'Fstatistic'"
              ),
              ### Panel for meandifc:
              conditionalPanel(
@@ -139,7 +149,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              h3(textOutput("stat")),
              # displays a warning in case the statistic is not returning a single number
              h4(textOutput("svaluewarning"), style="color:#f30")
-            ),
+             ),
     tabPanel("Resampling",
              sidebarLayout(
                sidebarPanel(

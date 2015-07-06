@@ -32,6 +32,10 @@ shinyServer(function(input, output, session) {
             }
             corr <- function(dataframe) {
               cor(dataframe[, as.numeric(input$r1)], dataframe[, as.numeric(input$r2)])
+          }
+            Fstatistic <- function(dataframe){
+              m1 <- lm(dataframe[,as.numeric(input$s2)]~ as.factor(dataframe[,as.numeric(input$s1)]))
+              anova(m1)[1,4]
             }
             # accessory for the custom function handler 
             # removed to make debugging faster, may be added back later?
@@ -52,7 +56,7 @@ shinyServer(function(input, output, session) {
             cols <- reactive({
               if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
                 return(as.numeric(input$m1))
-              if(input$stat == "meandif") # the "data" column is indicated by s2
+              if(input$stat %in% c("meandif","Fstatistic")) # the "data" column is indicated by s2
                 return(as.numeric(input$s2))
               if(input$stat == "meandifc") # the before and after columns are d1 and d2
                 return(c(as.numeric(input$d1), as.numeric(input$d2)))
@@ -84,6 +88,7 @@ shinyServer(function(input, output, session) {
                      "intercept" = intercept,
                      "slope" = slope,
                      "corr" = corr,
+                     "Fstatistic" = Fstatistic,
                      "custom" = custom
                      )
             })

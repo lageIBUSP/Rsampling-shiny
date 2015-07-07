@@ -94,6 +94,13 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                code("my.lm <- lm(dataframe[,5] ~ dataframe[,4])"), p(""),
                code("my.r <- residuals(my.lm)"), p(""),
                code("sum(my.r^2)"), p(""),
+               strong("Differences in the slope of linear regressions 
+                      applied to different levels of a factor:"),
+               code("m1 <- lm(n.roots ~ canopy.trunk, data=dataframe, subset=soil.instability==\"medium\")"),
+               p(""), 
+               code("m2 <- lm(n.roots ~ canopy.trunk, data=dataframe, subset=soil.instability==\"high\")"),
+               p(""),
+               code("coef(m1)[[2]] - coef(m2)[[2]]"),p(""),
                tags$textarea(id = "customstat", rows=5, cols=40, "return(pi)"),
                actionButton("gocustomstat", "Go!"),
                condition="input.stat == 'custom'"

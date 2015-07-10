@@ -11,11 +11,11 @@ shinyServer(function(input, output, session) {
               sd(dataframe[,as.numeric(input$m1)])
             }
             meandif <- function(dataframe){
-              props <- unlist(tapply(dataframe[,as.numeric(input$s2)], dataframe[,as.numeric(input$s1)], mean))
+              props <- unlist(tapply(dataframe[,as.numeric(input$m2)], dataframe[,as.numeric(input$m1)], mean))
               props[1] - props[length(props)]
             }
             meandifc <- function(dataframe){
-              dif <- dataframe[, as.numeric(input$d2)] - dataframe[, as.numeric(input$d1)]
+              dif <- dataframe[, as.numeric(input$m2)] - dataframe[, as.numeric(input$m1)]
               mean(dif)
             }
             srow <- function(dataframe) {
@@ -25,49 +25,40 @@ shinyServer(function(input, output, session) {
               mean(apply(dataframe, 2, sum))
             }
             intercept <- function(dataframe) {
-              coef(lm(dataframe[, as.numeric(input$r1)] ~ dataframe[, as.numeric(input$r2)]))[1]
+              coef(lm(dataframe[, as.numeric(input$m1)] ~ dataframe[, as.numeric(input$m2)]))[1]
             }
             slope <- function(dataframe) {
-              coef(lm(dataframe[, as.numeric(input$r1)] ~ dataframe[, as.numeric(input$r2)]))[2]
+              coef(lm(dataframe[, as.numeric(input$m1)] ~ dataframe[, as.numeric(input$m2)]))[2]
             }
             corr <- function(dataframe) {
-              cor(dataframe[, as.numeric(input$r1)], dataframe[, as.numeric(input$r2)])
-          }
-            Fstatistic <- function(dataframe){
-              m1 <- lm(dataframe[,as.numeric(input$s2)]~ as.factor(dataframe[,as.numeric(input$s1)]))
-              anova(m1)[1,4]
+              cor(dataframe[, as.numeric(input$m1)], dataframe[, as.numeric(input$m2)])
             }
-            # accessory for the custom function handler 
-            # removed to make debugging faster, may be added back later?
-            # (for a slight performance improvement over parsing everytime)
-            #pcustom <- reactive({
-            #  input$gocustomstat
-            #  parse(text=isolate(input$customstat))
-            #})
+            Fstatistic <- function(dataframe){
+              mod <- lm(dataframe[,as.numeric(input$m2)]~ as.factor(dataframe[,as.numeric(input$m1)]))
+              anova(mod)[1,4]
+            }
+            # custom function handler: parses the text in the custom input
             custom <- function(dataframe) {
-              #dataframe <- as.data.frame(my.df)
-              # Removes the spurious stratum column included by Rsampling routines
-              # Fixed in Rsampling 0.0.0.2, so this code is now useless
-              #if (colnames(dataframe)[1] == "stratum")
-              #  dataframe <- dataframe[,-1]
               eval(parse(text=input$customstat))
             }
             # what columns should be randomized?
-            cols <- reactive({
-              if(input$stat %in% c("smean", "ssd")) # the "data" column is indicated by m1
+            cols <- reactive({ 
+              # the "data" column is indicated by m1 for these statistics
+              if(input$stat %in% c("smean", "ssd")) 
                 return(as.numeric(input$m1))
-              if(input$stat %in% c("meandif","Fstatistic")) # the "data" column is indicated by s2
-                return(as.numeric(input$s2))
-              if(input$stat == "meandifc") # the before and after columns are d1 and d2
-                return(c(as.numeric(input$d1), as.numeric(input$d2)))
-              if(input$stat %in% c("scol", "srow")) # all columns should be used
+              # the "data" column is indicated by m2 for these statistics
+              if(input$stat %in% c("meandif","Fstatistic", "slope", "intercept", "corr"))
+                return(as.numeric(input$m2))
+              # both columns are randomized
+              if(input$stat == "meandifc") 
+                return(c(as.numeric(input$m1), as.numeric(input$m2)))
+              # all columns should be used
+              if(input$stat %in% c("scol", "srow"))
                 return(1:ncol(data()))
-              if(input$stat %in% c("slope", "intercept", "corr")) # the independent variable is r1
-                return(as.numeric(input$r1))
+              # the custom function has a special input box for selecting columns
               if(input$stat == "custom")
                 return(eval(parse(text=isolate(input$customcols))))
-              #else?
-              return(NULL)
+              # should never reach this point
             })
             stratum <- reactive({
               if (input$stratum == FALSE)
@@ -77,6 +68,7 @@ shinyServer(function(input, output, session) {
               return (d[, as.numeric(input$stratumc)])
             })
             ### this reactive simply translates the input value into the corresponding function
+            # can we tidy this up with something like match.fun?
             statistic <- reactive({
               switch(input$stat,
                      "meandif" = meandif,
@@ -144,27 +136,11 @@ shinyServer(function(input, output, session) {
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
-            ### tries to install the Rsampling package
-            # Removed in v1.1 because of several issues
-#            output$pkginstall <- renderText({
-#              # runs when the install button is pressed
-#              if (input$installbutton > 0) {
-#                if(!require(devtools))
-#                   install.packages("devtools")
-#                library(devtools)
-#                install_github(repo = 'lageIBUSP/Rsampling')
-#                if(require(Rsampling))
-#                  return("Installation complete!")
-#                else
-#                  return("Installation error!")
-#              }
-#            })
-	    output$download <- downloadHandler(
+            output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
-	      content=function(file) {
-		write.csv(distribution(), file)
-	      }
-	    )
+              content=function(file) {
+              write.csv(distribution(), file)
+            })
             # displays a warning in the case svalue() is not a single number
             output$svaluewarning <- renderText({
               s <- isolate(try(svalue(), silent=TRUE))
@@ -196,7 +172,7 @@ shinyServer(function(input, output, session) {
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-	      c(input$m1, input$r1, input$r2, input$s1, input$s2, input$d1, input$d2)
+	            c(input$m1, input$m2)
               input$gocustomstat
               input$stat
               # to avoid weird things when length > 1
@@ -222,13 +198,18 @@ shinyServer(function(input, output, session) {
               if(!ncol(d)) return();
               cols <- 1:length(colnames(d))
               names(cols) <- colnames(d)
-              updateSelectInput(session, "m1", choices = cols)
-              updateSelectInput(session, "r1", choices = cols)
-              updateSelectInput(session, "r2", choices = cols, selected=2)
-              updateSelectInput(session, "s1", choices = cols)
-              updateSelectInput(session, "s2", choices = cols, selected=2)
-              updateSelectInput(session, "d1", choices = cols)
-              updateSelectInput(session, "d2", choices = cols, selected=2)
+              # Please see ?switch for the syntax below
+              label1 <- switch(input$stat,
+                               'smean'=,'ssd'= "Variable column: ", 
+                               'intercept'=,'slope'=,'corr'="Dependent variable column: ",
+                               'meandif'=, 'Fstatistic'="Categorical variable column: ",
+                               'meandifc'= "Before treatment")
+              label2 <- switch(input$stat, 
+                               'intercept'=,'slope'=,'corr'="Independent variable column: ",
+                               'meandif'=, 'Fstatistic'="Numerical variable column: ",
+                               'meandifc'= "After treatment: ")
+              updateSelectInput(session, "m1", choices = cols, label = label1)
+              updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
               updateSelectInput(session, "stratumc", choices = cols)
             })
 })

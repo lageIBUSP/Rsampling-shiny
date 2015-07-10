@@ -183,7 +183,7 @@ shinyServer(function(input, output, session) {
             outputOptions(output, 'needinstall', suspendWhenHidden=FALSE)
             ### simple table display to see the contents of the data selected
             output$view <- renderTable({
-              head(data(), 15)
+              data()
             })
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({

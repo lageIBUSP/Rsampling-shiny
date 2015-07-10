@@ -156,17 +156,46 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                sidebarPanel(
                  helpText("Here is where we do the randomization!"),
                  selectInput("type", "Randomization type:", 
-                             choices=c("Normal", "Within rows", "Whithin columns", 
+                             choices=c("Normal", "Within rows", "Within columns", 
                                        "Rows as units", "Columns as units")
                              ),
                  ##Help for each randomization panel
-                   conditionalPanel(condition = "type == 'normal_rand'",
-                                    helpText("In normal resampling the data is
-          randomized over all cells of the selected columns. If you do not check the 'With replacement' box below the data is permuted over the cells. If you check the 'With Replacement' box 
-          data from any cell are sampled with replacement and
-          attributed to any other cell.")
-                       ),
-                
+                   conditionalPanel(
+                       helpText(
+                           "In normal resampling the data is randomized over all cells of the selected columns. If you do not check the 'With replacement' box below the data is permuted over the cells. Otherwise the data from any cell are sampled with replacement and attributed to any other cell."),
+                       condition = "input.type == 'Normal'"),
+                   conditionalPanel(
+                       helpText(
+                                "The randomization is done within each row of the data.
+                                If you do not check the 'With replacement' box below the values of
+                                each row are permuted independently. Otherwise 
+                                the values are sampled independently from each row and
+                                attributed only to cells of the row they were sampled from."),
+                       condition = "input.type == 'Within rows'"),
+                   conditionalPanel(
+                       helpText(
+                                "The randomization is done within each column of the data.
+                                If you do not check the 'With replacement' box below the values of
+                                each column are permuted independently. Otherwise 
+                                the values are sampled independently from each column and
+                                attributed only to cells of the column they were sampled from."),
+                       condition = "input.type == 'Within columns'"),
+                   conditionalPanel(
+                       helpText(
+                                "Randomizes the placement of rows
+                                 in the data table. If you do not check the 'With replacement' box below the
+                                 position of rows are permuted. Otherwise
+                                 whole rows are sampled with replacement to assemble the randomized data table.
+                                 In both cases the position of values within each row is kept."),
+                       condition = "input.type == 'Rows as units'"),
+                   conditionalPanel(
+                       helpText(
+                                "Randomizes the placement of columns
+                                 in the data table. If you do not check the 'With replacement' box below the
+                                 position of columns are permuted. Otherwise
+                                 whole columns are sampled with replacement to assemble the randomized data table.
+                                 In both cases the position of values within each column is kept."),
+                       condition = "input.type == 'Columns as units'"),
                  ##bsTooltip("type", "See the help page for details on the different randomization types."),
                  checkboxInput("replace", "With replacement?"),
                  selectInput("pside", "Alternative:", choices=c("Two sided", "Greater", "Lesser")),

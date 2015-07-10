@@ -121,7 +121,7 @@ shinyServer(function(input, output, session) {
               if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
                 return (0);
               type = switch(isolate(input$type),
-                            "Normal shuffle" = "normal_rand",
+                            "Normal" = "normal_rand",
                             "Rows as units" = "rows_as_units",
                             "Columns as units" = "columns_as_units",
                             "Within rows" = "within_rows",

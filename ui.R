@@ -158,8 +158,16 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  selectInput("type", "Randomization type:", 
                              choices=c("Normal shuffle", "Within rows", "Whithin columns", 
                                        "Rows as units", "Columns as units")
-                 ),
-                 bsTooltip("type", "See the help page for details on the different randomization types."),
+                             ),
+                 ##Help for each randomization panel
+                   conditionalPanel("type == 'Normal shuffle'",
+                                    helpText("In normal resampling the data is
+          permuted over all cells of the selected columns if you do not check the 'With replacement' box below. If you check it 
+          data from any cell of the selected columns can be sampled with replacement and
+          attributed to any other cell.")
+                       ),
+                
+                 ##bsTooltip("type", "See the help page for details on the different randomization types."),
                  checkboxInput("replace", "With replacement?"),
                  selectInput("pside", "Alternative:", choices=c("Two sided", "Greater", "Lesser")),
                  bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),

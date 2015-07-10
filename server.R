@@ -1,5 +1,7 @@
 library(shiny)
+library(Rsampling)
 shinyServer(function(input, output, session) {
+    vals<-reactiveValues()
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
             ###########################################
@@ -110,7 +112,7 @@ shinyServer(function(input, output, session) {
             ### calculates the distribution of the statistic of interest using Rsampling
             ### several of its arguments are isolate()'d, meaning that changing them will
             ### trigger a recalculation of the statistic (for performance reasons)
-            distribution <- reactive({
+            distribution <- observe({
               input$go # triggers the calculations when the "Update graph" is pressed
               # traps NA, NaN, NULL, Infin the statistic applied over the original data
               if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
@@ -122,12 +124,34 @@ shinyServer(function(input, output, session) {
                             "Within rows" = "within_rows",
                             "Within columns" = "within_columns"
                             )
-              Rsampling(type = type, dataframe = data(),
-                        statistics = statistic(), cols = cols(),
-                        stratum = isolate(stratum()),
-                        ntrials = isolate(input$ntrials), 
-                        replace=isolate(input$replace))
+              isolate({
+                  vals$iter <- 1
+                  vals$total_iterations <- input$ntrials 
+                  vals$seqsim <- seq(100, vals$total_iterations, len=100)
+                  vals$ei <- Rsampling(type = type, dataframe = data(),
+                                       statistics = statistic(), cols = cols(),
+                                       stratum = isolate(stratum()),
+                                       ntrials = isolate(input$ntrials), 
+                                       replace=isolate(input$replace))
+                  vals$maxcount<-max(hist(vals$ei, plot=FALSE)$counts)
+              })
+              run_iter$resume()
+          })
+    run_iter <- observe({
+        qry <- parseQueryString(session$clientData$url_search)
+        if (input$go == 0 & is.null(qry$auto)) {
+            isolate({
+                vals$x <- vals$ei
             })
+        } else{
+            isolate({
+                vals$x <- vals$ei[1:(round(vals$seqsim[vals$iter]))]
+                vals$iter <- vals$iter + 1
+            })
+    }
+        if (isolate(vals$iter) < 100) {
+                 invalidateLater(0, session)} else {return()}
+    })    
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
@@ -149,7 +173,7 @@ shinyServer(function(input, output, session) {
 	    output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
 	      content=function(file) {
-		write.csv(distribution(), file)
+		write.csv(vals$ei, file)
 	      }
 	    )
             # displays a warning in the case svalue() is not a single number
@@ -171,15 +195,15 @@ shinyServer(function(input, output, session) {
             ### simple table display to see the contents of the data selected
             output$view <- renderTable({
               head(data(), 15)
-            })
+          })
+#    output$distPlot <- renderText({c(vals$iter, vals$total_iterations)})
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
-              mydist <- distribution()
               # Traps errors
-              if (length(mydist) == 1)
-                stop("Distribution calculation stopped with error!")
-              Rsampling::dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
-                    extreme = input$extreme, vline = TRUE, rejection = input$rejection)
+              if (length(vals$ei) == 1)
+                  stop("Distribution calculation stopped with error!")
+               Rsampling::dplot(dist = vals$x, svalue =  svalue(), pside= input$pside, 
+                   extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
@@ -194,11 +218,11 @@ shinyServer(function(input, output, session) {
             output$p <- renderText({
               side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
               p <- switch(input$pside, 
-                          "Two sided" = abs(distribution()) >= abs(svalue()),
-                          "Greater" = distribution() >= svalue(),
-                          "Lesser" = distribution() <= svalue()
+                          "Two sided" = abs(vals$ei) >= abs(svalue()),
+                          "Greater" = vals$ei >= svalue(),
+                          "Lesser" = vals$ei <= svalue()
                           )
-              p <- round(sum(p) / length(distribution()),3)
+              p <- round(sum(p) / length(vals$ei),3)
               paste(side, "p-value:", p)
             })
             ### Updates the values in the dropdowns for column selection
@@ -217,5 +241,8 @@ shinyServer(function(input, output, session) {
               updateSelectInput(session, "d1", choices = cols)
               updateSelectInput(session, "d2", choices = cols, selected=2)
               updateSelectInput(session, "stratumc", choices = cols)
-            })
+          })
+    session$onSessionEnded(function() {
+    run_iter$suspend()
+     })  
 })

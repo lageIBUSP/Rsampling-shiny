@@ -60,7 +60,6 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                               '"'))
                  ),
                helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
-               helpText("First rows of your data:"),
                condition="input.datasource	== 'upload file'"
              ))),
              tableOutput("view"),

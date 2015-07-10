@@ -71,7 +71,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                          choices=c("Column mean" = "smean",
                                    "Column standard deviation" = "ssd",
                              "Mean difference between 2 groups" = "meandif",
-                             "F-statistic for more than 2 groups" = "Fstatistic",
+                             "Variance ratio (F) for more than 2 groups" = "Fstatistic",
                                    "Mean difference between columns" = "meandifc",
                                    "Mean sum of rows" = "srow",
                                    "Mean sum of columns" = "scol",
@@ -131,9 +131,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                helpText("The mean difference function splits the data acording to a categorical variable. Then it calculates 
                         the mean for each group, and subtracts one from another. Note that this is designed 
                         to work with only ",em("TWO")," categories!"),
-                 helpText("The F-statistic function splits the data acording to a categorical variable. Then it calculates
-                           the ratio of among-group to within-group variances (F-statistic).
-                           A large difference between means of at least two groups lead to large values of F."),
+               helpText("The variance ratio function splits the data acording to a categorical variable. Then it calculates
+                           the ratio of among-group to within-group variances (F).
+                           Large differences between means of at least two groups lead to large values of F."),
                selectInput("s1", "Categorical variable column: ", 1),
                selectInput("s2", "Numerical variable column: ", 2),
                condition="input.stat == 'meandif' || input.stat=='Fstatistic'"

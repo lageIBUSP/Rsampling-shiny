@@ -160,7 +160,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        "Rows as units", "Columns as units")
                              ),
                  ##Help for each randomization panel
-                   conditionalPanel("type == 'Normal shuffle'",
+                   conditionalPanel(condition = "type == 'Normal shuffle'",
                                     helpText("In normal resampling the data is
           permuted over all cells of the selected columns if you do not check the 'With replacement' box below. If you check it 
           data from any cell of the selected columns can be sampled with replacement and

@@ -62,8 +62,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                helpText("Make sure that the data is correctly interpreted in the display below!", style="color:#f30;"),
                condition="input.datasource	== 'upload file'"
              ))),
-             tableOutput("view"),
-             bsTooltip("view", "These are first rows of the selected data table.", "top")
+             tableOutput("view")
              ),
     tabPanel("Statistics",
              helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),

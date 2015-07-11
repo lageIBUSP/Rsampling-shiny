@@ -1,4 +1,5 @@
 library(shiny)
+library(Rsampling)
 shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
@@ -107,7 +108,12 @@ shinyServer(function(input, output, session) {
             ### calculates the distribution of the statistic of interest using Rsampling
             ### several of its arguments are isolate()'d, meaning that changing them will
             ### trigger a recalculation of the statistic (for performance reasons)
-            distribution <- reactive({
+            # As of Rsampling-shiny 1.3, the distribution() reactive was replaced by the
+            # vals reactive. Now vals$distribution should be used on all contexts in 
+            # which distribution() was previously used, EXCEPT inside the plotting function,
+            # where vals$x represent the distribution as it is being animated
+            vals<-reactiveValues()
+            distribution <- observe({
               input$go # triggers the calculations when the "Update graph" is pressed
               # traps NA, NaN, NULL, Infin the statistic applied over the original data
               if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
@@ -119,28 +125,53 @@ shinyServer(function(input, output, session) {
                             "Within rows" = "within_rows",
                             "Within columns" = "within_columns"
                             )
-              # sets up a new shiny progress bar and callback function
+             # sets up a new shiny progress bar and callback function
               progress <- shiny::Progress$new(max=100)
               on.exit(progress$close())
               progress$set(message = "Sampling...", value = 0)
               pupdate <- function(x) 
                 progress$set(value = x * progress$getMax(), 
                              detail=paste0(round(progress$getValue()), "%"))
-              Rsampling(type = type, dataframe = data(),
-                        statistics = statistic(), cols = cols(),
-                        stratum = isolate(stratum()),
-                        ntrials = isolate(input$ntrials), 
-                        replace=isolate(input$replace),
-                        progress = pupdate)
+              isolate({
+                  vals$iter <- 1
+                  vals$total_iterations <- input$ntrials 
+                  vals$seqsim <- seq(100, vals$total_iterations, len=100)
+                  vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
+                                       statistics = statistic(), cols = cols(),
+                                       stratum = isolate(stratum()),
+                                       ntrials = isolate(input$ntrials), 
+                                       replace=isolate(input$replace),
+                                       progress = pupdate)
+                  vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
+              })
+              run_iter$resume()
             })
+            run_iter <- observe({
+              qry <- parseQueryString(session$clientData$url_search)
+              if (input$go == 0 & is.null(qry$auto)) {
+                isolate({
+                  vals$x <- vals$distribution
+                })
+              } else {
+                isolate({
+                  vals$x <- vals$distribution[1:(round(vals$seqsim[vals$iter]))]
+                  vals$iter <- vals$iter + 1
+                })
+              }
+              if (isolate(vals$iter) < 100) 
+                invalidateLater(0, session)
+              else 
+                return()
+            })    
             ###########################################
             ####### OUTPUT GENERATING FUNCTIONS #######
             ###########################################
             output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
               content=function(file) {
-              write.csv(distribution(), file)
-            })
+                write.csv(vals$distribution, file)
+              }
+            )
             # displays a warning in the case svalue() is not a single number
             output$svaluewarning <- renderText({
               s <- isolate(try(svalue(), silent=TRUE))
@@ -151,8 +182,7 @@ shinyServer(function(input, output, session) {
               return("")
             })
             output$needinstall <- reactive({
-              if(! require(Rsampling)) return ("notinstalled")
-              else if(packageDescription("Rsampling")$Version != "0.0.0.3") return ("incompatible")
+              if(packageDescription("Rsampling")$Version != "0.0.0.3") return ("incompatible")
               else return ("ok")
             })
             # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput
@@ -163,12 +193,11 @@ shinyServer(function(input, output, session) {
             })
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
-              mydist <- distribution()
               # Traps errors
-              if (length(mydist) == 1)
-                stop("Distribution calculation stopped with error!")
-              Rsampling::dplot(dist = mydist, svalue = svalue(), pside= input$pside, 
-                    extreme = input$extreme, vline = TRUE, rejection = input$rejection)
+              if (length(vals$distribution) == 1)
+                  stop("Distribution calculation stopped with error!")
+               Rsampling::dplot(dist = vals$x, svalue =  svalue(), pside= input$pside, 
+                   extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
@@ -183,17 +212,16 @@ shinyServer(function(input, output, session) {
             output$p <- renderText({
               side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
               p <- switch(input$pside, 
-                          "Two sided" = abs(distribution()) >= abs(svalue()),
-                          "Greater" = distribution() >= svalue(),
-                          "Lesser" = distribution() <= svalue()
+                          "Two sided" = abs(vals$distribution) >= abs(svalue()),
+                          "Greater" = vals$distribution >= svalue(),
+                          "Lesser" = vals$distribution <= svalue()
                           )
-              p <- round(sum(p) / length(distribution()),3)
+              p <- round(sum(p) / length(vals$distribution),3)
               paste(side, "p-value:", p)
             })
             ### Updates the values in the dropdowns for column selection
             observe({
-              # Check to see if there is any data (may fail during file upload 
-              # or if Rsampling is not installed)
+              # Check to see if there is any data (may fail during file upload)
               d <- tryCatch(data(), error=function(cond) return(data.frame()))
               if(!ncol(d)) return();
               cols <- 1:length(colnames(d))
@@ -211,5 +239,8 @@ shinyServer(function(input, output, session) {
               updateSelectInput(session, "m1", choices = cols, label = label1)
               updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
               updateSelectInput(session, "stratumc", choices = cols)
-            })
+          })
+          session$onSessionEnded(function() {
+          run_iter$suspend()
+          })  
 })

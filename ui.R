@@ -12,10 +12,6 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                   following the instructions ", 
                   a("here", href="https://github.com/lageIBUSP/Rsampling"), " then reload this interface",
                   style="color:#f30"),
-#                actionButton("installbutton", "Install!"),
-#                conditionalPanel(condition="input.installbutton > 0",
-#                  textOutput("pkginstall")
-#                ),
                 condition="output.needinstall=='notinstalled'"
              ),
              conditionalPanel("output.needinstall=='ok'",
@@ -29,7 +25,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              )
     ),
     tabPanel("Data input", 
-             helpText("Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the \"upload\" option to upload your own file."),
+             helpText("Use this tab to select the input data for your analysis. The first options are 
+                      datasets included in the library, select the \"upload\" option to upload your own 
+                      file."),
              selectInput("datasource",
                          "What is your input data?",
                          choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
@@ -104,46 +102,60 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                actionButton("gocustomstat", "Go!"),
                condition="input.stat == 'custom'"
              ),
-             ### Panel for smean/ssd:
-             conditionalPanel(
-               helpText("These functions calculate the correlation coefficient, slope or intercept of
+             ### Panels with help text about the selected function
+             conditionalPanel("input.stat == 'intercept'",
+               helpText("This function calculates intercept of
                         a linear correlation analysis between two columns, y ~ ax + b. Here, x is the
-                        independent variable, and y is the dependent variable."),
-               selectInput("r1", "Dependent variable column: ", 1),
-               selectInput("r2", "Independent variable column: ", 2),
-               condition="input.stat == 'intercept' || input.stat == 'slope' || input.stat == 'corr'"
+                        independent variable, and y is the dependent variable.")
              ),
-             ### Panel for smean/ssd:
-             conditionalPanel(
-               helpText("This function calculates the mean or standard deviation of a single data column."),
-               selectInput("m1", "Variable column: ", choices=1),
-               condition="input.stat == 'smean' || input.stat == 'ssd'"
+             conditionalPanel("input.stat == 'slope'",
+               helpText("This function calculates the slope of
+                        a linear correlation analysis between two columns, y ~ ax + b. Here, x is the
+                        independent variable, and y is the dependent variable.")
              ),
-             ### Panel for srow/scol:
-             conditionalPanel(
-               helpText("This function calculates the sum of every values in a row (or column). Then, it takes
-                        the mean of these values."),
-               condition="input.stat == 'srow' || input.stat == 'scol'"
+             conditionalPanel("input.stat == 'corr'",
+               helpText("This function calculates the correlation coefficient between two columns")
              ),
-             ### Panel for meandif:
-             conditionalPanel(
-               helpText("The mean difference function splits the data acording to a categorical variable. Then it calculates 
+             conditionalPanel("input.stat == 'smean'",
+               helpText("This function calculates the mean of a single data column.")
+             ),
+             conditionalPanel("input.stat == 'ssd'",
+               helpText("This function calculates the standard deviation of a single data column.")
+             ),
+             conditionalPanel("input.stat == 'srow'",
+               helpText("This function calculates the sum of every values in a row. Then, it takes
+                        the mean of these values.")
+             ),
+             conditionalPanel("input.stat == 'scol'",
+               helpText("This function calculates the sum of every values in a column. Then, it takes
+                        the mean of these values.")
+             ),
+             conditionalPanel("input.stat == 'meandif'",
+               helpText("This function splits the data acording to a categorical variable. Then it calculates 
                         the mean for each group, and subtracts one from another. Note that this is designed 
-                        to work with only ",em("TWO")," categories!"),
-               helpText("The variance ratio function splits the data acording to a categorical variable. Then it calculates
-                           the ratio of among-group to within-group variances (F).
-                           Large differences between means of at least two groups lead to large values of F."),
-               selectInput("s1", "Categorical variable column: ", 1),
-               selectInput("s2", "Numerical variable column: ", 2),
-               condition="input.stat == 'meandif' || input.stat=='Fstatistic'"
-                 ),
-             ### Panel for meandifc:
-             conditionalPanel(
-               helpText("This function calculates the pairwise difference between two columns in your dataset (i.e.,
-                        before and after a treatment is applied). It then averages these differences."),
-               selectInput("d1", "Before treatment: ", 1),
-               selectInput("d2", "After treatment: ", 2),
-               condition="input.stat== 'meandifc'"
+                        to work with only ",em("TWO")," categories!")
+             ),
+             conditionalPanel("input.stat == 'Fstatistic'",
+               helpText("The variance ratio function splits the data acording to a categorical variable.
+                        Then it calculates
+                        the ratio of among-group to within-group variances (F).
+                        Large differences between means of at least two groups lead to large values of F.")
+             ),
+             conditionalPanel("input.stat== 'meandifc'",
+               helpText("This function calculates the pairwise difference between two columns in 
+                        your dataset (i.e., before and after a treatment is applied). It then 
+                        averages these differences.")
+             ),
+             #### Panels for the inputs selectors
+             conditionalPanel("input.stat != 'custom' && input.stat != 'srow' && input.stat != 'scol'", 
+                              # all other stats have a "column 1"
+               selectInput("m1", "Column 1", choices=1) # label and choices will be overriden!
+             ),
+             conditionalPanel("input.stat == 'slope' || input.stat == 'intercept' || 
+                               input.stat == 'corr' || input.stat == 'meandif' ||
+                               input.stat == 'Fstatistic' || input.stat == 'meandifc'", 
+                              # all the above stats have a "column 2"
+               selectInput("m2", "Column 2", choices=2) # label and choices will be overriden!
              ),
              helpText("Below you see the result of this function applied to the original data:"),
              h3(textOutput("stat")),

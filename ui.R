@@ -1,7 +1,7 @@
 library(shiny)
 library(shinyBS)
 shinyUI(fluidPage(theme= "bootstrap.css",
-  tabsetPanel(type="tabs",
+  tabsetPanel(type="tabs", id="tabEvent",
     tabPanel("Rsampling",
              h2("Rsampling - resampling statistics in R"),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
@@ -17,6 +17,130 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                   style="color:#f30")
              )
     ),
+    navbarMenu("Tutorials",
+               tabPanel("Mangrove trees",
+                        column(4,
+                               h4("Mangrove trees and soil stability"),
+                               h6("Question"),
+                               p("Do mangrove trees in more unstable soil allocate
+                                 more biomass in supporting roots?"),
+                               h6("Hypothesis"),
+                               p("Trees located in less stable soils 
+                                 will have more biomass on roots."),
+                               h5("In the left there is a plot and table (in blue) for which
+                                  the second column has been randomized"),
+                               actionButton("mangRand","Do it again!"),
+                               actionButton("clear1","Clear histogram"),
+                               plotOutput("distPlotMang",height=300),
+                               helpText("Each time a new randomized data set is generated, the statistic of interest is 
+                                        recalculated and added to this histogram. The statistic calculated on the original data
+                                        is shown as a dotted red line. Should the null hypothesis be rejected? Run this exercise in
+                                        the following tabs to find out!")
+                               ),
+                        column(8,
+                               fluidRow(
+                                 h5("About this data set"),
+                                 p("Area covered by aerial roots in mangrove trees sampled in two soil types.")
+                               ),
+                               fluidRow(
+                                 column(3, plotOutput("mangTable")),
+                                 column(6, plotOutput("mangPlot",height=300),
+                                        plotOutput("mangPlotRandom",height=300)),
+                                 column(3, plotOutput("mangTableRandom"))
+                               ),
+                               fluidRow(
+                                 helpText("Source: Prado, A. et al. 2013. Variações na morfologia de sustentação em", em("Rhizophora mangle"), 
+                                          "(Rizophoraceae) em diferentes condições de inundação do solo. Curso de campo 
+                                          Ecologia da Mata Atlântica (G. Machado, P.I. Prado & A.M.Z. Martini eds.). 
+                                          Universidade de São Paulo, São Paulo.", 
+                                          tags$a(href="http://ecologia.ib.usp.br/curso/2013/pdf/PO4-2.pdf", "Download pdf!"))
+                               )
+                               )
+                               ),      
+               tabPanel("Balanced mangrove trees",
+                        column(4,
+                               h4("Mangrove trees and torque"),
+                               h6("Question"),
+                               p("Does the torque caused by canopy weight result in mangrove
+                                 trees with more roots?"),
+                               helpText(tags$small("What is torque again? Review this concept in",
+                                                   tags$a(href="https://en.wikipedia.org/wiki/Torque", "Wikipedia"))),
+                               h6("Hypothesis"),
+                               p("The higher the torque caused by the canopy, the more roots
+                                 a tree wil have."),
+                               h5("In the left there is a plot and table (in blue) for which
+                                  the second column has been randomized"),
+                               actionButton("rhyzRand","Do it again!"),
+                               actionButton("clear2","Clear histogram"),
+                               plotOutput("distPlotRhyz", height=300),
+                               helpText("Each time a new randomized data set is generated, the statistic of interest is 
+                                        recalculated and added to this histogram. The statistic calculated on the original data
+                                        is shown as a dotted red line. Should the null hypothesis be rejected? Run this exercise in
+                                        the following tabs to find out!")
+                               ),
+                        column(8,
+                               fluidRow(
+                                 h5("About this data set"),
+                                 p("Ratio between canopy and trunk area, both in square meters, and number of aerial roots")
+                               ),
+                               fluidRow(
+                                 column(3, plotOutput("rhyzTable")),
+                                 column(6, plotOutput("rhyzPlot",height=300),
+                                        plotOutput("rhyzPlotRandom",height=300)),
+                                 column(3, plotOutput("rhyzTableRandom"))
+                               ),
+                               fluidRow(
+                                 helpText("Source: Prado, A. et al. 2013. Variações na morfologia de sustentação em", em("Rhizophora mangle"), 
+                                          "(Rizophoraceae) em diferentes condições de inundação do solo. Curso de campo 
+                                          Ecologia da Mata Atlântica (G. Machado, P.I. Prado & A.M.Z. Martini eds.). 
+                                          Universidade de São Paulo, São Paulo.", 
+                                          tags$a(href="http://ecologia.ib.usp.br/curso/2013/pdf/PO4-2.pdf", "Download pdf!"))
+                               )
+                               )
+                               ),
+               tabPanel("Protective ants",
+                        column(4,
+                               h4("Protective ants"),
+                               h6("Question"),
+                               p("Do ants respond more intensely to damage in younger leaves?"),
+                               h6("Hypothesis"),
+                               p("Damage on young leaves will lead to more recruited ants when compared
+                                 to damage on old leaves."),
+                               h5("In the left there is a plot and table (in blue) for which
+                                  the data has been randomized. How should the randomization be performed in
+                                  a paired experimental design?"),
+                               actionButton("aztRand","Do it again!"),
+                               actionButton("clear3","Clear histogram"),
+                               plotOutput("distPlotAzt", height=300),
+                               helpText("Each time a new randomized data set is generated, the statistic of interest is 
+                                        recalculated and added to this histogram. The statistic calculated on the original data
+                                        is shown as a dotted red line. Should the null hypothesis be rejected? Run this exercise in
+                                        the following tabs to find out!")
+               ),
+               column(8,
+                      fluidRow(
+                        h5("About this data set"),
+                        p("The ant colonies live in the hollow trunk of", em("Cecropia"), "and can detect and expel leaf-chewing 
+                          insects. To test if this response is more intense in young leaves, drops of extract of smashed
+                          young and old leaves were poured in two neighbor leaves of the same plant. After 7 minutes 
+                          the number of recruited", em("Azteca"),"ants in each leaf was recorded.")
+                      ),
+                      fluidRow(
+                        column(3, plotOutput("aztTable")),
+                        column(6, plotOutput("aztPlot",height=300),
+                               plotOutput("aztPlotRandom",height=300)),
+                        column(3, plotOutput("aztTableRandom"))
+                      ),
+                      fluidRow(
+                        helpText("Source: Kondrat, H. 2012. Estímulos químicos de folhas novas promovem recrutamento eficiente
+                                 de formigas associadas à embaúba Cecropia glaziovi (Urticaceae). Curso de campo Ecologia
+                                 da Mata Atlântica (G. Machado; P.I. Prado & A.M.Z. Martini, eds.). Universidade de
+                                 São Paulo, São Paulo", 
+                                 tags$a(href="http://ecologia.ib.usp.br/curso/2012/PDF/PI-Hebert.pdf", "Download pdf!"))
+                      )
+               )
+      )
+    ),    
     tabPanel("Data input", 
              helpText("Use this tab to select the input data for your analysis. The first options are 
                       datasets included in the library, select the \"upload\" option to upload your own 

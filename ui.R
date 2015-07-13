@@ -3,8 +3,14 @@ library(shinyBS)
 shinyUI(fluidPage(theme= "bootstrap.css",
   tabsetPanel(type="tabs", id="tabEvent",
     tabPanel("Rsampling",
-             h2("Rsampling - resampling statistics in R"),
+             fluidRow(
+               column(10,h2("Rsampling - resampling statistics in R")),
+               column(2,selectInput(inputId = "lang", label = "",
+                                  choices = c("English" = "en", "Português" = "pt"),
+                                  selected = "English"))
+                      ),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
+             #h1(textOutput("description")),
              includeHTML("help.html"),
              h3("Rsampling version"),
              conditionalPanel("output.needinstall=='ok'",
@@ -17,8 +23,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                   style="color:#f30")
              )
     ),
-    navbarMenu("Tutorials",
-               tabPanel("Mangrove trees",
+    navbarMenu("Tutorial",
+               tabPanel(textOutput("tutorial1"),
                         column(4,
                                h4("Mangrove trees and soil stability"),
                                h6("Question"),
@@ -98,7 +104,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                )
                                )
                                ),
-               tabPanel("Protective ants",
+               tabPanel(textOutput("tutorial3"),
                         column(4,
                                h4("Protective ants"),
                                h6("Question"),
@@ -141,10 +147,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                )
       )
     ),    
-    tabPanel("Data input", 
-             helpText("Use this tab to select the input data for your analysis. The first options are 
-                      datasets included in the library, select the \"upload\" option to upload your own 
-                      file."),
+    tabPanel(textOutput("dataInput"),
+             helpText(textOutput("help1")),
+             #helpText("Use this tab to select the input data for your analysis. The first options are 
+              #        datasets included in the library, select the \"upload\" option to upload your own 
+               #       file."),
              selectInput("datasource",
                          "What is your input data?",
                          choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")

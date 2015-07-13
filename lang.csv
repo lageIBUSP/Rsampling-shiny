@@ -1,0 +1,11 @@
+value;EN;PT;NO
+time;Time;Horario;Tid
+day;Day;Dia;Dag
+week;Week;Semana;Uke
+month;Month;Mes;Maaned
+resampling-title;x;x;x
+tutorials;Tutorials;Tutoriais;x
+tutorial1;Mangrove trees;Mangue;x
+tutorial3;Protective ants;Formigas protetoras;x
+dataInput;Data input;Entrada de dados;x
+help1;"Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the ""upload"" option to upload your own file.";Ajuda em português;x

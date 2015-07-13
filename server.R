@@ -465,4 +465,59 @@ shinyServer(function(input, output, session) {
                              extreme = FALSE, vline = TRUE, rejection = FALSE, 
                              breaks = seq(-8,8,1), xlim=c(-8,8))                
           })
+          ###########################################
+          ###       MULTILINGUAL INTERFACE        ###
+          #After:
+          #http://www.r-bloggers.com/design-a-bilingual-shiny-application/
+          ###########################################
+          lang <- unique(read.csv('lang.csv', sep = ';', stringsAsFactors = FALSE, fileEncoding="UTF-8"))
+          observe({
+            translate <- function(text, D = lang) {
+              for (i in 1:length(text)) {
+                id <- which(D$value %in% text[i])
+                if (length(id) == 0) {
+                  id <- which(D$EN %in% text[i])
+                  if (length(id) == 1) {
+                    text[i] <- ifelse(input$lang == 'pt', D$PT[id], D$EN[id])
+                  } else if (length(id) > 1) {
+                    print('Mulit-variable matched!')
+                  }
+                } else if (length(id) == 1) {
+                  text[i] <- ifelse(input$lang == 'pt', D$PT[id], D$EN[id])
+                } else if (length(id) > 1) {
+                  print('Mulit-variable matched!')
+                }
+              }
+              return(text)
+            }
+            ## Input;
+            output$uiUnit <- renderUI({
+              Items <- c('day', 'week', 'month')
+              selectInput(inputId = 'unit',
+                          label = translate('time'),
+                          choices = translate(Items),
+                          multiple = TRUE)
+            })
+            ## Output;
+            output$text1 <- renderText({
+              translate(input$unit)
+            })
+            #####Interface text
+            output$description <- renderText({
+              translate("day")})
+            output$tutorials <- renderText({
+              translate("tutorials")})
+            output$tutorial1 <- renderText({
+              translate("tutorial1")})
+            output$tutorial3 <- renderText({
+              translate("tutorial3")})
+            ###Data input tab
+            output$dataInput <- renderText({
+              translate("dataInput")})
+            output$help1 <- renderText({
+              translate("help1")})
+            ###############################################
+          })
+          
+          
 })

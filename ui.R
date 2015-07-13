@@ -1,3 +1,5 @@
+# loads the required libraries.
+# when adding libraries here, REMEMBER to include them as requirements on README.md
 library(shiny)
 library(shinyBS)
 shinyUI(fluidPage(theme= "bootstrap.css",

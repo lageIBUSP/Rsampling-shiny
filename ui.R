@@ -1,5 +1,4 @@
 library(shiny)
-library(shinyBS)
 shinyUI(fluidPage(theme= "bootstrap.css",
   tabsetPanel(type="tabs", id="tabEvent",
     tabPanel("Rsampling",
@@ -328,7 +327,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  sliderInput("ntrials", "Number of trials:", min=500,max=10000,value=1000,step=500),
                  checkboxInput("stratum", "Stratified resampling?"),
                  conditionalPanel("input.stratum",
-                 helpText("Should the randomization be restricted inside groups of rows?"),
+                 helpText("Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
                    selectInput("stratumc", "Stratum variable: ", 1)
                  ),
                  conditionalPanel("input.stat == 'custom'",

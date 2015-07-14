@@ -43,7 +43,8 @@ shinyServer(function(input, output, session) {
             }
             # custom function handler: parses the text in the custom input
             custom <- function(dataframe) {
-              eval(parse(text=input$customstat))
+              input$gocustomstat
+              eval(parse(text=isolate(input$customstat)))
             }
             # what columns should be randomized?
             cols <- reactive({ 
@@ -115,43 +116,55 @@ shinyServer(function(input, output, session) {
             # vals reactive. Now vals$distribution should be used on all contexts in 
             # which distribution() was previously used, EXCEPT inside the plotting function,
             # where vals$x represent the distribution as it is being animated
-            vals<-reactiveValues()
+            # vals$run controls whether the distribution() has run succesfully
+            vals<-reactiveValues(run = FALSE)
             distribution <- observe({
-              input$go # triggers the calculations when the "Update graph" is pressed
-              # traps NA, NaN, NULL, Infin the statistic applied over the original data
-              if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
-                return (0);
-              type = switch(isolate(input$type),
-                            "Normal" = "normal_rand",
-                            "Rows as units" = "rows_as_units",
-                            "Columns as units" = "columns_as_units",
-                            "Within rows" = "within_rows",
-                            "Within columns" = "within_columns"
-                            )
-             # sets up a new shiny progress bar and callback function
-              progress <- shiny::Progress$new(max=100)
-              on.exit(progress$close())
-              progress$set(message = "Sampling...", value = 0)
-              pupdate <- function(x) 
-                progress$set(value = x * progress$getMax(), 
-                             detail=paste0(round(progress$getValue()), "%"))
+              vals$run <- FALSE
+              # triggers the calculations when the "Update graph" is pressed
+              if (input$go == 0) { #no sampling was done yet, initializes vals with "zeroes"
+                vals$iter <- 1; vals$distribution <- 0; vals$seqsim <- c()
+                return(0);
+              }
+              # EVERYTHING ELSE is isolated:
               isolate({
-                  vals$iter <- 1
-                  vals$total_iterations <- input$ntrials 
-                  vals$seqsim <- seq(100, vals$total_iterations, len=100)
-                  vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
+              # traps NA, NaN, NULL, Infin the statistic applied over the original data
+                if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue()))) {
+                  vals$iter <- 1; vals$distribution <- 0; vals$seqsim <- c()
+                  return (0);
+                }
+                type = switch(isolate(input$type),
+                              "Normal" = "normal_rand",
+                              "Rows as units" = "rows_as_units",
+                              "Columns as units" = "columns_as_units",
+                              "Within rows" = "within_rows",
+                              "Within columns" = "within_columns"
+                              )
+             # sets up a new shiny progress bar and callback function
+                progress <- shiny::Progress$new(max=100)
+                on.exit(progress$close())
+                progress$set(message = "Sampling...", value = 0)
+                pupdate <- function(x) 
+                  progress$set(value = x * progress$getMax(), 
+                               detail=paste0(round(progress$getValue()), "%"))
+                vals$iter <- 1
+                vals$total_iterations <- input$ntrials 
+                vals$seqsim <- seq(100, vals$total_iterations, len=100)
+                vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
                                        statistics = statistic(), cols = cols(),
                                        stratum = isolate(stratum()),
                                        ntrials = isolate(input$ntrials), 
                                        replace=isolate(input$replace),
                                        progress = pupdate)
-                  vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
+                vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
               })
+              vals$run <- TRUE
+              # why is resume() called here???
               run_iter$resume()
             })
             run_iter <- observe({
+              if (!vals$run) return();
               qry <- parseQueryString(session$clientData$url_search)
-              if (input$go == 0 & is.null(qry$auto)) {
+              if (is.null(qry$auto) && input$go == 0) {
                 isolate({
                   vals$x <- vals$distribution
                 })
@@ -172,6 +185,7 @@ shinyServer(function(input, output, session) {
             output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
               content=function(file) {
+                if(!vals$run) stop ("Sampling ended with error!")
                 write.csv(vals$distribution, file)
               }
             )
@@ -197,22 +211,24 @@ shinyServer(function(input, output, session) {
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
               # Traps errors
-              if (length(vals$distribution) == 1)
+              if (input$go == 0) {
+                plot(0,0, type='n',xlab="", ylab="", main="Run the resampling to see the graphs");
+                return();
+              }
+              if (! vals$run)
                   stop("Distribution calculation stopped with error!")
-               Rsampling::dplot(dist = vals$x, svalue =  svalue(), pside= input$pside, 
+               Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
                    extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-	            c(input$m1, input$m2)
-              input$gocustomstat
-              input$stat
               # to avoid weird things when length > 1
-              s <- paste(round(isolate(svalue()), 3), collapse = " ")
+              s <- paste(round(svalue(), 3), collapse = " ")
               paste("Statistic of interest: ", s, "\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({
+              if (! vals$run) return ("no available p-value yet...")
               side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
               p <- switch(input$pside, 
                           "Two sided" = abs(vals$distribution) >= abs(svalue()),

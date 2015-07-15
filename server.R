@@ -211,13 +211,13 @@ shinyServer(function(input, output, session) {
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
               # Traps errors
-              if (input$go == 0) {
+              if (input$go == 0 | !is.numeric(vals$x)) {
                 plot(0,0, type='n',xlab="", ylab="", main="Run the resampling to see the graphs");
                 return();
               }
               if (! vals$run)
                   stop("Distribution calculation stopped with error!")
-               Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
+              Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
                    extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
             ### simply displays the statistic of interest

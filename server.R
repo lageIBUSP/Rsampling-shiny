@@ -222,9 +222,6 @@ shinyServer(function(input, output, session) {
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-	            c(input$m1, input$m2)
-              input$gocustomstat
-              input$stat
               # to avoid weird things when length > 1
               s <- paste(round(svalue(), 3), collapse = " ")
               paste("Statistic of interest: ", s, "\n", sep="")

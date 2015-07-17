@@ -18,7 +18,7 @@ install_github(repo = 'lageIBUSP/Rsampling')
 ## Web version
 You can run Rsampling shiny from github! Just open R and run:
 ```R
-install.packages(c("shiny","shinyBS", "gridExtra"))
+install.packages(c("shiny","PerformanceAnalytics"))
 library(shiny)
 runGitHub(repo="andrechalom/Rsampling-shiny")
 ``` 
@@ -40,3 +40,4 @@ Remember that you need to install the shiny/shinyBS packages while you have inte
 * Select your randomization scheme, with or without replacement
 * Optional stratified randomization
 * Reactive graph showing the distribuion of the statistic of interest and estimated p-value
+* Interactive tutorials on resampling statistics

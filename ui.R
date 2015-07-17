@@ -1,7 +1,6 @@
 # loads the required libraries.
 # when adding libraries here, REMEMBER to include them as requirements on README.md
 library(shiny)
-library(shinyBS)
 shinyUI(fluidPage(theme= "bootstrap.css",
   tabsetPanel(type="tabs", id="tabEvent",
     tabPanel("Rsampling",
@@ -177,8 +176,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              fluidRow(column(6,conditionalPanel(
                fileInput("file", "Choose CSV file:", accept='.csv'),
                fluidRow(
-                 column(3, checkboxInput("header", "Header?")),
-                 bsTooltip("header", "First row as header"),
+                 column(3, checkboxInput("header", "First row as header?")),
                  column(3,
                  radioButtons('sep', 'Separator',
                               c(Comma=',',
@@ -348,27 +346,23 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                  whole columns are sampled with replacement to assemble the randomized data table.
                                  In both cases the position of values within each column is kept."),
                        condition = "input.type == 'Columns as units'"),
-                 ##bsTooltip("type", "See the help page for details on the different randomization types."),
                  checkboxInput("replace", "With replacement?"),
-                 selectInput("pside", "Alternative:", choices=c("Two sided", "Greater", "Lesser")),
-                 bsTooltip("replace", "Check this option if you want all the draws to be made independently (that is, with replacement) from the original data"),
-                 bsTooltip("pside", "Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.", "top"),
+                 selectInput("pside", "Alternative hypothesis:", choices=c("Two sided", "Greater", "Lesser")),
                  sliderInput("ntrials", "Number of trials:", min=500,max=10000,value=1000,step=500),
                  checkboxInput("stratum", "Stratified resampling?"),
-                 bsTooltip("stratum", "Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
                  conditionalPanel("input.stratum",
+                 helpText("Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value."),
                    selectInput("stratumc", "Stratum variable: ", 1)
                  ),
                  conditionalPanel("input.stat == 'custom'",
-                   helpText("Which columns of the data set should be randomized? This input
-                           will be parsed as R code, so 1:3 or c(1,4,5) are valid values"),
+                   helpText("Which columns of the data set should be randomized? 
+                             R code such as 1:3 or c(1,4,5) are valid values"),
                    textInput("customcols", "Columns", "1")
                  ),
-                 bsTooltip("ntrials", "How many iteractions of sampling should we do?"),
                  fluidRow(column(6, checkboxInput("extreme", "Show extremes?", TRUE)),
                           column(6, checkboxInput("rejection", "Show rejection region?", TRUE))
                          ),
-	         fluidRow(column(6, actionButton("go", "Update Graph")),
+	         fluidRow(column(6, actionButton("go", "Run sampling!")),
 			  column(6, downloadButton('download', "Download data"))
 			 )
                ),

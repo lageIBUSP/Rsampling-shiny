@@ -1,17 +1,25 @@
 library(shiny)
 library(shinyBS)
+# Translate input widgets
+##Statistic
+optionsStat <- c("smean","ssd","meandif","Fstatistic","meandifc","srow",
+             "scol","intercept","slope","corr","custom")
+names(optionsStat) <- tr(optionsStat, lg)
+###
 shinyUI(fluidPage(theme= "bootstrap.css",
   tabsetPanel(type="tabs", id="tabEvent",
     tabPanel("Rsampling",
-             fluidRow(
-               column(10,h2("Rsampling - resampling statistics in R")),
-               column(2,selectInput(inputId = "lang", label = "",
-                                  choices = c("English" = "en", "Português" = "pt"),
-                                  selected = "English"))
-                      ),
+             if(!is.element(lg,colnames(lang)[-1])){
+               h5("The language selected is not available or was not properly
+                            detected. Language was set back to the default.",style="color:#f30")
+             },             
+             h2(tr("resampling-title",lg)),
              h4("powered by ", a("Shiny", href="http://www.rstudio.com/shiny")),
-             #h1(textOutput("description")),
-             includeHTML("help.html"),
+             if (lg=="pt") {
+               includeHTML("help_pt.html")
+             } else {
+               includeHTML("help.html")
+             },
              h3("Rsampling version"),
              conditionalPanel("output.needinstall=='ok'",
                p("You already have the right version of Rsampling installed :)")
@@ -24,10 +32,10 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              )
     ),
     navbarMenu("Tutorial",
-               tabPanel(textOutput("tutorial1"),
+               tabPanel(tr("tutorial1",lg),
                         column(4,
                                h4("Mangrove trees and soil stability"),
-                               h6("Question"),
+                               h6(tr("Question",lg)),
                                p("Do mangrove trees in more unstable soil allocate
                                  more biomass in supporting roots?"),
                                h6("Hypothesis"),
@@ -104,7 +112,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                )
                                )
                                ),
-               tabPanel(textOutput("tutorial3"),
+               tabPanel(tr("tutorial3",lg),
                         column(4,
                                h4("Protective ants"),
                                h6("Question"),
@@ -147,11 +155,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                )
       )
     ),    
-    tabPanel(textOutput("dataInput"),
-             helpText(textOutput("help1")),
-             #helpText("Use this tab to select the input data for your analysis. The first options are 
-              #        datasets included in the library, select the \"upload\" option to upload your own 
-               #       file."),
+    tabPanel(tr("dataInput",lg),
+             helpText(tr("help1",lg)),
              selectInput("datasource",
                          "What is your input data?",
                          choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
@@ -186,20 +191,10 @@ shinyUI(fluidPage(theme= "bootstrap.css",
              ))),
              tableOutput("view")
              ),
-    tabPanel("Statistics",
+    tabPanel(tr("Statistics",lg),
              helpText("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own."),
              selectInput("stat", "Statistic:", 
-                         choices=c("Column mean" = "smean",
-                                   "Column standard deviation" = "ssd",
-                             "Mean difference between 2 groups" = "meandif",
-                             "Variance ratio (F) for more than 2 groups" = "Fstatistic",
-                                   "Mean difference between columns" = "meandifc",
-                                   "Mean sum of rows" = "srow",
-                                   "Mean sum of columns" = "scol",
-                                   "Regression intercept" = "intercept",
-                                   "Regression coefficient" = "slope",
-                                   "Correlation between columns" = "corr",
-                                   "Custom code" = "custom"),
+                         choices=optionsStat,
                          "meandif"),
              ### Panel for custom code:
              conditionalPanel(
@@ -297,7 +292,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                  ##Help for each randomization panel
                    conditionalPanel(
                        helpText(
-                           "In normal resampling the data is randomized over all cells of the selected columns. If you do not check the 'With replacement' box below the data is permuted over the cells. Otherwise the data from any cell are sampled with replacement and attributed to any other cell."),
+                           "In normal resampling the data is randomized over all cells of the
+                           selected columns. If you do not check the 'With replacement' box
+                           below the data is permuted over the cells. Otherwise the data from
+                           any cell are sampled with replacement and attributed to any other 
+                           cell."),
                        condition = "input.type == 'Normal'"),
                    conditionalPanel(
                        helpText(

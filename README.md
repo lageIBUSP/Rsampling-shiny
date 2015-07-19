@@ -34,6 +34,13 @@ runApp("<path to Rsampling-shiny>")
 ```
 Remember that you need to install the shiny/shinyBS packages while you have internet access!
 
+## Languages
+The app is currently available in English (default) and Portuguese.
+To use the version in Portuguese, run the following command 
+before running the app (runGitHub(...) or runApp(...))
+```R
+language <- "pt"
+```
 ## Current features
 * Access the Rsampling sample datafiles, or upload your own data in csv format
 * Choose between a range of statistics, or write your own R function

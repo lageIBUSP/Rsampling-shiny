@@ -1,0 +1,29 @@
+value;en;pt
+time;Time;Horario
+day;Day;Dia
+week;Week;Semana
+month;Month;Mes
+resampling-title;Rsampling - resampling statistics in R;Rsampling - estatística baseada em permutação em R;
+tutorials;Tutorials;Tutoriais
+tutorial1;Mangrove trees;Mangue
+tutorial3;Protective ants;Formigas protetoras
+Question;Question;Pergunta
+dataInput;Data input;Entrada de dados
+help1;"Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the ""upload"" option to upload your own file.";Ajuda em português
+Statistics;Statistics;Estatística
+smean;Column mean;Média da coluna
+ssd;Column standard deviation; Desvio padrão da coluna
+meandif;Mean difference between 2 groups;Diferença média entre 2 grupos
+Fstatistic;Variance ratio (F) for more than 2 groups;Razão entre variâncias (F) para mais de 2 grupos
+meandifc;Mean difference between columns;Diferença média entre colunas
+srow;Mean sum of rows;Média da soma das linhas
+scol;Mean sum of columns;Média da soma das colunas
+intercept;Regression intercept;Intercepto da regressão
+slope;Regression coefficient;Coeficiente da regressão
+corr;Correlation between columns;Correlação entre colunas
+custom;Custom code;Código personalizado
+treatment;Treatment;Tratamento
+Original data;Original data;Dados originais
+Canopy area / trunk area;Canopy area / trunk area;Área da copa / área do tronco
+Number of roots;Number of roots;Número de raizes
+slopePlot;slope;inclinação

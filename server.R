@@ -1,5 +1,7 @@
+# loads the required libraries.
+# when adding libraries here, REMEMBER to include them as requirements on README.md
 library(shiny)
-library(gridExtra)
+library(PerformanceAnalytics) #required for table ploting in tutorial tab
 library(Rsampling)
 shinyServer(function(input, output, session) {
             ###########################################
@@ -41,7 +43,8 @@ shinyServer(function(input, output, session) {
             }
             # custom function handler: parses the text in the custom input
             custom <- function(dataframe) {
-              eval(parse(text=input$customstat))
+              input$gocustomstat
+              eval(parse(text=isolate(input$customstat)))
             }
             # what columns should be randomized?
             cols <- reactive({ 
@@ -113,43 +116,55 @@ shinyServer(function(input, output, session) {
             # vals reactive. Now vals$distribution should be used on all contexts in 
             # which distribution() was previously used, EXCEPT inside the plotting function,
             # where vals$x represent the distribution as it is being animated
-            vals<-reactiveValues()
+            # vals$run controls whether the distribution() has run succesfully
+            vals<-reactiveValues(run = FALSE)
             distribution <- observe({
-              input$go # triggers the calculations when the "Update graph" is pressed
-              # traps NA, NaN, NULL, Infin the statistic applied over the original data
-              if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue())))
-                return (0);
-              type = switch(isolate(input$type),
-                            "Normal" = "normal_rand",
-                            "Rows as units" = "rows_as_units",
-                            "Columns as units" = "columns_as_units",
-                            "Within rows" = "within_rows",
-                            "Within columns" = "within_columns"
-                            )
-             # sets up a new shiny progress bar and callback function
-              progress <- shiny::Progress$new(max=100)
-              on.exit(progress$close())
-              progress$set(message = "Sampling...", value = 0)
-              pupdate <- function(x) 
-                progress$set(value = x * progress$getMax(), 
-                             detail=paste0(round(progress$getValue()), "%"))
+              vals$run <- FALSE
+              # triggers the calculations when the "Update graph" is pressed
+              if (input$go == 0) { #no sampling was done yet, initializes vals with "zeroes"
+                vals$iter <- 1; vals$distribution <- 0; vals$seqsim <- c()
+                return(0);
+              }
+              # EVERYTHING ELSE is isolated:
               isolate({
-                  vals$iter <- 1
-                  vals$total_iterations <- input$ntrials 
-                  vals$seqsim <- seq(100, vals$total_iterations, len=100)
-                  vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
+              # traps NA, NaN, NULL, Infin the statistic applied over the original data
+                if ((is.null(svalue())) || (is.na(svalue()) | is.nan(svalue()) | !is.finite(svalue()))) {
+                  vals$iter <- 1; vals$distribution <- 0; vals$seqsim <- c()
+                  return (0);
+                }
+                type = switch(isolate(input$type),
+                              "Normal" = "normal_rand",
+                              "Rows as units" = "rows_as_units",
+                              "Columns as units" = "columns_as_units",
+                              "Within rows" = "within_rows",
+                              "Within columns" = "within_columns"
+                              )
+             # sets up a new shiny progress bar and callback function
+                progress <- shiny::Progress$new(max=100)
+                on.exit(progress$close())
+                progress$set(message = "Sampling...", value = 0)
+                pupdate <- function(x) 
+                  progress$set(value = x * progress$getMax(), 
+                               detail=paste0(round(progress$getValue()), "%"))
+                vals$iter <- 1
+                vals$total_iterations <- input$ntrials 
+                vals$seqsim <- seq(100, vals$total_iterations, len=100)
+                vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
                                        statistics = statistic(), cols = cols(),
                                        stratum = isolate(stratum()),
                                        ntrials = isolate(input$ntrials), 
                                        replace=isolate(input$replace),
                                        progress = pupdate)
-                  vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
+                vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
               })
+              vals$run <- TRUE
+              # why is resume() called here???
               run_iter$resume()
             })
             run_iter <- observe({
+              if (!vals$run) return();
               qry <- parseQueryString(session$clientData$url_search)
-              if (input$go == 0 & is.null(qry$auto)) {
+              if (is.null(qry$auto) && input$go == 0) {
                 isolate({
                   vals$x <- vals$distribution
                 })
@@ -170,6 +185,7 @@ shinyServer(function(input, output, session) {
             output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
               content=function(file) {
+                if(!vals$run) stop ("Sampling ended with error!")
                 write.csv(vals$distribution, file)
               }
             )
@@ -195,22 +211,24 @@ shinyServer(function(input, output, session) {
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
               # Traps errors
-              if (length(vals$distribution) == 1)
+              if (input$go == 0 | !is.numeric(vals$x)) {
+                plot(0,0, type='n',xlab="", ylab="", main="Run the resampling to see the graphs");
+                return();
+              }
+              if (! vals$run)
                   stop("Distribution calculation stopped with error!")
-               Rsampling::dplot(dist = vals$x, svalue =  svalue(), pside= input$pside, 
+              Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
                    extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
             ### simply displays the statistic of interest
             output$stat <- renderText({
-	            c(input$m1, input$m2)
-              input$gocustomstat
-              input$stat
               # to avoid weird things when length > 1
-              s <- paste(round(isolate(svalue()), 3), collapse = " ")
+              s <- paste(round(svalue(), 3), collapse = " ")
               paste("Statistic of interest: ", s, "\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({
+              if (! vals$run) return ("no available p-value yet...")
               side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
               p <- switch(input$pside, 
                           "Two sided" = abs(vals$distribution) >= abs(svalue()),
@@ -249,220 +267,204 @@ shinyServer(function(input, output, session) {
           ###########################################
           ###########################################################################
           values <- reactiveValues()
+          #Object where the statistics from the rondomized
+          ## data sets are stored
           values$saveDist <- list()
+          #Clear histrogram when button is pressed
+          ##Tab 1 - mangrove trees
           observeEvent(input$clear1, {
             isolate(values$saveDist <- list())
           })
+          ##Tab 2 - balanced mangrove trees
           observeEvent(input$clear2, {
             isolate(values$saveDist <- list())
           })
+          ##Tab 3 - protective ants
           observeEvent(input$clear3, {
             isolate(values$saveDist <- list())
           })
+          #Reset values when the user goes to a different tab
           observeEvent(input$tabEvent, {
             isolate(values$saveDist <- list())
+            isolate(values$orig <- data.frame())
+            updateSelectInput(session, "dataset", selected='Original')
+            updateSelectInput(session, "dataset2", selected='Original')
+            updateSelectInput(session, "dataset3", selected='Original')
           })
+          favoriteColor <- "#428bca" #blue 
+          tablePlot <- function(dataframe, is.randomizedSet){
+            nrows <- dim(dataframe)[1]          
+            if(is.randomizedSet) {
+              colors <- matrix(ifelse(unlist(dataframe) == unlist(values$orig), "black", favoriteColor),nrow=nrows)
+            } else {
+              colors <- matrix(rep("black",dim(dataframe)[1]*dim(dataframe)[2]),nrow=nrows,byrow=TRUE)
+            }
+            title <- ifelse(is.randomizedSet,
+                            "Randomized data",
+                            "Original data")
+            xmin <- par("usr")[1]
+            xmax <- par("usr")[2]
+            ymin <- par("usr")[3]
+            ymax <- par("usr")[4]
+            xsize <- xmax-xmin
+            ysize <- ymax-ymin
+            textplot(dataframe,col.data=colors,show.rownames=TRUE,show.colnames=TRUE,
+                     col.rownames= "grey90", wrap=TRUE, wrap.colnames = 2, cmar = 1,
+                     rmar = 0.05*(ysize/nrows), cex = 18*(ysize/nrows))
+            text((xmin+xmax)/2, ysize-(0.06*ysize), labels=title, cex=1.2, font=2)
+            rect(xmin, ymin ,xmax, ysize-(0.08*ysize), xpd=TRUE) 
+
+          }
+          distPlot <- function(xmin,xmax,binsize){
+            par(mar = c(4,3,2,0))
+            Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = values$origStat, 
+                             extreme = FALSE, vline = TRUE, rejection = FALSE, 
+                             breaks = seq(xmin,xmax,binsize), xlim=c(xmin,xmax), ylim=c(0,30))    
+          }
           #################################################################
           ###Mangrove trees
-          mangStat <- mean(rhyzophora[ which(rhyzophora$soil.instability=='high'),]$root)-
-            mean(rhyzophora[ which(rhyzophora$soil.instability=='medium'),]$root)
-          ### Specific plots for this dataset
-          output$mangPlot <- renderPlot({
+          mangBoxPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
-            boxplot(root ~ soil.instability, data=rhyzophora, type="n",
-                    main="Original data",
+            title <- ifelse(is.randomizedSet,
+                            "Randomized data",
+                            "Original data")
+            color <- ifelse(is.randomizedSet,favoriteColor,"grey")
+            textcolor <- ifelse(is.randomizedSet,"black","red")
+            boxplot(root ~ soil.instability, data=dataframe, type="n",
+                    main=title, col=color,
                     xlab="Soil instability", ylab="area covered by aerial root (m2)")             
-            text(2,33,paste("mean difference = \n",round(mangStat,4)),col="red")
+            text(2,33,paste("mean difference = \n",round(stat,4)),col=textcolor)
+          }
+          #Randomization output
+          randomizedMang <- reactive({
+            input$mangRand # triggers the calculations when the "Do it again!" button is pressed
+            Rsampling::normal_rand(dataframe = rhyzophora, cols = 3)
           })
-          output$mangPlotRandom <- renderPlot({
-            thisSet <- randomizedMang()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=24))
-            names(thisDf) <- c("si","canopy.trunk","root","n.roots")
-            thisStat <- mean(thisDf[ which(thisDf$si==1),]$root)-
-              mean(thisDf[ which(thisDf$si==2),]$root)
-            isolate(values$saveDist <- rbind(values$saveDist, thisStat))
-            par(mar = c(4,4,2,2))
-            boxplot(root ~ si, data=thisDf, type="n",
-                    main="Randomized data", col="#428bca",
-                    xlab="Soil instability", ylab="area covered by aerial root (m2)")             
-            text(2,33,paste("mean difference = \n",round(thisStat,4)))
-          })
-          ### Display data set as a plot
+          # Display data set as a plot
+          ## Note that the original data set is stored in this block
           output$mangTable <- renderPlot({
             data <- rhyzophora[,c(1,3)]
             data$root <- round(data$root,3)
-            tbl <- tableGrob(data,
-                             cols = c("soil.instability", 
-                                      "roots"),
-                             show.rownames =FALSE,
-                             gpar.corefill = gpar(fill = "grey80", col = "white"))
-            grid.draw(tbl)
-          },height=500)
+            isolate(values$orig <- data)
+            tablePlot(values$orig, is.randomizedSet=FALSE)     
+          })         
           output$mangTableRandom <- renderPlot({
-            thisSet <- randomizedMang()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=24))
-            names(thisDf) <- c("si","canopy.trunk","root","n.roots")
-            thisDf$si[thisDf$si == 1] <- "high"
-            thisDf$si[thisDf$si == 2] <- "medium"
+            thisDf <- randomizedMang()   
             data <- thisDf[,c(1,3)]
-            data$root <- round(data$root,3)   
-            tbl <- tableGrob(data,
-                             cols = c("soil.instability", 
-                                      "roots"),
-                             show.rownames =FALSE,
-                             gpar.corefill = gpar(fill = "#428bca", col = "white"))
-            grid.draw(tbl)
-          },height=500)
-          #Randomization output
-          randomizedMang <- reactive({
-            input$mangRand # triggers the calculations when the "..." is pressed
-            Rsampling(type = "normal_rand", dataframe = rhyzophora,
-                      statistics = function(dataframe) return(dataframe), cols = 3,
-                      ntrials = 1)
+            data$root <- round(data$root,3)      
+            tablePlot(data, is.randomizedSet=TRUE)    
           })
-          ### main plot of the program: generates a histogram of distribution()
+          # Specific plots for this dataset
+          ## Note that the statistic of interest for the original data set is stored in this block
+          output$mangPlot <- renderPlot({
+            isolate(values$origStat <- mean(rhyzophora[ which(rhyzophora$soil.instability=='high'),]$root)-
+                      mean(rhyzophora[ which(rhyzophora$soil.instability=='medium'),]$root))
+            mangBoxPlot(rhyzophora,values$origStat,is.randomizedSet=FALSE)
+          })          
+          output$mangPlotRandom <- renderPlot({
+            thisDf <- randomizedMang()
+            thisStat <- mean(thisDf[ which(thisDf$soil.instability=="high"),]$root)-
+             mean(thisDf[ which(thisDf$soil.instability=="medium"),]$root)
+             isolate(values$saveDist <- rbind(values$saveDist, thisStat))
+            mangBoxPlot(thisDf,thisStat,is.randomizedSet=TRUE)
+          })
+          # Histrogram of statistics from the the randomized data sets
           output$distPlotMang <- renderPlot({
-            par(mar = c(4,3,2,0))
-            Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = mangStat, 
-                             extreme = FALSE, vline = TRUE, rejection = FALSE, 
-                             breaks = seq(-15,15,2), xlim=c(-15,15))                
+            distPlot(xmin=-15,xmax=15,binsize=2)              
           })
           ######################################################################
-          ###More mangrove trees
-          rhyzSlope <- coef(lm(n.roots ~ canopy.trunk, data=rhyzophora))[2]
-          ### Specific plots for this dataset
-          output$rhyzPlot <- renderPlot({
+          ###Balanced mangrove trees          
+          rhyzScatterPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
-            plot(n.roots ~ canopy.trunk, data=rhyzophora, pch=19,
-                 main="Original data",
+            title <- ifelse(is.randomizedSet,
+                            "Randomized data",
+                            "Original data")
+            color <- ifelse(is.randomizedSet,favoriteColor,"grey")
+            textcolor <- ifelse(is.randomizedSet,"black","red")
+            plot(n.roots ~ canopy.trunk, data=dataframe, pch=19,
+                 main=title, col=color,
                  xlab="canopy area / trunk area", ylab="number of roots")             
-            abline(lm(n.roots ~ canopy.trunk, data=rhyzophora))
-            text(3000,150,paste("slope =",round(rhyzSlope,4)),col="red")
-          })
-          output$rhyzPlotRandom <- renderPlot({
-            thisSet <- randomizedRhyz()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=24))
-            names(thisDf) <- c("si","canopy.trunk","root","n.roots")
-            thisSlope <- coef(lm(n.roots ~ canopy.trunk, data=thisDf))[2]
-            isolate(values$saveDist <- rbind(values$saveDist, thisSlope))
-            par(mar = c(4,4,2,2))
-            plot(n.roots ~ canopy.trunk, data=thisDf, pch=19,
-                 main="Randomized data", col="#428bca",
-                 xlab="canopy area / trunk area", ylab="number of roots")
-            abline(lm(n.roots ~ canopy.trunk, data=thisDf))
-            text(3000,150,paste("slope =",round(thisSlope,4)))
-          })
-          output$rhyzTable <- renderPlot({
-            data <- rhyzophora[,c(2,4)]
-            data$canopy.trunk <- round(data$canopy.trunk,2)
-            tbl <- tableGrob(data,
-                             cols = c("canopy.trunk", 
-                                      "n.roots"),
-                             show.rownames =FALSE,
-                             gpar.corefill = gpar(fill = "grey80", col = "white"))
-            grid.draw(tbl)
-          },height=500)
-          output$rhyzTableRandom <- renderPlot({
-            thisSet <- randomizedRhyz()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=24))
-            names(thisDf) <- c("si","canopy.trunk","root","n.roots")
-            data <- thisDf[,c(2,4)]
-            data$canopy.trunk <- round(data$canopy.trunk,2)   
-            tbl <- tableGrob(data,
-                             cols = c("canopy.trunk", 
-                                      "n.roots"),
-                             show.rownames =FALSE,                               
-                             gpar.corefill = gpar(fill = "#428bca", col = "white"))
-            grid.draw(tbl)
-          },height=500)
+            abline(lm(n.roots ~ canopy.trunk, data=dataframe))
+            text(3000,150,paste("slope =",round(stat,4)),col=textcolor)
+          }
           #Randomization output
           randomizedRhyz <- reactive({
-            input$rhyzRand # triggers the calculations when the "..." is pressed
-            Rsampling(type = "normal_rand", dataframe = rhyzophora,
-                      statistics = function(dataframe) return(dataframe), cols = 4,
-                      ntrials = 1)
+            input$rhyzRand # triggers the calculations when the "Do it again!" button is pressed
+            Rsampling::normal_rand(dataframe = rhyzophora, cols = 4)
+          })   
+          # Display data set as a plot
+          output$rhyzTable <- renderPlot({
+            data <- rhyzophora[,c(2,4)]
+            data$canopy.trunk <- round(data$canopy.trunk,3)
+            isolate(values$orig <- data)            
+            tablePlot(values$orig, is.randomizedSet=FALSE)     
           })
-          ### main plot of the program: generates a histogram of distribution()
+          output$rhyzTableRandom <- renderPlot({
+            thisDf <- randomizedRhyz()   
+            data <- thisDf[,c(2,4)]
+            data$canopy.trunk <- round(data$canopy.trunk,3)    
+            tablePlot(data, is.randomizedSet=TRUE)    
+          })       
+          # Specific plots for this dataset
+          output$rhyzPlot <- renderPlot({
+            isolate(values$origStat <- coef(lm(n.roots ~ canopy.trunk, data=rhyzophora))[2])
+            rhyzScatterPlot(rhyzophora,values$origStat,is.randomizedSet=FALSE)
+          })
+          output$rhyzPlotRandom <- renderPlot({
+            thisDf <- randomizedRhyz()
+            thisStat <- coef(lm(n.roots ~ canopy.trunk, data=thisDf))[2]
+            isolate(values$saveDist <- rbind(values$saveDist, thisStat))
+            rhyzScatterPlot(thisDf,thisStat,is.randomizedSet=TRUE)
+          })
+          # Histrogram of statistics from the the randomized data sets
           output$distPlotRhyz <- renderPlot({
-            par(mar = c(4,3,2,0))
-            Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = rhyzSlope, 
-                             extreme = FALSE, vline = TRUE, rejection = FALSE, 
-                             breaks = seq(-0.04,0.04,0.005), xlim=c(-0.04,0.04))                
+            distPlot(xmin=-0.04,xmax=0.04,binsize=0.005)             
           })      
           ###########################################################################
           ###Azteca
-          ### Specific plots for this dataset
-          aztStat <- mean(azteca$extract.new)-mean(azteca$extract.old)
-          output$aztPlot <- renderPlot({
+          aztPairedPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
-            plot(c(azteca$extract.new[1], azteca$extract.old[1]), type="o",
-                 main="Original data", ylim = c(0,60), xlim=c(0.9,2.1), pch=19,
-                 xlab="Treatment", ylab="Number of recruited ants", xaxt='n')
-            for(i in 2:dim(azteca)[1])
-            {
-              points(c(azteca$extract.new[i], azteca$extract.old[i]), pch=19,type="o")
-            }
+            title <- ifelse(is.randomizedSet,
+                            "Randomized data",
+                            "Original data")
+            color <- ifelse(is.randomizedSet,favoriteColor,"grey")
+            textcolor <- ifelse(is.randomizedSet,"black","red")
+            splot(dataframe$extract.new,dataframe$extract.old, col.dif = c(color, color),
+                  main="Original data", pch=19,
+                  xlab="Treatment", ylab="Number of recruited ants", xaxt='n')
             mtext("Extract of \n new leaves",1, at=1, line=1.5)
             mtext("Extract of \n old leaves",1, at=2, line=1.5)
-            text(1.8,52,paste("mean difference = \n",
-                              round(aztStat,4)),col="red")
-          })
-          output$aztPlotRandom <- renderPlot({
-            thisSet <- randomizedAzt()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=21))
-            names(thisDf) <- c("plant","extract.new","extract.old")
-            thisStat <- mean(thisDf$extract.new)-mean(thisDf$extract.old)
-            isolate(values$saveDist <- rbind(values$saveDist, thisStat))
-            par(mar = c(4,4,2,2))
-            plot(c(thisDf$extract.new[1], thisDf$extract.old[1]), type="o",
-                 main="Randomized data", ylim = c(0,60), xlim=c(0.9,2.1), pch=19,
-                 col="#428bca",
-                 xlab=tr("treatment",lg), ylab="Number of recruited ants", xaxt='n')
-            for(i in 2:dim(azteca)[1])
-            {
-              points(c(thisDf$extract.new[i], thisDf$extract.old[i]), pch=19,type="o",
-                     col="#428bca")
-            }
-            mtext("Extract of \n new leaves",1, at=1, line=1.5)
-            mtext("Extract of \n old leaves",1, at=2, line=1.5)
-            text(1.8,52,paste("mean difference = \n",
-                              round(thisStat,4)))
+            text(1.5,46,paste("mean difference = \n",
+                              round(stat,4)),col=textcolor)            
+          }
+          #Randomization output
+          randomizedAzt <- reactive({
+            input$aztRand # triggers the calculations when the "Do it again!" button is pressed
+            Rsampling::within_rows(dataframe = azteca, cols = c(2,3))
           })
           ### Display data set as a plot
           output$aztTable <- renderPlot({
             data <- azteca
-            tbl <- tableGrob(data,
-                             cols = c("plant", 
-                                      "extract.new",
-                                      "extract.old"),
-                             show.rownames =FALSE,
-                             gpar.corefill = gpar(fill = "grey80", col = "white"))
-            grid.draw(tbl)
-          },height=500)
-          output$aztTableRandom <- renderPlot({
-            thisSet <- randomizedAzt()
-            thisDf <- data.frame(matrix(unlist(thisSet), nrow=21))
-            data <- thisDf
-            tbl <- tableGrob(data,
-                             cols = c("plant", 
-                                      "extract.new",
-                                      "extract.old"),
-                             show.rownames =FALSE,
-                             gpar.corefill = gpar(fill = "#428bca", col = "white"))
-            grid.draw(tbl)
-          },height=500)
-          #Randomization output
-          randomizedAzt <- reactive({
-            input$aztRand # triggers the calculations when the "Do it again!" button is pressed
-            Rsampling(type = "within_rows", dataframe = azteca,
-                      statistics = function(dataframe) return(dataframe), cols = c(2,3),
-                      ntrials = 1)
+            isolate(values$orig <- data)            
+            tablePlot(values$orig, is.randomizedSet=FALSE)     
           })
-          ### main plot of the program: generates a histogram of distribution()
+          output$aztTableRandom <- renderPlot({
+            thisDf <- randomizedAzt()
+            tablePlot(thisDf, is.randomizedSet=TRUE) 
+          })
+          ### Specific plots for this dataset          
+          output$aztPlot <- renderPlot({
+            isolate(values$origStat <- mean(azteca$extract.new)-mean(azteca$extract.old))
+            aztPairedPlot(azteca,values$origStat,is.randomizedSet=FALSE)
+          })
+          output$aztPlotRandom <- renderPlot({
+            thisDf <- randomizedAzt()
+            thisStat <- mean(thisDf$extract.new)-mean(thisDf$extract.old)
+            isolate(values$saveDist <- rbind(values$saveDist, thisStat))
+            aztPairedPlot(thisDf,thisStat,is.randomizedSet=TRUE)
+          })
+          ### Histrogram of statistics from the the randomized data sets
           output$distPlotAzt <- renderPlot({
-            par(mar = c(4,3,2,0))
-            Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = aztStat, 
-                             extreme = FALSE, vline = TRUE, rejection = FALSE, 
-                             breaks = seq(-8,8,1), xlim=c(-8,8))                
-          })          
+            distPlot(xmin=-8,xmax=8,binsize=1)          
+          })
 })

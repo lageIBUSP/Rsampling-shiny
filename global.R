@@ -20,4 +20,4 @@ tr <- function(text, language, D = lang) {
       }
     }
     return(text)
-  }
+}

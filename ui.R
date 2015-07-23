@@ -1,7 +1,6 @@
 # loads the required libraries.
 # when adding libraries here, REMEMBER to include them as requirements on README.md
 library(shiny)
-library(shinyBS)
 # Translate input widgets
 ##Statistic
 optionsStat <- c("smean","ssd","meandif","Fstatistic","meandifc","srow",

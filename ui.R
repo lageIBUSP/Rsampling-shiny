@@ -5,7 +5,10 @@ library(shiny)
 ##Statistic
 optionsStat <- c("smean","ssd","meandif","Fstatistic","meandifc","srow",
                  "scol","intercept","slope","corr","custom")
-names(optionsStat) <- optionsStat
+names(optionsStat) <- tr(optionsStat,lg)
+##Randomization
+optionsRand <- c("Normal", "Within rows", "Within columns", "Rows as units", "Columns as units")
+names(optionsRand) <- tr(optionsRand,lg)
 ###
 shinyUI(fluidPage(theme= "bootstrap.css",
                   tabsetPanel(type="tabs", id="tabEvent",
@@ -132,8 +135,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                          )
                                                   )
                                          )
-                              ),    
-                              tabPanel(tr("dataInput",lg),
+                              ),
+                              tabPanel(tr("data_input",lg),
                                        helpText(tr("help1",lg)),
                                        selectInput("datasource",
                                                    tr("What is your input data?",lg),
@@ -169,7 +172,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        ))),
                                        tableOutput("view")
                               ),
-                              tabPanel(tr("Statistics",lg),
+                              tabPanel(tr("stat",lg),
                                        helpText(tr("Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own.",lg)),
                                        selectInput("stat", tr("Statistic:",lg), 
                                                    choices=optionsStat,
@@ -240,12 +243,12 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        # displays a warning in case the statistic is not returning a single number
                                        h4(textOutput("svaluewarning"), style="color:#f30")
                               ),
-                              tabPanel("Resampling",
+                              tabPanel(tr("Resampling",lg),
                                        sidebarLayout(
                                          sidebarPanel(
                                            helpText(tr("Here is where we do the randomization!",lg)),
                                            selectInput("type", tr("Randomization type:",lg), 
-                                                       choices=c("Normal", "Within rows", "Within columns", "Rows as units", "Columns as units")
+                                                       choices=optionsRand
                                            ),
                                            ##Help for each randomization panel
                                            conditionalPanel(
@@ -265,7 +268,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                              condition = "input.type == 'Columns as units'"),
                                            ##bsTooltip("type", "See the help page for details on the different randomization types."),
                                            checkboxInput("replace", tr("With replacement?",lg)),
-                                           selectInput("pside", tr("Alternative:",lg), choices=c("Two sided", "Greater", "Lesser")),
+                                           selectInput("pside", tr("Alternative:",lg), choices=tr(c("Two sided", "Greater", "Lesser"),lg)),
                                            #bsTooltip("replace", tr("Check this option if you want all the draws to be made independently (that is, with replacement) from the original data",lg)),
                                            #bsTooltip("pside", tr("Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.",lg), "top"),
                                            sliderInput("ntrials", tr("Number of trials:",lg), min=500,max=10000,value=1000,step=500),

@@ -3,7 +3,7 @@ week;Week;Semana
 This function calculates intercept of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;This function calculates intercept of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;Esta  funçãoo calcula o intercepto de uma análise de correlação linear entre duas colunas, y~ax+b. Aqui x é a variável independente, e y é a variável dependente
 The variance ratio function splits the data acording to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F.;The variance ratio function splits the data acording to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F.;A função de razão de variância divide os dados de acordo com uma variável categórica. Então ela calcula a razão entre as variâncias entre-grupos e dentro-de-grupos  (F). Grandes diferenças entre as médias de pelo menos dois grupos levam a valores maiores de F
 Area covered by aerial roots in mangrove trees sampled in two soil types;Area covered by aerial roots in mangrove trees sampled in two soil types;Área coberta pelas raízes aéreas em arvores de mangue amostradas em dois tipos de solo
-dataInput;Data input;Entrada de dados
+data_input;Data input;Entrada de dados
 About this data set (rhyzophora);About this data set (rhyzophora);Sobre este conjunto de dados (rhyzophora)
 month;Month;Mês
 help1;Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the "upload" option to upload your own file.;Use esta aba para selecionar os dados de entrada para sua análise. As primeiras opções são conjuntos de dados incluídos na biblioteca, selecione a opção "upload" para enviar seu próprio arquivo
@@ -26,7 +26,7 @@ The higher the torque caused by the canopy, the more roots a tree wil have.;The 
 Sum of the squared residuals of a linear model:;Sum of the squared residuals of a linear model:;Soma dos resíduos quadrados de um modelo linear:
 Mangrove trees and torque;Mangrove trees and torque;Manguezais e torque
 This function calculates the correlation coefficient between two columns;This function calculates the correlation coefficient between two columns;Esta função calcula o coeficiente de correlação entre duas colunas
-Statistics;Statistics;Estatísticas
+stat;Statistics;Estatísticas
 Do ants respond more intensely to damage in younger leaves?;Do ants respond more intensely to damage in younger leaves?;Formigas respondem mais intensamente a dano em folhas mais jovens?
 time;Time;Tempo
 Differences in the slope of linear regressions applied to different levels of a factor:;Differences in the slope of linear regressions applied to different levels of a factor:;diferenças na inclinação das regressões lineares aplicadas a diferentes níveis de um fator:
@@ -62,6 +62,7 @@ Rsampling - resampling statistics in R;Rsampling - resampling statistics in R;Rs
 smean;Column mean;Média da coluna
 treatment;Treatment;Tratamento
 resampling-title;Rsampling - resampling statistics in R;Rsampling - estatística baseada em permutação em R
+Resampling;Resampling;Reamostragem
 Rhizophora mangle;Rhizophora mangle;Rhizophora mangle
  and can detect and expel leaf-chewing insects. To test if this response is more intense in young leaves, drops of extract of smashed young and old leaves were poured in two neighbor leaves of the same plant. After 7 minutes  the number of recruited; and can detect and expel leaf-chewing insects. To test if this response is more intense in young leaves, drops of extract of smashed young and old leaves were poured in two neighbor leaves of the same plant. After 7 minutes  the number of recruited; e podem detectar e expelir insetos comedores de folhas. Para testar se esta resposta é mais intensa em folhas jovens, gotas de extrato de folhas jovens e velhas esmagadas foram colocadas em duas folhas vizinhas da mesma planta. Após 7 minutos, o número de formigas 
 Azteca;Azteca;Azteca
@@ -107,7 +108,7 @@ Randomizes the placement of columns in the data table. If you do not check the '
 With replacement?;With replacement?;Com reposição?
 Check this option if you want all the draws to be made independently (that is, with replacement) from the original data;Check this option if you want all the draws to be made independently (that is, with replacement) from the original data; Marque esta opção se quiser que todos os sorteios sejam feitos independentemente (isto é, com reposição) a partir dos dados originais
 Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.;Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.;Use isto para selecionar se quer que o valor de p seja atribuído a partir de uma hipótese bicaudal (isto é, tanto valores positivos quanto negativos podem ser considerados extremos), ou um teste unicaudal.;
-Number of trials:;Number of trials:;Número de rodadas
+Number of trials:;Number of trials:;Número de repetições
 Stratified resampling?;Stratified resampling?;Reamostragem estratificada
 Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Marque aqui se quiser que a randomização seja restrita a dentro de grupos de linhas definidas por um valor categórico
 Stratum variable:;Stratum variable:;Variável de estrato
@@ -158,3 +159,12 @@ slope =; slope =;inclinação
 Go!;Go!;Vai!
 Cecropia;Cecropia;Cecropia
 What is your input data?;What is your input data?;Quais os seus dados de entrada?
+Normal;Normal;Normal
+Within rows;Within rows;Dentro das linhas
+Within columns;Within columns;Dentro das colunas
+Rows as units;Rows as units;Linhas como unidades;
+Columns as units;Columns as units;Colunas como unidades
+Two sided;Two sided;Bicaudal
+Greater;Greater;Maior que
+Lesser;Lesser;Menor que
+distplot_title;Distribution of \n the statistic of interest;Distribuição da \n estatística de interesse

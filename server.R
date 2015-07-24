@@ -319,7 +319,8 @@ shinyServer(function(input, output, session) {
             par(mar = c(4,3,2,0))
             Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = values$origStat, 
                              extreme = FALSE, vline = TRUE, rejection = FALSE, 
-                             breaks = seq(xmin,xmax,binsize), xlim=c(xmin,xmax), ylim=c(0,30))    
+                             breaks = seq(xmin,xmax,binsize), xlim=c(xmin,xmax), ylim=c(0,30),
+                             main=tr("distplot_title",lg))    
           }
           #################################################################
           ###Mangrove trees

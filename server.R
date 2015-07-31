@@ -142,7 +142,7 @@ shinyServer(function(input, output, session) {
              # sets up a new shiny progress bar and callback function
                 progress <- shiny::Progress$new(max=100)
                 on.exit(progress$close())
-                progress$set(message = "Sampling...", value = 0)
+                progress$set(message = tr("Sampling...",lg), value = 0)
                 pupdate <- function(x) 
                   progress$set(value = x * progress$getMax(), 
                                detail=paste0(round(progress$getValue()), "%"))
@@ -185,7 +185,7 @@ shinyServer(function(input, output, session) {
             output$download <- downloadHandler(
               filename=function() "Rsampling.csv",
               content=function(file) {
-                if(!vals$run) stop ("Sampling ended with error!")
+                if(!vals$run) stop (tr("Sampling ended with error!",lg))
                 write.csv(vals$distribution, file)
               }
             )
@@ -195,7 +195,7 @@ shinyServer(function(input, output, session) {
               input$gocustomstat
               input$stat
               if(!is.null(s) && length(s) > 1)
-                return("WARNING, the statistic function should return a single number.")
+                return(tr("WARNING, the statistic function should return a single number.",lg))
               return("")
             })
             output$needinstall <- reactive({
@@ -212,11 +212,11 @@ shinyServer(function(input, output, session) {
             output$distPlot <- renderPlot({
               # Traps errors
               if (input$go == 0 | !is.numeric(vals$x)) {
-                plot(0,0, type='n',xlab="", ylab="", main="Run the resampling to see the graphs");
+                plot(0,0, type='n',xlab="", ylab="", main=tr("Run the resampling to see the graphs",lg));
                 return();
               }
               if (! vals$run)
-                  stop("Distribution calculation stopped with error!")
+                  stop(tr("Distribution calculation stopped with error!",lg))
               Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
                    extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount))
             })
@@ -224,11 +224,11 @@ shinyServer(function(input, output, session) {
             output$stat <- renderText({
               # to avoid weird things when length > 1
               s <- paste(round(svalue(), 3), collapse = " ")
-              paste("Statistic of interest: ", s, "\n", sep="")
+              paste(tr("Statistic of interest",lg),": ", s, "\n", sep="")
             })
             ### simply displays the "p-value"
             output$p <- renderText({
-              if (! vals$run) return ("no available p-value yet...")
+              if (! vals$run) return (tr("no available p-value yet...",lg))
               side <- switch(input$pside, "Two sided" = "(two sided)", "(one sided)")
               p <- switch(input$pside, 
                           "Two sided" = abs(vals$distribution) >= abs(svalue()),
@@ -248,13 +248,13 @@ shinyServer(function(input, output, session) {
               # Please see ?switch for the syntax below
               label1 <- switch(input$stat,
                                'smean'=,'ssd'= "Variable column: ", 
-                               'intercept'=,'slope'=,'corr'="Dependent variable column: ",
-                               'meandif'=, 'Fstatistic'="Categorical variable column: ",
-                               'meandifc'= "Before treatment")
+                               'intercept'=,'slope'=,'corr'=tr("Dependent variable column: ",lg),
+                               'meandif'=, 'Fstatistic'=tr("Categorical variable column: ",lg),
+                               'meandifc'= tr("Before treatment",lg))
               label2 <- switch(input$stat, 
-                               'intercept'=,'slope'=,'corr'="Independent variable column: ",
-                               'meandif'=, 'Fstatistic'="Numerical variable column: ",
-                               'meandifc'= "After treatment: ")
+                               'intercept'=,'slope'=,'corr'=tr("Independent variable column: ",lg),
+                               'meandif'=, 'Fstatistic'=tr("Numerical variable column: ",lg),
+                               'meandifc'= tr("After treatment: ",lg))
               updateSelectInput(session, "m1", choices = cols, label = label1)
               updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
               updateSelectInput(session, "stratumc", choices = cols)
@@ -267,7 +267,7 @@ shinyServer(function(input, output, session) {
           ###########################################
           ###########################################################################
           values <- reactiveValues()
-          #Object where the statistics from the rondomized
+          #Object where the statistics from the randomized
           ## data sets are stored
           values$saveDist <- list()
           #Clear histrogram when button is pressed
@@ -300,8 +300,8 @@ shinyServer(function(input, output, session) {
               colors <- matrix(rep("black",dim(dataframe)[1]*dim(dataframe)[2]),nrow=nrows,byrow=TRUE)
             }
             title <- ifelse(is.randomizedSet,
-                            "Randomized data",
-                            "Original data")
+                            tr("Randomized data",lg),
+                               tr("Original data",lg))
             xmin <- par("usr")[1]
             xmax <- par("usr")[2]
             ymin <- par("usr")[3]
@@ -319,21 +319,22 @@ shinyServer(function(input, output, session) {
             par(mar = c(4,3,2,0))
             Rsampling::dplot(dist = as.numeric(values$saveDist), svalue = values$origStat, 
                              extreme = FALSE, vline = TRUE, rejection = FALSE, 
-                             breaks = seq(xmin,xmax,binsize), xlim=c(xmin,xmax), ylim=c(0,30))    
+                             breaks = seq(xmin,xmax,binsize), xlim=c(xmin,xmax), ylim=c(0,30),
+                             main=tr("distplot_title",lg))    
           }
           #################################################################
           ###Mangrove trees
           mangBoxPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
             title <- ifelse(is.randomizedSet,
-                            "Randomized data",
-                            "Original data")
+                            tr("Randomized data",lg),
+                            tr("Original data",lg))
             color <- ifelse(is.randomizedSet,favoriteColor,"grey")
             textcolor <- ifelse(is.randomizedSet,"black","red")
             boxplot(root ~ soil.instability, data=dataframe, type="n",
                     main=title, col=color,
-                    xlab="Soil instability", ylab="area covered by aerial root (m2)")             
-            text(2,33,paste("mean difference = \n",round(stat,4)),col=textcolor)
+                    xlab=tr("Soil instability",lg), ylab=tr("area covered by aerial root (m2)",lg))             
+            text(2,33,paste(tr("mean difference = \n",lg),round(stat,4)),col=textcolor)
           }
           #Randomization output
           randomizedMang <- reactive({
@@ -377,15 +378,15 @@ shinyServer(function(input, output, session) {
           rhyzScatterPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
             title <- ifelse(is.randomizedSet,
-                            "Randomized data",
-                            "Original data")
+                            tr("Randomized data",lg),
+                            tr("Original data",lg))
             color <- ifelse(is.randomizedSet,favoriteColor,"grey")
             textcolor <- ifelse(is.randomizedSet,"black","red")
             plot(n.roots ~ canopy.trunk, data=dataframe, pch=19,
                  main=title, col=color,
-                 xlab="canopy area / trunk area", ylab="number of roots")             
+                 xlab=tr("canopy area / trunk area",lg), ylab=tr("number of roots",lg))             
             abline(lm(n.roots ~ canopy.trunk, data=dataframe))
-            text(3000,150,paste("slope =",round(stat,4)),col=textcolor)
+            text(3000,150,paste(tr("slope =",lg),round(stat,4)),col=textcolor)
           }
           #Randomization output
           randomizedRhyz <- reactive({
@@ -425,16 +426,16 @@ shinyServer(function(input, output, session) {
           aztPairedPlot <- function(dataframe,stat,is.randomizedSet){
             par(mar = c(4,4,2,2))
             title <- ifelse(is.randomizedSet,
-                            "Randomized data",
-                            "Original data")
+                            tr("Randomized data",lg),
+                               tr("Original data",lg))
             color <- ifelse(is.randomizedSet,favoriteColor,"grey")
             textcolor <- ifelse(is.randomizedSet,"black","red")
             splot(dataframe$extract.new,dataframe$extract.old, col.dif = c(color, color),
-                  main="Original data", pch=19,
-                  xlab="Treatment", ylab="Number of recruited ants", xaxt='n')
-            mtext("Extract of \n new leaves",1, at=1, line=1.5)
-            mtext("Extract of \n old leaves",1, at=2, line=1.5)
-            text(1.5,46,paste("mean difference = \n",
+                  main=tr("Original data",lg), pch=19,
+                  xlab=tr("Treatment",lg), ylab=tr("Number of recruited ants",lg), xaxt='n')
+            mtext(tr("Extract of \n new leaves",lg),1, at=1, line=1.5)
+            mtext(tr("Extract of \n old leaves",lg),1, at=2, line=1.5)
+            text(1.5,46,paste(tr("mean difference = \n",lg),
                               round(stat,4)),col=textcolor)            
           }
           #Randomization output

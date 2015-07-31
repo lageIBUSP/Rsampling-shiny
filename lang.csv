@@ -1,0 +1,182 @@
+value;en;pt
+week;Week;Semana
+This function calculates intercept of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;This function calculates intercept of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;Esta função calcula o intercepto de uma análise de correlação linear entre duas colunas, y~ax+b. Aqui x é a variável independente, e y é a variável dependente
+The variance ratio function splits the data acording to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F.;The variance ratio function splits the data acording to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F.;A função de razão de variância divide os dados de acordo com uma variável categórica. Então ela calcula a razão entre as variâncias entre-grupos e dentro-de-grupos  (F). Grandes diferenças entre as médias de pelo menos dois grupos levam a valores maiores de F
+Area covered by aerial roots in mangrove trees sampled in two soil types;Area covered by aerial roots in mangrove trees sampled in two soil types;Área coberta pelas raízes aéreas em arvores de mangue amostradas em dois tipos de solo
+data_input;Data input;Entrada de dados
+About this data set (rhyzophora);About this data set (rhyzophora);Sobre este conjunto de dados (rhyzophora)
+month;Month;Mês
+help1;Use this tab to select the input data for your analysis. The first options are datasets included in the library, select the 'upload file' option to upload your own file.;Use esta aba para selecionar os dados de entrada para sua análise. As primeiras opções são conjuntos de dados incluídos na biblioteca, selecione a opção 'upload file' para enviar seu próprio arquivo.
+This function calculates the sum of every values in a row. Then, it takes the mean of these values.;This function calculates the sum of every values in a row. Then, it takes the mean of these values.;Esta função calcula a soma de todos os valores em uma linha, e então calcula a média destes valores.
+;This function calculates the sum of every values in a column. Then, it takes the mean of these values.;Esta função calcula a soma de todos os valores em uma coluna, e então calcula a média destes valores.
+Question;Question;Pergunta
+tutorial3;Protective ants;Formigas protetoras
+Your version of the Rsampling library seems to be incompatible with this interface version. Please download the latest version of the library ;Your version of the Rsampling library seems to be incompatible with this interface version. Please download the latest version of the library ;Sua versão da biblioteca Rsampling parece ser incompatível com esta versão da interface. Por favor baixe a versão mais recente da biblioteca
+Source: Prado, A. et al. 2013. Variações na morfologia de sustentação em;Source: Prado, A. et al. 2013. Variações na morfologia de sustentação em;Fonte: Prado, A. et al. 2013. Variações na morfologia de sustentação em
+The ant colonies live in the hollow trunk of;The ant colonies live in the hollow trunk of;As colônias de formigas vivem no tronco oco de 
+ants in each leaf was recorded.;ants in each leaf was recorded.;recrutadas em cada folha foram registradas. 
+scol;Mean sum of columns;Média da soma das colunas
+tutorials;Tutorials;Tutoriais
+Do mangrove trees in more unstable soil allocate more biomass in supporting roots?;Do mangrove trees in more unstable soil allocate more biomass in supporting roots?; Árvores de manguezal em solos mais instáveis alocam mais biomassa para raízes de suporte?
+Mean difference between soil types;Mean difference between soil types;Diferença média entre tipos de solo
+Number of roots;Number of roots;N?mero de raizes
+This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences.;This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences.;Esta função calcula a diferença par a par entre duas colunas em seu conjunto de dados(isto é, antes e depois de um tratamento ser aplicado). Ela então tira a média das duas diferenças 
+Rsampling version;Rsampling version;Versão do Rsampling
+ssd;Column standard deviation; Desvio padrão da coluna
+The higher the torque caused by the canopy, the more roots a tree wil have.;The higher the torque caused by the canopy, the more roots a tree wil have.;Quanto maior o torque causado pela copa, mais raizes terá a árvore
+Sum of the squared residuals of a linear model:;Sum of the squared residuals of a linear model:;Soma dos resíduos quadrados de um modelo linear:
+Mangrove trees and torque;Mangrove trees and torque;Manguezais e torque
+This function calculates the correlation coefficient between two columns;This function calculates the correlation coefficient between two columns;Esta função calcula o coeficiente de correlação entre duas colunas
+stat;Statistics;Estatísticas
+Do ants respond more intensely to damage in younger leaves?;Do ants respond more intensely to damage in younger leaves?;Formigas respondem mais intensamente a dano em folhas mais jovens?
+time;Time;Tempo
+Differences in the slope of linear regressions applied to different levels of a factor:;Differences in the slope of linear regressions applied to different levels of a factor:;Diferenças na inclinação das regressões lineares aplicadas a diferentes níveis de um fator:
+TWO;TWO;DUAS
+This function calculates the mean of a single data column.;This function calculates the mean of a single data column.;Esta função calcula calcula a média de uma única coluna de dados
+This function splits the data acording to a categorical variable. Then it calculates the mean for each group, and subtracts one from another. Note that this is designed to work with only ;This function splits the data acording to a categorical variable. Then it calculates the mean for each group, and subtracts one from another. Note that this is designed to work with only ;Esta função divide os dados de acordo com uma variável categórica. Então ela calcula a média para cada grupo, e subtrai um do outro. Note que isto é projetado para funcionar com somente 
+Fstatistic;Variance ratio (F) for more than 2 groups;Razão entre variâncias (F) para mais de 2 grupos
+Slope of the regression between the number of roots and the ratio between canopy and trunk area;Slope of the regression between the number of roots and the ratio between canopy and trunk area;Inclinação da regressão entre o número de raízes e a razão entre Área do copa e do tronco
+Balanced mangrove trees;Balanced mangrove trees;Mangues equilibristas
+tutorial3;Formigas protetoras;Formigas protetoras
+dataInput;dataInput;Entrada de dados
+distPlot_help;Each time a new randomized data set is generated, the statistic of interest is recalculated and added to this histogram. The statistic calculated on the original data is shown as a dotted red line. Should the null hypothesis be rejected? Run this exercise inthe following tabs to find out!;Cada vez que um novo conjunto de dados é gerado, a estatística de interesse é recalculada e adicionado ao histograma. A estatística calculada sobre os dados originais é mostrada como uma linha pontilhada vermelha. A hipótese nula deve ser rejeitada? Execute este exercício nas próximas abas para descobrir!
+This function calculates the slope of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;This function calculates the slope of a linear correlation analysis between two columns, y ~ ax + b. Here, x is the independent variable, and y is the dependent variable.;Esta função calcula a inclinação de uma análise de correlação linear entr duas colunas, y ~x+b. Aqui Y é a variável independente e x é a variável dependente
+intercept;Regression intercept;Intercepto da regressão
+The language selected is not available or was not properly detected. Language was set back to the default.;The language selected is not available or was not properly detected. Language was set back to the default.;A linguagem selecionada não está disponivel ou não foi detectada adequadamente. A linguagem foi redefinida para o padrão (en)
+Hypothesis;Hypothesis;Hipótese
+srow;Mean sum of rows;Média da soma das linhas
+Mangrove Trees;Mangrove Trees;Árvores de Mangue
+;Statistic of interest;Estatística de Interesse
+This function calculates the standard deviation of a single data column.;This function calculates the standard deviation of a single data column.;Esta função calcula o desvio padrão de uma única coluna de dados
+slope;Regression coefficient;Coeficiente da regressão
+slopePlot;slope;inclinação
+corr;Correlation between columns;Correlação entre colunas
+meandifc;Mean difference between columns;Diferença média entre colunas
+day;Day;Dia
+About this data set (azteca);About this data set (azteca);Sobre este conjunto de dados (azteca)
+Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set;Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genertate a new randomized data set;Aqui a coluna esquerda dos dados originais foi aleatorizada. A diferença média entre os tipos de solo foi calculada para este conjunto de dados aleatorizados e é mostrada no plot acima. Clique no botão para gerar um novo conjunto de dados
+Correlation coefficient between columns 1 and 2:;Correlation coefficient between columns 1 and 2:;Coeficiente de correlação entre as colunas 1 e 2:
+Statistics;Statistics;Estatística
+Rsampling - resampling statistics in R;Rsampling - resampling statistics in R;Rsampling - Estatística baseada em permutação no R
+smean;Column mean;Média da coluna
+treatment;Treatment;Tratamento
+resampling-title;Rsampling - resampling statistics in R;Rsampling - estatística baseada em permutação em R
+Resampling;Resampling;Reamostragem
+Rhizophora mangle;Rhizophora mangle;Rhizophora mangle
+ and can detect and expel leaf-chewing insects. To test if this response is more intense in young leaves, drops of extract of smashed young and old leaves were poured in two neighbor leaves of the same plant. After 7 minutes  the number of recruited; and can detect and expel leaf-chewing insects. To test if this response is more intense in young leaves, drops of extract of smashed young and old leaves were poured in two neighbor leaves of the same plant. After 7 minutes  the number of recruited; e podem detectar e expelir insetos comedores de folhas. Para testar se esta resposta é mais intensa em folhas jovens, gotas de extrato de folhas jovens e velhas esmagadas foram colocadas em duas folhas vizinhas da mesma planta. Após 7 minutos, o número de formigas 
+Azteca;Azteca;Azteca
+Canopy area / trunk area;Canopy area / trunk area;Área da copa / Área do tronco
+Does the torque caused by canopy weight result in mangrove trees with more roots?;Does the torque caused by canopy weight result in mangrove trees with more roots?;O torque causado pelo peso da copa resulta em Árvores de mangue com raízes
+What is torque again? Review this concept in;What is torque again? Review this concept in;O que é o torque de novo? Reveja este conceito em
+Source: Kondrat, H. 2012. Estímulos químicos de folhas novas promovem recrutamento eficiente de formigas associadas à embaúba Cecropia glaziovi (Urticaceae). Curso de campo Ecologia da Mata Atlântica (G. Machado;Source: Kondrat, H. 2012. Estímulos químicos de folhas novas promovem recrutamento eficiente de formigas associadas à embaúba Cecropia glaziovi (Urticaceae). Curso de campo Ecologia da Mata Atlântica (G. Machado;Fonte: Kondrat, H. 2012. Estímulos químicos de folhas novas promovem recrutamento eficiente de formigas associadas à embaúba Cecropia glaziovi (Urticaceae). Curso de campo Ecologia da Mata Atlântica (G. Machado
+Here the left column of the original data has been randomized. The slope of the linear regression has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set;Here the left column of the original data has been randomized. The slope of the linear regression has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set;Aqui a coluna esquerda dos dados originais foi aleatorizada. A diferença média entre os tipos de solo foi calculada para este conjunto de dados aleatorizados e é mostrada no plot acima. Clique no botão para gerar um novo conjunto de dados
+Here the second and third column of the original data have been randomized within each row. The mean differece between treatments is calculated and shown in the plot above. Hit the button to genetate a new randaomized data set;Here the second and third column of the original data have been randomized within each row. The mean differece between treatments is calculated and shown in the plot above. Hit the button to genetate a new randaomized data set;Aqui a segunda e terceira coluna dos dados originais foram aleatorizada dentro de cada linha. A diferença média entre os tratamentos é calculada e mostrada no plot acima. Clique no botão para gerar um novo conjunto de dados randomizados
+custom;Custom code;Código personalizado
+You already have the right version of Rsampling installed :);You already have the right version of Rsampling installed :);Você já tem a versão correta do Rsampling instalada :)
+Protective ants;Protective ants;Formigas protetoras
+Ratio between canopy and trunk area, both in square meters, and number of aerial roots;Ratio between canopy and trunk area, both in square meters, and number of aerial roots;Proporção entre Área da copa e do tronco, ambas em metros quadrados, e número de raízes aéreas
+Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own.;Next, we need to determine what is the function (i.e., the statistic) that will be applied to the data. Use one of the preset statistics or write your own.;Depois, nós precisamos determinar qual é a função (isto é, a estatística) que será aplicada aos dados. Use uma das estatísticas preselecionadas ou escreva a sua própria
+meandif;Mean difference between 2 groups;Diferença média entre 2 grupos
+MangroveTitle;Mangrove trees and soil stability;Árvores de Mangue e estabilidade do solo
+Trees located in less stable soils will have more biomass on roots;Trees located in less stable soils will have more biomass on roots; Árvores localizadas em solos menos estáveis terão mais biomassa nas raízes
+tutorial1;Mangrove trees;Mangue
+(Rizophoraceae) em diferentes condições de inundação do solo. Curso de campo Ecologia da Mata Atlântica (G. Machado, P.I. Prado & A.M.Z. Martini eds.). Universidade de São Paulo, São Paulo.;(Rizophoraceae) em diferentes condições de inundação do solo. Curso de campo Ecologia da Mata Atlântica (G. Machado, P.I. Prado & A.M.Z. Martini eds.). Universidade de São Paulo, São Paulo.;(Rizophoraceae) em diferentes condições de inundação do solo. Curso de campo Ecologia da Mata Atlântica (G. Machado, P.I. Prado & A.M.Z. Martini eds.). Universidade de São Paulo, São Paulo.
+Download pdf!;Download pdf!;Baixar pdf!
+Make sure that the data is correctly interpreted in the display below!;Make sure that the data is correctly interpreted in the display below!;Assegure-se de que os dados sejam interpretados corretamente na tabela abaixo
+Sum of column 1:;Sum of column 1:;Soma da coluna 1:
+Mean difference between treatments;Mean difference between treatments;Diferença média entre tratamentos
+The language selected is not available or was not properly detected. Language was set back to the default.;The language selected is not available or was not properly detected. Language was set back to the default.;The language selected is not available or was not properly detected. Language was set back to the default.
+ categories!; categories!; categorias!
+Damage on old leaves will lead to less recruited ants whencompared to damage on young leaves;Damage on old leaves will lead to less recruited ants whencompared to damage on young leaves;Dano nas folhas médias leva a menos formigas recrutadas quando comparado a dano nas folhas jovens
+powered by ;powered by ;implementado em
+Mean of row 3:;Mean of row 3:;Média da linha 3:
+Statistic:;Statistic:;Estatística:
+Numerical variable column;Numerical variable column;Coluna de variável numérica
+Here is where we do the randomization!;Here is where we do the randomization!;Aqui é onde nós fazemos a aleatorização!
+Below you see the result of this function applied to the original data:;Below you see the result of this function applied to the original data:;Abaixo, veja o resultado desta função aplicada aos dados originais:
+Randomization type:;Randomization type:;Tipo de aleatorização
+In normal resampling the data is randomized over all cells of the selected columns. If you do not check the 'With replacement' box below the data is permuted over the cells. Otherwise the data from any cell are sampled with replacement and attributed to any other cell.;In normal resampling the data is randomized over all cells of the selected columns. If you do not check the 'With replacement' box below the data is permuted over the cells. Otherwise the data from any cell are sampled with replacement and attributed to any other cell.; Na permutação normal os dados são amostrados com reposição e atribuídos a qualquer outra célula. Se você não marcar a caixa 'com reposição' abaixo os dados são permutados por todas as células. De outro modo os dados de qualquer célula são amostrados com substituição e e atribuídos a qualquer outra célula
+within_row_help;The randomization is done within each row of the data. If you do not check the 'With replacement' box below the values of each row are permuted independently. Otherwise the values are sampled independently from each row and attributed only to cells of the row they were sampled from;A randomização é feita dentro de cada linha dos dados. se você não marcar a caixa 'com substituição' abaixo os valores de cada linha são permutados independentemente a partir de cada linha e atribuídos somente às células da linha da qual foram amostrados.
+The randomization is done within each column of the data. If you do not check the 'With replacement' box below the values of each column are permuted independently. Otherwise the values are sampled independently from each column and attributed only to cells of the column they were sampled from.;The randomization is done within each column of the data. If you do not check the 'With replacement' box below the values of each column are permuted independently. Otherwise the values are sampled independently from each column and attributed only to cells of the column they were sampled from.; A randomização é feita dentro de cada coluna dos dados. Se você não checar a caixa 'Com reposição' abaixo, os valores de cada coluna são permutados independentemente. De outro modo, os valores são amostrados independentemente de cada coluna e atribuídos somente à celulas da coluna da qual eles foram amostrados.
+Randomizes the placement of rows in the data table. If you do not check the 'With replacement' box below the position of rows are permuted. Otherwise whole rows are sampled with replacement to assemble the randomized data table. In both cases the position of values within each row is kept.;Randomizes the placement of rows in the data table. If you do not check the 'With replacement' box below the position of rows are permuted. Otherwise whole rows are sampled with replacement to assemble the randomized data table. In both cases the position of values within each row is kept.;Randomiza a colocação de linhas na tabela de dados. Se você não Checar a caixa 'Com reposição' abaixo a posição das linhas será permutada. De outro modo, linhas inteiras são amostradas com reposição para formar a tabela de dados aleatorizada. Em ambos os casos, a posição dos valores dentro de cada linha é mantida.
+cols_units_help;Randomizes the placement of columns in the data table. If you do not check the 'With replacement' box below the position of columns are permuted. Otherwise whole columns are sampled with replacement to assemble the randomized data table. In both cases the position of values within each column is kept;Aleatoriza a colocação das colunas na tabela de dados.Se você não Checar a caixa 'Com reposição' abaixo a posição das linhas será permutada. De outro modo, colunas inteiras são amostradas com reposição para formar a tabela de dados aleatorizada. Em ambos os casos a posição dos valores dentro de cadacoluna é mantida
+With replacement?;With replacement?;Com reposição?
+Check this option if you want all the draws to be made independently (that is, with replacement) from the original data;Check this option if you want all the draws to be made independently (that is, with replacement) from the original data; Marque esta opção se quiser que todos os sorteios sejam feitos independentemente (isto é, com reposição) a partir dos dados originais
+Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.;Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test.;Use isto para selecionar se quer que o valor de p seja atribuído a partir de uma hipótese bicaudal (isto é, tanto valores positivos quanto negativos podem ser considerados extremos), ou um teste unicaudal.;
+Number of trials:;Number of trials:;Número de repetições
+Stratified resampling?;Stratified resampling?;Reamostragem estratificada
+Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Marque aqui se quiser que a randomização seja restrita a dentro de grupos de linhas definidas por um valor categórico
+Stratum variable:;Stratum variable:;Variável de estrato
+Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Quais colunas serão reamostradas: Esta entradaserá interpretada como código do R, então 1:3 ou 1(1,4,5) são valores válidos
+How many iteractions of sampling should we do?;How many iteractions of sampling should we do?;Quantas iterações de amostragem devemos fazer?
+Show extremes?;Show extremes?;Mostrar extremos?
+Show rejection region?;Show rejection region?;Mostrar regiões de rejeição?
+Update Graph;Update Graph;Atualizar Gráfico
+Download data;Download data;Baixar dados
+mainplot_help1;The graph above shows the distribution of your selected statistic after repeated randomization from your data. The histograms bins in orange (if any) represent those simulations in which the statistic had a value that's;O gráfico acima mostra a distribuição de sua estatística selecionada após randomização repetida a partir dos seus dados. As colunas em laranja do histograma (se houver alguma) representam aquelas simulações nas quais a estatística tinha um valor que era
+equal to or more extreme;equal to or more extreme;igual a ou mais extremo que
+ than the statistic calculated on your original data (represented by the dotted red line). The gray area delimits the values of the statistics under which the null hypothesis should be accepted with 5% of chance of error. The proportion of simulations with statistics more extreme than the observed (p-value of) is:; than the statistic calculated on your original data (represented by the dotted red line). The gray area delimits the values of the statistics under which the null hypothesis should be accepted with 5% of chance of error. The proportion of simulations with statistics more extreme than the observed (p-value of) is:; a estatística calculada para seus dados originais (representada pela linha pontilhada vermelha). A área cinza delimita os valores da estatísticasob os quais a hipótese nula deve ser aceita com 5% de chance de erro. A proporção de simulações com estatísticas mais extremas que o observado (valor de p) é
+Original;Original;Original
+Randomized;Randomized;Aleatorizado
+Clear histogram;Clear histogram;Limpar histograma
+Normal;Normal;Normal
+Rows as units;Rows as units;Linhas como unidades
+Columns as units;Columns as units;Colunas como unidades
+Within rows;Within rows;Dentro de linhas
+Within columns;Within columns;Dentro de colunas
+Sampling...;Sampling...;Amostrando
+Sampling ended with error!;Sampling ended with error!;Amstragem terminou com erro
+WARNING, the statistic function should return a single number.;WARNING, the statistic function should return a single number.;AVISO, a função de estatística deve retornar um número único
+incompatible;incompatible;incompatível
+Run the resampling to see the graphs;Run the resampling to see the graphs;Rode a reamostragem para ver os gráficos
+Distribution calculation stopped with error!;Distribution calculation stopped with error!;Calculo da distribuição terminou com erro!
+no available p-value yet...;no available p-value yet...;nenhum valor de p disponível ainda
+Alternative:;Alternative:;Alternativa:
+;Variable column:;Coluna com a variável:
+;Dependent variable column:;Coluna com a variável dependente:
+;Categorical variable column:;Coluna com a variável categórica:
+;Before treatment:;Antes do tratamento:
+;Independent variable column:; Coluna com a variável independente:
+;Numerical variable column:;Coluna com a variável numérica:
+;After treatment:;Após tratamento:
+Randomized data;Randomized data;Dados aleatorizados
+Original data;Original data;Dados originais
+Soil instability;Soil instability;Instabilidade do solo
+area covered by aerial root (m2);area covered by aerial root (m2);Área coberta pela raiz aérea (m2)
+canopy area / trunk area;canopy area / trunk area;área da copa / área do tronco
+number of roots;number of roots;número de raízes
+Treatment;Treatment;Tratamento
+Number of recruited ants;Number of recruited ants;Número de formigas recrutadas
+Extract of new leaves;Extract of new leaves;Extrato de folhas novas
+Extract of old leaves;Extract of old leaves;Extrato de folhas velhas
+slope =; slope =;inclinação
+Go!;Go!;Vai!
+Cecropia;Cecropia;Cecropia
+What is your input data?;What is your input data?;Quais os seus dados de entrada?
+Two sided;Two sided;Bicaudal
+Greater;Greater;Maior que
+Lesser;Lesser;Menor que
+distplot_title;Distribution of the statistic of interest;Distribuição da estatística de interesse
+twosided;(two-sided) p-value:;valor p (bilateral):
+onesided;(one-sided) p-value:;valor p (unilateral):
+;here;aqui
+meandiff=;mean difference = ;diferença média =
+;then reload this interface; e então recarregue esta interface
+;Data set:;Conjunto de dados:
+;Do it again!;De novo!
+custom_help;You are free to write down your own R function to calculate any statistic over your data! The data is stored as a dataframe with the boring name of 'dataframe'. Your last line in the code should return a single number, representing the statistic of interest. Some examples of what to use include:;Você pode escrever a função em R que você quiser para calcular qualquer estatística sobre seus dados! Os dados vão ser passados para esta função com o (desinteressante) nome de 'dataframe'. A última linha no seu código precisa retornar um único número, representando a estatística de interesse. Alguns exemplos do que você pode fazer:
+;Source:;Fonte:
+;Header?;Cabeçalho?
+;Separator;Separador de campos
+;Comma;Vírgula
+;Semicolon;Ponto e vírgula
+;Tab;Tabulação
+;Space;Espaço
+;Decimal;Ponto decimal
+;Dot;Ponto
+;Quote;Aspas
+;None;Nenhuma
+;Double Quote;Aspas duplas
+;Single Quote;Aspas simples
+;Choose CSV file:;Escolha o nome do arquivo CSV:
+;Frequency;Frequência

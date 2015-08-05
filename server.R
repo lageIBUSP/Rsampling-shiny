@@ -436,7 +436,7 @@ shinyServer(function(input, output, session) {
                   xlab=tr("Treatment"), ylab=tr("Number of recruited ants"), xaxt='n')
             mtext(tr("Extract of new leaves"),1, at=1, line=1.5)
             mtext(tr("Extract of old leaves"),1, at=2, line=1.5)
-            text(1.5,46,paste(tr("mean difference = \n"),
+            text(1.5,46,paste(tr("meandiff="),
                               round(stat,4)),col=textcolor)            
           }
           #Randomization output

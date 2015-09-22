@@ -20,7 +20,7 @@ You can run Rsampling shiny from github! Just open R and run:
 ```R
 install.packages(c("shiny","PerformanceAnalytics"))
 library(shiny)
-runGitHub(repo="andrechalom/Rsampling-shiny")
+runGitHub(repo="lageIBUSP/Rsampling-shiny")
 ``` 
 and wait for the browser window to open!
 

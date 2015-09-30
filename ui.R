@@ -287,7 +287,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                            ),
                                            #bsTooltip("ntrials", tr("How many iteractions of sampling should we do?")),
                                            fluidRow(column(6, checkboxInput("extreme", tr("Show extremes?"), TRUE)),
-                                                    column(6, checkboxInput("rejection", tr("Show rejection region?"), TRUE))
+                                                    column(6, checkboxInput("rejection", tr("Show acceptance region?"), TRUE))
                                            ),
                                            fluidRow(column(6, actionButton("go", tr("Update Graph"))),
                                                     column(6, downloadButton('download', tr("Download data")))

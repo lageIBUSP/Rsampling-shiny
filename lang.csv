@@ -110,7 +110,7 @@ Stratum variable:;Stratum variable:;Variável de estrato
 Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Quais colunas serão reamostradas: Esta entradaserá interpretada como código do R, então 1:3 ou 1(1,4,5) são valores válidos
 How many iteractions of sampling should we do?;How many iteractions of sampling should we do?;Quantas iterações de amostragem devemos fazer?
 Show extremes?;Show extremes?;Mostrar extremos?
-Show rejection region?;Show rejection region?;Mostrar regiões de rejeição?
+Show acceptance region?;Show acceptance region?;Mostrar regiões de aceitação?
 Update Graph;Update Graph;Atualizar Gráfico
 Download data;Download data;Baixar dados
 mainplot_help1;The graph above shows the distribution of your selected statistic after repeated randomization from your data. The histograms bins in orange (if any) represent those simulations in which the statistic had a value that's;O gráfico acima mostra a distribuição de sua estatística selecionada após randomização repetida a partir dos seus dados. As colunas em laranja do histograma (se houver alguma) representam aquelas simulações nas quais a estatística tinha um valor que era

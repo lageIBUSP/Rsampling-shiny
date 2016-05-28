@@ -41,6 +41,16 @@ shinyServer(function(input, output, session) {
               mod <- lm(dataframe[,as.numeric(input$m2)]~ as.factor(dataframe[,as.numeric(input$m1)]))
               anova(mod)[1,4]
             }
+            ancova1 <- function(dataframe){
+                # Difference between slopes of regressions fitted to two groups 
+                slope = function(x) coef(lm(x[,2]~x[,1]))[2]
+                props = by(dataframe[,as.numeric(c(input$m1,input$m2))], dataframe[,as.numeric(input$m3)], slope)
+                props[1] - props[length(props)]
+            }
+            ancova2 <- function(dataframe){
+                ### TODO
+                2
+            }
             # custom function handler: parses the text in the custom input
             custom <- function(dataframe) {
               input$gocustomstat
@@ -55,7 +65,7 @@ shinyServer(function(input, output, session) {
               if(input$stat %in% c("meandif","Fstatistic", "slope", "intercept", "corr"))
                 return(as.numeric(input$m2))
               # both columns are randomized
-              if(input$stat == "meandifc") 
+              if(input$stat %in% c("meandifc", "ancova1", "ancova2")) 
                 return(c(as.numeric(input$m1), as.numeric(input$m2)))
               # all columns should be used
               if(input$stat %in% c("scol", "srow"))
@@ -86,6 +96,8 @@ shinyServer(function(input, output, session) {
                      "slope" = slope,
                      "corr" = corr,
                      "Fstatistic" = Fstatistic,
+                     "ancova1" = ancova1,
+                     "ancova2" = ancova2,
                      "custom" = custom
                      )
             })
@@ -249,15 +261,18 @@ shinyServer(function(input, output, session) {
               # Please see ?switch for the syntax below
               label1 <- switch(input$stat,
                                'smean'=,'ssd'= tr("Variable column:"), 
-                               'intercept'=,'slope'=,'corr'=tr("Dependent variable column:"),
+                               'intercept'=,'slope'=,'corr'=,'ancova1'=,'ancova2'=tr("Dependent variable column:"),
                                'meandif'=, 'Fstatistic'=tr("Categorical variable column:"),
                                'meandifc'= tr("Before treatment:"))
               label2 <- switch(input$stat, 
-                               'intercept'=,'slope'=,'corr'=tr("Independent variable column:"),
+                               'intercept'=,'slope'=,'corr'=,'ancova1'=,'ancova2'=tr("Dependent variable column:"),
                                'meandif'=, 'Fstatistic'=tr("Numerical variable column:"),
                                'meandifc'= tr("After treatment:"))
+              label3 <- switch(input$stat,
+                               'ancova1'=, 'ancova2'=tr("Categorical variable column:"))
               updateSelectInput(session, "m1", choices = cols, label = label1)
               updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
+              updateSelectInput(session, "m3", choices = cols, selected=3, label = label3)
               updateSelectInput(session, "stratumc", choices = cols)
           })
           session$onSessionEnded(function() {

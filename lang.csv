@@ -52,6 +52,10 @@ slope;Regression coefficient;Coeficiente da regressão
 slopePlot;slope;inclinação
 corr;Correlation between columns;Correlação entre colunas
 meandifc;Mean difference between columns;Diferença média entre colunas
+ancova1;Difference between slopes of regressions fitted to two groups;Diferença entre inclinação de regressões aplicadas a dois grupos
+help-ancova1;Difference between slopes of regressions fitted to two groups;Diferença entre inclinação de regressões aplicadas a dois grupos
+ancova2;Difference between intercepts of regressions fitted to two groups with common slope;Diferença entre intercepto de regressões aplicadas a dois grupos com mesma inclinação
+help-ancova2;Difference between intercepts of regressions fitted to two groups with common slope;Diferença entre intercepto de regressões aplicadas a dois grupos com mesma inclinação
 day;Day;Dia
 About this data set (azteca);About this data set (azteca);Sobre este conjunto de dados (azteca)
 Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set;Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genertate a new randomized data set;Aqui a coluna esquerda dos dados originais foi aleatorizada. A diferença média entre os tipos de solo foi calculada para este conjunto de dados aleatorizados e é mostrada no plot acima. Clique no botão para gerar um novo conjunto de dados
@@ -110,7 +114,7 @@ Stratum variable:;Stratum variable:;Variável de estrato
 Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Quais colunas serão reamostradas: Esta entradaserá interpretada como código do R, então 1:3 ou 1(1,4,5) são valores válidos
 How many iteractions of sampling should we do?;How many iteractions of sampling should we do?;Quantas iterações de amostragem devemos fazer?
 Show extremes?;Show extremes?;Mostrar extremos?
-Show rejection region?;Show rejection region?;Mostrar regiões de rejeição?
+Show acceptance region?;Show acceptance region?;Mostrar regiões de aceitação?
 Update Graph;Update Graph;Atualizar Gráfico
 Download data;Download data;Baixar dados
 mainplot_help1;The graph above shows the distribution of your selected statistic after repeated randomization from your data. The histograms bins in orange (if any) represent those simulations in which the statistic had a value that's;O gráfico acima mostra a distribuição de sua estatística selecionada após randomização repetida a partir dos seus dados. As colunas em laranja do histograma (se houver alguma) representam aquelas simulações nas quais a estatística tinha um valor que era

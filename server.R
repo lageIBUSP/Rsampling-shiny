@@ -48,8 +48,10 @@ shinyServer(function(input, output, session) {
                 props[1] - props[length(props)]
             }
             ancova2 <- function(dataframe){
-                ### TODO
-                2
+                # Difference between intercepts with same slope
+                coef(lm(dataframe[, as.numeric(input$m2)] ~ 
+                        dataframe[, as.numeric(input$m1)] + 
+                        dataframe[, as.numeric(input$m3)]))[3]
             }
             # custom function handler: parses the text in the custom input
             custom <- function(dataframe) {

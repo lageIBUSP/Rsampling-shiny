@@ -52,6 +52,10 @@ slope;Regression coefficient;Coeficiente da regressão
 slopePlot;slope;inclinação
 corr;Correlation between columns;Correlação entre colunas
 meandifc;Mean difference between columns;Diferença média entre colunas
+ancova1;Difference between slopes of regressions fitted to two groups;Diferença entre inclinação de regressões aplicadas a dois grupos
+help-ancova1;Difference between slopes of regressions fitted to two groups;Diferença entre inclinação de regressões aplicadas a dois grupos
+ancova2;Difference between intercepts of regressions fitted to two groups with common slope;Diferença entre intercepto de regressões aplicadas a dois grupos com mesma inclinação
+help-ancova2;Difference between intercepts of regressions fitted to two groups with common slope;Diferença entre intercepto de regressões aplicadas a dois grupos com mesma inclinação
 day;Day;Dia
 About this data set (azteca);About this data set (azteca);Sobre este conjunto de dados (azteca)
 Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set;Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genertate a new randomized data set;Aqui a coluna esquerda dos dados originais foi aleatorizada. A diferença média entre os tipos de solo foi calculada para este conjunto de dados aleatorizados e é mostrada no plot acima. Clique no botão para gerar um novo conjunto de dados

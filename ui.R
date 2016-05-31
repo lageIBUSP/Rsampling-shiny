@@ -4,7 +4,7 @@ library(shiny)
 # Translate input widgets
 ##Statistic
 optionsStat <- c("smean","ssd","meandif","Fstatistic","meandifc","srow",
-                 "scol","intercept","slope","corr","custom")
+                 "scol","intercept","slope","corr","ancova1","ancova2","custom")
 names(optionsStat) <- tr(optionsStat)
 ##Randomization
 optionsRand <- c("Normal", "Within rows", "Within columns", "Rows as units", "Columns as units")
@@ -233,14 +233,24 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        conditionalPanel("input.stat== 'meandifc'",
                                                         helpText(tr("This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences."))
                                        ),
+                                       conditionalPanel("input.stat== 'ancova1'",
+                                                        helpText(tr("help-ancova1"))
+                                       ),
+                                       conditionalPanel("input.stat== 'ancova2'",
+                                                        helpText(tr("help-ancova2"))
+                                       ),
                                        #### Panels for the inputs selectors
                                        conditionalPanel("input.stat != 'custom' && input.stat != 'srow' && input.stat != 'scol'", 
                                                         # all other stats have a "column 1"
                                                         selectInput("m1", "Column 1", choices=1) # label and choices will be overriden!
                                        ),
-                                       conditionalPanel("input.stat == 'slope' || input.stat == 'intercept' || input.stat == 'corr' || input.stat == 'meandif' || input.stat == 'Fstatistic' || input.stat == 'meandifc'", 
+                                       conditionalPanel("input.stat == 'slope' || input.stat == 'intercept' || input.stat == 'corr' || input.stat == 'meandif' || input.stat == 'Fstatistic' || input.stat == 'meandifc' || input.stat == 'ancova1' || input.stat == 'ancova2'", 
                                                         # all the above stats have a "column 2"
                                                         selectInput("m2", "Column 2", choices=2) # label and choices will be overriden!
+                                       ),
+                                       conditionalPanel("input.stat == 'ancova1' || input.stat == 'ancova2'", 
+                                                        # these stats have three columns
+                                                        selectInput("m3", "Column 3", choices=2) # label and choices will be overriden!
                                        ),
                                        helpText(tr("Below you see the result of this function applied to the original data:")),
                                        h3(textOutput("stat")),

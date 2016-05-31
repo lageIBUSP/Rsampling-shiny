@@ -311,7 +311,7 @@ shinyServer(function(input, output, session) {
             ysize <- ymax-ymin
             textplot(dataframe,col.data=colors,show.rownames=TRUE,show.colnames=TRUE,
                      col.rownames= "grey90", wrap=TRUE, wrap.colnames = 2, cmar = 1,
-                     rmar = 0.05*(ysize/nrows), cex = 18*(ysize/nrows))
+                     rmar = 0.05*(ysize/nrows))
             text((xmin+xmax)/2, ysize-(0.06*ysize), labels=title, cex=1.2, font=2)
             rect(xmin, ymin ,xmax, ysize-(0.08*ysize), xpd=TRUE) 
 
@@ -432,7 +432,7 @@ shinyServer(function(input, output, session) {
             color <- ifelse(is.randomizedSet,favoriteColor,"grey")
             textcolor <- ifelse(is.randomizedSet,"black","red")
             splot(dataframe$extract.new,dataframe$extract.old, col.dif = c(color, color),
-                  main=tr("Original data"), pch=19,
+                  main=title, pch=19,
                   xlab=tr("Treatment"), ylab=tr("Number of recruited ants"), xaxt='n')
             mtext(tr("Extract of new leaves"),1, at=1, line=1.5)
             mtext(tr("Extract of old leaves"),1, at=2, line=1.5)

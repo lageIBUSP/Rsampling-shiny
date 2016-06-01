@@ -267,7 +267,7 @@ shinyServer(function(input, output, session) {
                                'meandif'=, 'Fstatistic'=tr("Categorical variable column:"),
                                'meandifc'= tr("Before treatment:"))
               label2 <- switch(input$stat, 
-                               'intercept'=,'slope'=,'corr'=,'ancova1'=,'ancova2'=tr("Dependent variable column:"),
+                               'intercept'=,'slope'=,'corr'=,'ancova1'=,'ancova2'=tr("Independent variable column:"),
                                'meandif'=, 'Fstatistic'=tr("Numerical variable column:"),
                                'meandifc'= tr("After treatment:"))
               label3 <- switch(input$stat,

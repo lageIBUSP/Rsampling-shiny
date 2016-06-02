@@ -69,7 +69,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                            conditionalPanel("input.dataset == 'Randomized'", column(4, plotOutput("mangTableRandom"))),
                                                            conditionalPanel("input.dataset == 'Original'", column(8, plotOutput("mangPlot",height=300))),
                                                            conditionalPanel("input.dataset == 'Randomized'", column(8, plotOutput("mangPlotRandom",height=300),
-                                                                                                                                                h5(tr("Here the left column of the original data has been randomized. The mean differece between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set")),
+                                                                                                                                                h5(tr("Here the left column of the original data has been randomized. The mean difference between soil types has been calculated for this randomized data set and is shown in the plot above. Hit the button to generate a new randomized data set")),
                                                                                                                                                 actionButton("mangRand",tr("Do it again!"))))
                                                          ),
                                                          fluidRow(
@@ -85,7 +85,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                          p(tr("Does the torque caused by canopy weight result in mangrove trees with more roots?")),
                                                          helpText(tags$small(tr("What is torque again? Review this concept in"), tags$a(href="https://en.wikipedia.org/wiki/Torque", "Wikipedia"))),
                                                          h6(tr("Hypothesis")),
-                                                         p(tr("The higher the torque caused by the canopy, the more roots a tree wil have.")),
+                                                         p(tr("The higher the torque caused by the canopy, the more roots a tree will have.")),
                                                          h6(tr("Statistic of interest")),
                                                          p(tr("Slope of the regression between the number of roots and the ratio between canopy and trunk area")),  
                                                          plotOutput("distPlotRhyz", height=300),
@@ -104,7 +104,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                            conditionalPanel("input.dataset2 == 'Randomized'" , column(4, plotOutput("rhyzTableRandom"))),
                                                            conditionalPanel("input.dataset2 == 'Original'" , column(8, plotOutput("rhyzPlot",height=300))),
                                                            conditionalPanel("input.dataset2 == 'Randomized'" , column(8, plotOutput("rhyzPlotRandom",height=300),
-                                                                                                                      h5(tr("Here the left column of the original data has been randomized. The slope of the linear regression has been calculated for this randomized data set and is shown in the plot above. Hit the button to genetate a new randomized data set")),
+                                                                                                                      h5(tr("Here the left column of the original data has been randomized. The slope of the linear regression has been calculated for this randomized data set and is shown in the plot above. Hit the button to generate a new randomized data set")),
                                                                                                                       actionButton("rhyzRand",tr("Do it again!"))))
                                                          ),
                                                          fluidRow(
@@ -118,7 +118,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                          h6(tr("Question")),
                                                          p(tr("Do ants respond more intensely to damage in younger leaves?")),
                                                          h6(tr("Hypothesis")),
-                                                         p(tr("Damage on old leaves will lead to less recruited ants whencompared to damage on young leaves")),
+                                                         p(tr("Damage on old leaves will lead to less recruited ants when compared to damage on young leaves")),
                                                          h6(tr("Statistic of interest")),
                                                          p(tr("Mean difference between treatments")),  
                                                          plotOutput("distPlotAzt", height=300),
@@ -137,7 +137,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                            conditionalPanel("input.dataset3 == 'Randomized'" , column(4, plotOutput("aztTableRandom"))),
                                                            conditionalPanel("input.dataset3 == 'Original'" , column(8, plotOutput("aztPlot",height=300))),
                                                            conditionalPanel("input.dataset3 == 'Randomized'" , column(8, plotOutput("aztPlotRandom",height=300),
-                                                                                                                      h5(tr("Here the second and third column of the original data have been randomized within each row. The mean differece between treatments is calculated and shown in the plot above. Hit the button to genetate a new randaomized data set")),
+                                                                                                                      h5(tr("Here the second and third column of the original data have been randomized within each row. The mean difference between treatments is calculated and shown in the plot above. Hit the button to generate a new randomized data set")),
                                                                                                                       actionButton("aztRand",tr("Do it again!"))))
                                                          ),
                                                          fluidRow(
@@ -219,16 +219,16 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                         helpText(tr("This function calculates the standard deviation of a single data column."))
                                        ),
                                        conditionalPanel("input.stat == 'srow'",
-                                                        helpText(tr("This function calculates the sum of every values in a row. Then, it takes the mean of these values."))
+                                                        helpText(tr("This function calculates the sum of every value in a row. Then it takes the mean of these values."))
                                        ),
                                        conditionalPanel("input.stat == 'scol'",
-                                                        helpText(tr("This function calculates the sum of every values in a column. Then, it takes the mean of these values."))
+                                                        helpText(tr("This function calculates the sum of every value in a column. Then it takes the mean of these values."))
                                        ),
                                        conditionalPanel("input.stat == 'meandif'",
-                                                        helpText(tr("This function splits the data acording to a categorical variable. Then it calculates the mean for each group, and subtracts one from another. Note that this is designed to work with only "),em(tr("TWO")),tr(" categories!"))
+                                                        helpText(tr("This function splits the data according to a categorical variable. Then it calculates the mean for each group, and subtracts one from another. Note that this is designed to work with only "),em(tr("TWO")),tr(" categories!"))
                                        ),
                                        conditionalPanel("input.stat == 'Fstatistic'",
-                                                        helpText(tr("The variance ratio function splits the data acording to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F."))
+                                                        helpText(tr("The variance ratio function splits the data according to a categorical variable. Then it calculates the ratio of among-group to within-group variances (F). Large differences between means of at least two groups lead to large values of F."))
                                        ),
                                        conditionalPanel("input.stat== 'meandifc'",
                                                         helpText(tr("This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences."))

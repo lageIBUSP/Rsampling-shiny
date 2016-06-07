@@ -121,6 +121,7 @@ shinyServer(function(input, output, session) {
                      "azteca" = azteca,
                      "peucetia" = peucetia,
                      "rhyzophora" = rhyzophora,
+                     "pielou" = pielou,
                      "upload file" = csvfile())
             })
             ### calculates the distribution of the statistic of interest using Rsampling
@@ -163,15 +164,18 @@ shinyServer(function(input, output, session) {
                 vals$iter <- 1
                 vals$total_iterations <- input$ntrials 
                 vals$seqsim <- seq(100, vals$total_iterations, len=100)
-                vals$distribution <- Rsampling::Rsampling(type = type, dataframe = data(),
+                vals$distribution <- tryCatch(
+                                       Rsampling::Rsampling(type = type, dataframe = data(),
                                        statistics = statistic(), cols = cols(),
                                        stratum = isolate(stratum()),
                                        ntrials = isolate(input$ntrials), 
                                        replace=isolate(input$replace),
-                                       progress = pupdate)
+                                       progress = pupdate),
+                                       error = function (e) 0)
                 vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
               })
-              vals$run <- TRUE
+              if (length(vals$distribution) == vals$total_iterations)
+                  vals$run <- TRUE
               # why is resume() called here???
               run_iter$resume()
             })
@@ -225,12 +229,14 @@ shinyServer(function(input, output, session) {
             ### main plot of the program: generates a histogram of distribution()
             output$distPlot <- renderPlot({
               # Traps errors
+              if(input$go != 0 && ! vals$run) { 
+                  plot(0,0, type='n',xlab="", ylab="", col.main="red", main=tr("Distribution calculation stopped with error!"));
+                  return()
+              } 
               if (input$go == 0 | !is.numeric(vals$x)) {
                 plot(0,0, type='n',xlab="", ylab="", main=tr("Run the resampling to see the graphs"));
                 return();
               }
-              if (! vals$run)
-                  stop(tr("Distribution calculation stopped with error!"))
               Rsampling::dplot(dist = vals$x, svalue =  isolate(svalue()), pside= input$pside, 
                    extreme = input$extreme, vline = TRUE, rejection = input$rejection, ylim=c(0,vals$maxcount),
                              main=tr("distplot_title"), xlab=tr("Statistic of interest"), ylab=tr("Frequency"))

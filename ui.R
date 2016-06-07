@@ -150,7 +150,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        helpText(tr("help1")),
                                        selectInput("datasource",
                                                    tr("What is your input data?"),
-                                                   choices = c("embauba", "azteca", "peucetia", "rhyzophora", "upload file")
+                                                   choices = c("embauba", "azteca", "peucetia", "rhyzophora", "pielou", "upload file")
                                        ),
                                        ## the next panel only shows for the custom datasource
                                        fluidRow(column(6,conditionalPanel(

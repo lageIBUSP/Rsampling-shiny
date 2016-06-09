@@ -85,23 +85,8 @@ shinyServer(function(input, output, session) {
               return (d[, as.numeric(input$stratumc)])
             })
             ### this reactive simply translates the input value into the corresponding function
-            # can we tidy this up with something like match.fun?
             statistic <- reactive({
-              switch(input$stat,
-                     "meandif" = meandif,
-                     "meandifc" = meandifc,
-                     "smean" = smean,
-                     "ssd" = ssd,
-                     "srow" = srow,
-                     "scol" = scol,
-                     "intercept" = intercept,
-                     "slope" = slope,
-                     "corr" = corr,
-                     "Fstatistic" = Fstatistic,
-                     "ancova1" = ancova1,
-                     "ancova2" = ancova2,
-                     "custom" = custom
-                     )
+                eval(parse(text=input$stat))
             })
             ### the statistic applied to the original data
             svalue <- reactive({
@@ -116,13 +101,8 @@ shinyServer(function(input, output, session) {
             ### translates the input value for data source into the corresponding R object
             ### in the case "upload file", it reads the csv using the csvfile() reactive
             data <- reactive({
-              switch(input$datasource,
-                     "embauba" = embauba,
-                     "azteca" = azteca,
-                     "peucetia" = peucetia,
-                     "rhyzophora" = rhyzophora,
-                     "pielou" = pielou,
-                     "upload file" = csvfile())
+                if (input$datasource == "upload file") return (csvfile());
+                eval(parse(text=input$datasource))
             })
             ### calculates the distribution of the statistic of interest using Rsampling
             ### several of its arguments are isolate()'d, meaning that changing them will
@@ -282,10 +262,10 @@ shinyServer(function(input, output, session) {
               updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
               updateSelectInput(session, "m3", choices = cols, selected=3, label = label3)
               updateSelectInput(session, "stratumc", choices = cols)
-          })
-          session$onSessionEnded(function() {
-          run_iter$suspend()
-          })
+            })
+            session$onSessionEnded(function() {
+              run_iter$suspend()
+            })
           ###########################################
           ####### FUNCTIONS USED IN TUTORIAL #######
           ###########################################

@@ -6,9 +6,6 @@ library(shiny)
 optionsStat <- c("smean","ssd","meandif","Fstatistic","meandifc","srow",
                  "scol","intercept","slope","corr","ancova1","ancova2","custom")
 names(optionsStat) <- tr(optionsStat)
-##Randomization
-optionsRand <- c("Normal", "Within rows", "Within columns", "Rows as units", "Columns as units")
-names(optionsRand) <- tr(optionsRand)
 # Original/Randomized switch
 OriRand <- c("Original", "Randomized")
 names(OriRand) <- tr(OriRand)
@@ -262,7 +259,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                          sidebarPanel(
                                            helpText(tr("Here is where we do the randomization!")),
                                            selectInput("type", tr("Randomization type:"), 
-                                                       choices=optionsRand
+                                                       choices=1
                                            ),
                                            ##Help for each randomization panel
                                            conditionalPanel(

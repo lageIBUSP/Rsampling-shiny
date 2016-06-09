@@ -7,6 +7,8 @@ shinyServer(function(input, output, session) {
             ###########################################
             ### INTERNAL OBJECTS AND INPUT HANDLING ###
             ###########################################
+            optionsRand <- c("Normal", "Within rows", "Within columns", "Rows as units", "Columns as units")
+            names(optionsRand) <- tr(optionsRand)
             #### Selection of prebuilt statistic functions
             smean <- function(dataframe){
               mean(dataframe[,as.numeric(input$m1)])
@@ -44,7 +46,7 @@ shinyServer(function(input, output, session) {
             ancova1 <- function(dataframe){
                 # Difference between slopes of regressions fitted to two groups 
                 slope = function(x) coef(lm(x[,2]~x[,1]))[2]
-                props = by(dataframe[,as.numeric(c(input$m1,input$m2))], dataframe[,as.numeric(input$m3)], slope)
+                props = by(dataframe[,as.numeric(c(input$m2,input$m1))], dataframe[,as.numeric(input$m3)], slope)
                 props[1] - props[length(props)]
             }
             ancova2 <- function(dataframe){
@@ -67,8 +69,11 @@ shinyServer(function(input, output, session) {
               if(input$stat %in% c("meandif","Fstatistic", "slope", "intercept", "corr"))
                 return(as.numeric(input$m2))
               # both columns are randomized
-              if(input$stat %in% c("meandifc", "ancova1", "ancova2")) 
+              if(input$stat %in% c("meandifc")) 
                 return(c(as.numeric(input$m1), as.numeric(input$m2)))
+              # the categorical variable is randomized
+              if(input$stat %in% c("ancova1", "ancova2")) 
+                return(as.numeric(input$m3))
               # all columns should be used
               if(input$stat %in% c("scol", "srow"))
                 return(1:ncol(data()))
@@ -151,7 +156,7 @@ shinyServer(function(input, output, session) {
                                        ntrials = isolate(input$ntrials), 
                                        replace=isolate(input$replace),
                                        progress = pupdate),
-                                       error = function (e) 0)
+                                       error = function (e) {print(paste("Error when sampling:", e$message));return(0)})
                 vals$maxcount<-max(hist(vals$distribution, plot=FALSE)$counts)
               })
               if (length(vals$distribution) == vals$total_iterations)
@@ -262,6 +267,14 @@ shinyServer(function(input, output, session) {
               updateSelectInput(session, "m2", choices = cols, selected=2, label = label2)
               updateSelectInput(session, "m3", choices = cols, selected=3, label = label3)
               updateSelectInput(session, "stratumc", choices = cols)
+            })
+            ### Locks down randomization choice for some statistics
+            observe({
+              if(input$stat %in% c("smean", "ssd", "meandif", "Fstatistic",
+                                   "slope", "intercept", "corr", "ancova1", "ancova2"))
+                  updateSelectInput(session, "type", choices = optionsRand[3]) 
+              else
+                  updateSelectInput(session, "type", choices = optionsRand) 
             })
             session$onSessionEnded(function() {
               run_iter$suspend()

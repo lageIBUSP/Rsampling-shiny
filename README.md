@@ -11,7 +11,7 @@ shiny, shiny-BS and PerformanceAnalytics libraries.
 To install these dependencies, open R and run:
 
 ```R
-install.packages(c("Rsampling", "shiny","shinyBS","PerformanceAnalytics"))
+install.packages(c("Rsampling", "shiny", "PerformanceAnalytics"))
 ```
 
 ![ ] (www/chicken.png?raw=true)

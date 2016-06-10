@@ -6,7 +6,7 @@ Rsampling-shiny is a web-based graphical user interface
 written in [shiny] (http://shiny.rstudio.com).
 
 To run, you need to install [R] (http://www.r-project.org/) and the [Rsampling] (https://github.com/lageIBUSP/Rsampling),
-shiny, shiny-BS and PerformanceAnalytics libraries.
+shiny and PerformanceAnalytics libraries.
 
 To install these dependencies, open R and run:
 

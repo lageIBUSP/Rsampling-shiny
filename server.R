@@ -202,7 +202,7 @@ shinyServer(function(input, output, session) {
               return("")
             })
             output$needinstall <- reactive({
-              if(!packageDescription("Rsampling")$Version %in% c("0.1.0", "0.1.1")) return ("incompatible")
+              if(!packageDescription("Rsampling")$Version %in% c("0.1.0", "0.1.1", "0.1.2")) return ("incompatible")
               else return ("ok")
             })
             # see: http://stackoverflow.com/questions/19686581/make-conditionalpanel-depend-on-files-uploaded-with-fileinput

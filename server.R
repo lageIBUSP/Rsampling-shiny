@@ -94,7 +94,8 @@ shinyServer(function(input, output, session) {
                 eval(parse(text=input$stat))
             })
             ### the statistic applied to the original data
-            svalue <- reactive({
+    svalue <- reactive({
+        if(!is.na(as.numeric(input$fixeds))) return(as.numeric(input$fixeds)); ## fix statistics if a value is provided to fixeds
               f <- statistic()
               f(data())
             })
@@ -232,6 +233,13 @@ shinyServer(function(input, output, session) {
               s <- paste(round(svalue(), 3), collapse = " ")
               paste(tr("Statistic of interest"),": ", s, "\n", sep="")
             })
+    ## Conditional messages for statisc calculated from data or fixed by the user
+    output$stats.help <- renderText({
+        if(!is.na(as.numeric(input$fixeds)))
+            return(tr("Function above does not apply because the statistics was fixed by the user (see Resampling tab)."));
+        return(tr("Below you see the result of this function applied to the original data:"))
+    }
+    )
             ### simply displays the "p-value"
             output$p <- renderText({
               if (! vals$run) return (tr("no available p-value yet..."))

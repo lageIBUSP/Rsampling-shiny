@@ -248,8 +248,9 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                        conditionalPanel("input.stat == 'ancova1' || input.stat == 'ancova2'", 
                                                         # these stats have three columns
                                                         selectInput("m3", "Column 3", choices=2) # label and choices will be overriden!
-                                       ),
-                                       helpText(tr("Below you see the result of this function applied to the original data:")),
+                                                        ),
+                                       h3(textOutput("stats.help")),
+                                       #helpText(tr("Below you see the result of this function applied to the original data:")),
                                        h3(textOutput("stat")),
                                        # displays a warning in case the statistic is not returning a single number
                                        h4(textOutput("svaluewarning"), style="color:#f30")
@@ -280,6 +281,8 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                            ##bsTooltip("type", "See the help page for details on the different randomization types."),
                                            checkboxInput("replace", tr("With replacement?")),
                                            selectInput("pside", tr("Alternative:"), choices=Alt),
+                                        #numericInput("fixeds", tr("Change observed statistic to"), value=NULL),
+                                           textInput("fixeds", tr("Change observed statistic to"), value=""),
                                            #bsTooltip("replace", tr("Check this option if you want all the draws to be made independently (that is, with replacement) from the original data")),
                                            #bsTooltip("pside", tr("Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test."), "top"),
                                            sliderInput("ntrials", tr("Number of trials:"), min=500,max=10000,value=1000,step=500),

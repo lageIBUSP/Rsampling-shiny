@@ -19,7 +19,7 @@ scol;Mean sum of columns;Média da soma das colunas
 tutorials;Tutorials;Tutoriais
 Do mangrove trees in more unstable soil allocate more biomass in supporting roots?;Do mangrove trees in more unstable soil allocate more biomass in supporting roots?; Árvores de manguezal em solos mais instáveis alocam mais biomassa para raízes de suporte?
 Mean difference between soil types;Mean difference between soil types;Diferença média entre tipos de solo
-Number of roots;Number of roots;N?mero de raizes
+Number of roots;Number of roots;Número de raizes
 This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences.;This function calculates the pairwise difference between two columns in your dataset (i.e., before and after a treatment is applied). It then averages these differences.;Esta função calcula a diferença par a par entre duas colunas em seu conjunto de dados(isto é, antes e depois de um tratamento ser aplicado). Ela então tira a média das duas diferenças 
 Rsampling version;Rsampling version;Versão do Rsampling
 ssd;Column standard deviation; Desvio padrão da coluna
@@ -109,7 +109,7 @@ Use this to select if you want the p-value to be assigned from a two-sided hypot
 Number of trials:;Number of trials:;Número de repetições
 Stratified resampling?;Stratified resampling?;Reamostragem estratificada
 Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.;Marque aqui se quiser que a randomização seja restrita a dentro de grupos de linhas definidas por um valor categórico
-Stratum variable:;Stratum variable:;Variável de estrato
+Stratum variable:;Stratum variable:;Variável de estrato:
 Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values;Quais colunas serão reamostradas: Esta entradaserá interpretada como código do R, então 1:3 ou 1(1,4,5) são valores válidos
 How many iterations of sampling should we do?;How many iterations of sampling should we do?;Quantas iterações de amostragem devemos fazer?
 Show extremes?;Show extremes?;Mostrar extremos?
@@ -132,7 +132,7 @@ Sampling ended with error!;Sampling ended with error!;Amstragem terminou com err
 WARNING, the statistic function should return a single number.;WARNING, the statistic function should return a single number.;AVISO, a função de estatística deve retornar um número único
 incompatible;incompatible;incompatível
 Run the resampling to see the graphs;Run the resampling to see the graphs;Rode a reamostragem para ver os gráficos
-Distribution calculation stopped with error!;Distribution calculation stopped with error!;Calculo da distribuição terminou com erro!
+Distribution calculation stopped with error!;Distribution calculation stopped with error!;Cálculo da distribuição terminou com erro!
 no available p-value yet...;no available p-value yet...;nenhum valor de p disponível ainda
 Alternative:;Alternative:;Alternativa:
 ;Variable column:;Coluna com a variável:
@@ -152,7 +152,7 @@ Treatment;Treatment;Tratamento
 Number of recruited ants;Number of recruited ants;Número de formigas recrutadas
 Extract of new leaves;Extract of new leaves;Extrato de folhas novas
 Extract of old leaves;Extract of old leaves;Extrato de folhas velhas
-slope =; slope =;inclinação
+slope =; slope =;inclinação = 
 Go!;Go!;Vai!
 Cecropia;Cecropia;Cecropia
 What is your input data?;What is your input data?;Quais os seus dados de entrada?
@@ -160,8 +160,8 @@ Two sided;Two sided;Bicaudal
 Greater;Greater;Maior que
 Lesser;Lesser;Menor que
 distplot_title;Distribution of the statistic of interest;Distribuição da estatística de interesse
-twosided;(two-sided) p-value:;valor p (bilateral):
-onesided;(one-sided) p-value:;valor p (unilateral):
+twosided;(two-sided) p-value;valor p (bilateral)
+onesided;(one-sided) p-value;valor p (unilateral)
 ;here;aqui
 meandiff=;mean difference = ;diferença média =
 ;then reload this interface; e então recarregue esta interface

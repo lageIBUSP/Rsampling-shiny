@@ -94,10 +94,10 @@ shinyServer(function(input, output, session) {
                 eval(parse(text=input$stat))
             })
             ### the statistic applied to the original data
-    svalue <- reactive({
-        if(!is.na(as.numeric(input$fixeds))) return(as.numeric(input$fixeds)); ## fix statistics if a value is provided to fixeds
-              f <- statistic()
-              f(data())
+            svalue <- reactive({
+                if(!is.na(as.numeric(input$fixeds))) return(as.numeric(input$fixeds)); ## fix statistics if a value is provided to fixeds
+                f <- statistic()
+                f(data())
             })
             ### reads the CSV uploaded by the data selector
             csvfile <- reactive({
@@ -233,13 +233,13 @@ shinyServer(function(input, output, session) {
               s <- paste(round(svalue(), 3), collapse = " ")
               paste(tr("Statistic of interest"),": ", s, "\n", sep="")
             })
-    ## Conditional messages for statistic calculated from data or fixed by the user
-    output$stats.help <- renderText({
-        if(!is.na(as.numeric(input$fixeds)))
-            return(tr("Function above does not apply because the statistics was fixed by the user (see Resampling tab)."));
-        return(tr("Below you see the result of this function applied to the original data:"))
-    }
-    )
+            ## Conditional messages for statistic calculated from data or fixed by the user
+            output$stats.help <- renderText({
+                if(!is.na(as.numeric(input$fixeds)))
+                    return(tr("Function above does not apply because the statistics was fixed by the user (see Resampling tab)."));
+                return(tr("Below you see the result of this function applied to the original data:"))
+            }
+            )
             ### simply displays the "p-value"
             output$p <- renderText({
               if (! vals$run) return (tr("no available p-value yet..."))
@@ -249,8 +249,12 @@ shinyServer(function(input, output, session) {
                           "Greater" = vals$distribution >= svalue(),
                           "Lesser" = vals$distribution <= svalue()
                           )
+              # Special case: if simulated p = 0, this actually means p < 1/nsim
+              if (sum(p) == 0) {
+                  return(paste(tr(side),"<", round(1/length(vals$distribution), 4)))
+              }
               p <- round(sum(p) / length(vals$distribution),3)
-              paste(tr(side), p)
+              paste(tr(side),"=", p)
             })
             ### Updates the values in the dropdowns for column selection
             observe({

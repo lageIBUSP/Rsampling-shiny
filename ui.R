@@ -154,7 +154,6 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                          fileInput("file", tr("Choose CSV file:"), accept='.csv'),
                                          fluidRow(
                                            column(3, checkboxInput("header", tr("Header?"))),
-                                           #bsTooltip("header", "First row as header"),
                                            column(3,
                                                   radioButtons('sep', tr('Separator'),
                                                                sep,
@@ -249,8 +248,7 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                         # these stats have three columns
                                                         selectInput("m3", "Column 3", choices=2) # label and choices will be overriden!
                                                         ),
-                                       h3(textOutput("stats.help")),
-                                       #helpText(tr("Below you see the result of this function applied to the original data:")),
+                                       helpText(textOutput("stats.help")),
                                        h3(textOutput("stat")),
                                        # displays a warning in case the statistic is not returning a single number
                                        h4(textOutput("svaluewarning"), style="color:#f30")
@@ -278,16 +276,11 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                            conditionalPanel(
                                              helpText(tr("cols_units_help")),
                                              condition = "input.type == 'Columns as units'"),
-                                           ##bsTooltip("type", "See the help page for details on the different randomization types."),
                                            checkboxInput("replace", tr("With replacement?")),
                                            selectInput("pside", tr("Alternative:"), choices=Alt),
-                                        #numericInput("fixeds", tr("Change observed statistic to"), value=NULL),
                                            textInput("fixeds", tr("Change observed statistic to"), value=""),
-                                           #bsTooltip("replace", tr("Check this option if you want all the draws to be made independently (that is, with replacement) from the original data")),
-                                           #bsTooltip("pside", tr("Use this to select if you want the p-value to be assigned from a two-sided hypothesis (that is, both positive and negative values can be considered extreme), or a one sided test."), "top"),
                                            sliderInput("ntrials", tr("Number of trials:"), min=500,max=10000,value=1000,step=500),
                                            checkboxInput("stratum", tr("Stratified resampling?")),
-                                           #bsTooltip("stratum", tr("Check this if you want the randomization to be restricted inside groups of rows defined by a categorical value.")),
                                            conditionalPanel("input.stratum",
                                                             selectInput("stratumc", tr("Stratum variable:"), 1)
                                            ),
@@ -295,7 +288,6 @@ shinyUI(fluidPage(theme= "bootstrap.css",
                                                             helpText(tr("Which columns of the data set should be randomized? This input will be parsed as R code, so 1:3 or c(1,4,5) are valid values")),
                                                             textInput("customcols", "Columns", "1")
                                            ),
-                                           #bsTooltip("ntrials", tr("How many iteractions of sampling should we do?")),
                                            fluidRow(column(6, checkboxInput("extreme", tr("Show extremes?"), TRUE)),
                                                     column(6, checkboxInput("rejection", tr("Show acceptance region?"), TRUE))
                                            ),

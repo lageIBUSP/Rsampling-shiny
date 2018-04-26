@@ -233,7 +233,7 @@ shinyServer(function(input, output, session) {
               s <- paste(round(svalue(), 3), collapse = " ")
               paste(tr("Statistic of interest"),": ", s, "\n", sep="")
             })
-    ## Conditional messages for statisc calculated from data or fixed by the user
+    ## Conditional messages for statistic calculated from data or fixed by the user
     output$stats.help <- renderText({
         if(!is.na(as.numeric(input$fixeds)))
             return(tr("Function above does not apply because the statistics was fixed by the user (see Resampling tab)."));

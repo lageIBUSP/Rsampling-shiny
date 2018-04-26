@@ -183,3 +183,5 @@ custom_help;You are free to write down your own R function to calculate any stat
 ;Single Quote;Aspas simples
 ;Choose CSV file:;Escolha o nome do arquivo CSV:
 ;Frequency;Frequência
+;Change observed statistic to;Trocar o valor observado para
+;Function above does not apply because the statistics was fixed by the user (see Resampling tab).;A função acima não foi aplicada, pois o valor observado foi fixado pelo usuário (veja na aba Reamostragem).

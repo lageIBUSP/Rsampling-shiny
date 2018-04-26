@@ -26,7 +26,7 @@ and extract it to a folder. Then, open R (with the required packages installed, 
 library(shiny)
 runApp("<path to Rsampling-shiny>")
 ```
-Remember that you need to install the packages listes above while you have internet access!
+Remember that you need to install the packages listed above while you have internet access!
 
 ## Web version
 You can run Rsampling shiny from github! Just open R and run:

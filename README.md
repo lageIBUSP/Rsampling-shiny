@@ -19,8 +19,7 @@ install.packages(c("Rsampling", "shiny", "PerformanceAnalytics"))
 
 ## Running offline
 
-If you need to be able to use Rsampling-shiny without Internet access, download the [latest stable version]
-(https://github.com/lageIBUSP/Rsampling-shiny/releases), 
+If you need to be able to use Rsampling-shiny without Internet access, download the [latest stable version](https://github.com/lageIBUSP/Rsampling-shiny/releases), 
 and extract it to a folder. Then, open R (with the required packages installed, see above) and run
 
 ```R
